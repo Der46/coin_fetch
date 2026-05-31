@@ -1,15 +1,16 @@
-import requests
-from bs4 import BeautifulSoup
-from urllib.parse import urlparse, parse_qs
-from datetime import datetime
-from zoneinfo import ZoneInfo
-import pandas as pd
-import re
+import argparse
 import json
 import os
-import argparse
+import re
+from datetime import datetime
+from zoneinfo import ZoneInfo
+from urllib.parse import urljoin
 
-PAGE_URL = "https://levvvel.com/zh-hant/coin-master-free-spins-code/"
+import pandas as pd
+import requests
+from bs4 import BeautifulSoup
+
+PAGE_URL = "https://coinmaster-daily.com/"
 
 
 def fetch_html(url):
@@ -19,11 +20,12 @@ def fetch_html(url):
             "AppleWebKit/537.36 (KHTML, like Gecko) "
             "Chrome/125.0.0.0 Safari/537.36"
         ),
-        "Accept-Language": "zh-TW,zh;q=0.9,en;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9,zh-TW;q=0.8,zh;q=0.7",
         "Accept": (
             "text/html,application/xhtml+xml,application/xml;"
             "q=0.9,image/avif,image/webp,*/*;q=0.8"
         ),
+        "Referer": "https://coinmaster-daily.com/",
     }
 
     response = requests.get(url, headers=headers, timeout=30)
@@ -31,186 +33,140 @@ def fetch_html(url):
     return response.text
 
 
-def parse_campaign(url):
-    parsed = urlparse(url)
-    params = parse_qs(parsed.query)
-
-    campaign = params.get("c", [""])[0]
-
-    campaign_date = ""
-    match = re.search(r"_(\d{8})$", campaign)
-    if match:
-        campaign_date = match.group(1)
-
-    return campaign, campaign_date
-
-
-def build_mobile_reward_url(campaign):
-    return (
-        "https://rewards.coinmaster.com/rewards/playonmobile.png"
-        "?deep_link_sub1=promotions"
-        f"&c={campaign}"
-        "&pid=Reward%20link"
-        "&deep_link_value=coinmaster%3A%2F%2F"
-        "&af_xp=social"
-        "&af_adset=no_source"
-        "&af_force_deeplink=true"
-    )
-
-
 def normalize_reward_text(text):
     text = re.sub(r"\s+", " ", text).strip()
 
-    replacements = {
-        "能量": "能量",
-        "旋轉": "旋轉",
-        "硬幣": "硬幣",
-        "coins": "金幣",
-        "spins": "旋轉",
-    }
+    match = re.search(r"(\d+)\s*(spins?|coins?)", text, re.IGNORECASE)
 
-    for old, new in replacements.items():
-        text = text.replace(old, new)
+    if not match:
+        return text
+
+    amount = match.group(1)
+    reward_type = match.group(2).lower()
+
+    if reward_type.startswith("spin"):
+        return f"{amount} 能量"
+
+    if reward_type.startswith("coin"):
+        return f"{amount} 金幣"
 
     return text
 
 
-def campaign_date_to_display_date(campaign_date):
-    if not campaign_date:
-        return "Unknown"
+def parse_pub_datetime(text):
+    text = re.sub(r"\s+", " ", text).strip()
 
     try:
-        dt = datetime.strptime(campaign_date, "%Y%m%d")
-        return dt.strftime("%m/%d/%Y")
+        return datetime.strptime(text, "%Y-%m-%d %H:%M:%S")
     except Exception:
+        return None
+
+
+def datetime_to_campaign_date(dt):
+    if not dt:
+        return ""
+
+    return dt.strftime("%Y%m%d")
+
+
+def datetime_to_display_date(dt):
+    if not dt:
         return "Unknown"
 
+    return dt.strftime("%m/%d/%Y")
 
-def extract_display_date_from_heading(heading_text, fallback_campaign_date=""):
+
+def build_reward_url(href):
+    return urljoin(PAGE_URL, href)
+
+
+def build_mobile_reward_url(url):
     """
-    LEVVVEL 的繁中標題可能長這樣：
-    - 今天的 Coin Master 免費能量和金幣
-    - Coin Master 免費能量和金幣 年五月30日
-    - Coin Master 免費能量和金幣 年六月1日
-
-    因為標題翻譯格式不一定穩定，所以最可靠來源仍是 campaign 裡面的 YYYYMMDD。
-    這個函式只做輔助，最後仍會 fallback 到 campaign_date。
+    coinmaster-daily.com 這個來源目前只有 /?gift=xxxx 這種領取入口。
+    你前面已經把前端改成只顯示「領取」按鈕，所以 mobile_url 不會被使用。
+    這裡保留欄位只是為了相容舊版 JSON 結構。
     """
-    heading_text = re.sub(r"\s+", "", heading_text)
-
-    now = datetime.now(ZoneInfo("Asia/Taipei"))
-
-    if "今天" in heading_text:
-        return now.strftime("%m/%d/%Y")
-
-    month_map = {
-        "一月": 1,
-        "二月": 2,
-        "三月": 3,
-        "四月": 4,
-        "五月": 5,
-        "六月": 6,
-        "七月": 7,
-        "八月": 8,
-        "九月": 9,
-        "十月": 10,
-        "十一月": 11,
-        "十二月": 12,
-    }
-
-    for month_text, month_num in month_map.items():
-        match = re.search(month_text + r"(\d{1,2})日", heading_text)
-        if match:
-            day = int(match.group(1))
-            year = now.year
-
-            try:
-                return datetime(year, month_num, day).strftime("%m/%d/%Y")
-            except Exception:
-                break
-
-    return campaign_date_to_display_date(fallback_campaign_date)
+    return url
 
 
-def is_reward_heading(text):
-    text = re.sub(r"\s+", "", text)
+def extract_gift_id(block, url):
+    gift_id = block.get("data-id", "").strip()
 
-    keywords = [
-        "CoinMaster免費能量和金幣",
-        "免費能量和金幣",
-        "免費旋轉和硬幣",
-        "今天的CoinMaster",
-    ]
+    if gift_id:
+        return gift_id
 
-    return any(keyword in text for keyword in keywords)
+    match = re.search(r"[?&]gift=(\d+)", url)
+
+    if match:
+        return match.group(1)
+
+    return ""
+
+
+def extract_datetime_from_block(block):
+    meta_items = block.select(".fs-meta .fs-clicks")
+
+    for item in meta_items:
+        text = item.get_text(" ", strip=True)
+        dt = parse_pub_datetime(text)
+
+        if dt:
+            return dt
+
+    return None
 
 
 def scrape_rewards(html):
     soup = BeautifulSoup(html, "lxml")
 
-    content = soup.select_one(".entry-content")
-
-    if not content:
-        content = soup
+    blocks = soup.select(".fs-wrapper .fs-block")
 
     records = []
-    current_heading = ""
-    current_display_date = ""
 
-    for element in content.find_all(["h2", "ol"]):
-        if element.name == "h2":
-            heading_text = element.get_text(" ", strip=True)
+    for block in blocks:
+        bonus_el = block.select_one(".fs-bonus")
+        link_el = block.select_one(".fs-collect a[href]")
 
-            if is_reward_heading(heading_text):
-                current_heading = heading_text
-            else:
-                current_heading = ""
-
+        if not bonus_el or not link_el:
             continue
 
-        if element.name != "ol":
+        reward_text = normalize_reward_text(
+            bonus_el.get_text(" ", strip=True)
+        )
+
+        href = link_el.get("href", "").strip()
+
+        if not href:
             continue
 
-        if not current_heading:
+        reward_url = build_reward_url(href)
+        gift_id = extract_gift_id(block, reward_url)
+
+        if not gift_id:
             continue
 
-        links = element.select('a[href*="rewards.coinmaster.com"]')
+        published_dt = extract_datetime_from_block(block)
 
-        for a in links:
-            reward_url = a.get("href", "").strip()
-            reward_text = normalize_reward_text(a.get_text(" ", strip=True))
+        campaign_date = datetime_to_campaign_date(published_dt)
+        display_date = datetime_to_display_date(published_dt)
 
-            if not reward_url:
-                continue
+        campaign = f"coinmaster_daily_gift_{gift_id}"
 
-            campaign, campaign_date = parse_campaign(reward_url)
-
-            if not campaign:
-                continue
-
-            heading_display_date = extract_display_date_from_heading(
-                current_heading,
-                fallback_campaign_date=campaign_date
-            )
-
-            campaign_display_date = campaign_date_to_display_date(campaign_date)
-
-            display_date = (
-                campaign_display_date
-                if campaign_display_date != "Unknown"
-                else heading_display_date
-            )
-
-            records.append({
-                "display_date": display_date,
-                "campaign_date": campaign_date,
-                "reward": reward_text,
-                "campaign": campaign,
-                "url": reward_url,
-                "mobile_url": build_mobile_reward_url(campaign),
-                "source": PAGE_URL,
-                "source_heading": current_heading,
-            })
+        records.append({
+            "display_date": display_date,
+            "campaign_date": campaign_date,
+            "reward": reward_text,
+            "campaign": campaign,
+            "url": reward_url,
+            "mobile_url": build_mobile_reward_url(reward_url),
+            "source": PAGE_URL,
+            "gift_id": gift_id,
+            "published_at": (
+                published_dt.strftime("%Y-%m-%d %H:%M:%S")
+                if published_dt
+                else ""
+            ),
+        })
 
     unique = {}
 
@@ -222,7 +178,8 @@ def scrape_rewards(html):
     result.sort(
         key=lambda item: (
             item.get("campaign_date") or "",
-            item.get("campaign") or "",
+            item.get("published_at") or "",
+            item.get("gift_id") or "",
         ),
         reverse=True
     )
@@ -236,13 +193,13 @@ def filter_rewards(records, target_date=None, display_date=None):
     if target_date:
         result = [
             item for item in result
-            if item["campaign_date"] == target_date
+            if item.get("campaign_date") == target_date
         ]
 
     if display_date:
         result = [
             item for item in result
-            if item["display_date"] == display_date
+            if item.get("display_date") == display_date
         ]
 
     return result
@@ -275,12 +232,12 @@ def save_outputs(records, output_dir, prefix):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Fetch Coin Master reward links from LEVVVEL"
+        description="Fetch Coin Master reward links from coinmaster-daily.com"
     )
 
     parser.add_argument(
         "--date",
-        help="依 campaign 日期過濾，格式 YYYYMMDD，例如 20260531"
+        help="依日期過濾，格式 YYYYMMDD，例如 20260531"
     )
 
     parser.add_argument(
@@ -291,13 +248,13 @@ def main():
     parser.add_argument(
         "--today",
         action="store_true",
-        help="使用台北時區的今天日期作為 campaign 日期"
+        help="使用台北時區的今天日期作為過濾日期"
     )
 
     parser.add_argument(
         "--output-dir",
-        default="/coin_fetch/output",
-        help="輸出資料夾，預設 /coin_fetch/output"
+        default="output",
+        help="輸出資料夾，預設 output"
     )
 
     parser.add_argument(
@@ -333,7 +290,8 @@ def main():
             f'{item["display_date"]} | '
             f'{item["campaign_date"]} | '
             f'{item["reward"]} | '
-            f'{item["campaign"]}'
+            f'{item["campaign"]} | '
+            f'{item["url"]}'
         )
 
     if target_date:
