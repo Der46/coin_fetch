@@ -1,0 +1,43 @@
+name: Daily Coin Master Rewards Fetch
+
+on:
+  schedule:
+    # GitHub Actions 使用 UTC
+    # 每 2 小時執行一次
+    - cron: "0 */2 * * *"
+
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch-and-build-site:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Fetch rewards
+        run: |
+          python fetch_rewards.py --output-dir output
+
+      - name: Generate static site
+        run: |
+          python generate_site.py
+
+      - name: Commit and push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update daily Coin Master rewards"
+          file_pattern: output/* docs/index.html
