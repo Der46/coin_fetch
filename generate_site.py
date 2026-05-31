@@ -35,7 +35,9 @@ def date_sort_key(date_text):
 
 
 def generate_html(records):
-    now = datetime.now(ZoneInfo("Asia/Taipei")).strftime("%Y-%m-%d %H:%M:%S")
+    current_time = datetime.now(ZoneInfo("Asia/Taipei"))
+    now = current_time.strftime("%Y-%m-%d %H:%M:%S")
+    year = current_time.year
 
     grouped = group_by_display_date(records)
     sorted_dates = sorted(grouped.keys(), key=date_sort_key, reverse=True)
@@ -58,7 +60,6 @@ def generate_html(records):
             campaign = html.escape(item.get("campaign", ""))
             campaign_date = html.escape(item.get("campaign_date", ""))
             url = html.escape(item.get("url", ""))
-            mobile_url = html.escape(item.get("mobile_url", ""))
 
             rows_html.append(f"""
             <article class="card reward-card" data-campaign="{campaign}">
@@ -69,8 +70,7 @@ def generate_html(records):
               <div class="campaign">{campaign}</div>
 
               <div class="actions">
-                <a href="{url}" target="_blank" rel="noopener">網頁領取</a>
-                <a href="{mobile_url}" target="_blank" rel="noopener">手機領取</a>
+                <a href="{url}" target="_blank" rel="noopener">領取</a>
                 <button type="button" class="claim-toggle" data-campaign="{campaign}">
                   標記已領
                 </button>
@@ -419,9 +419,9 @@ def generate_html(records):
     {body}
   </main>
 
-    <footer>
-      © {datetime.now(ZoneInfo("Asia/Taipei")).year} Coin999-長長久久隊伍. All rights reserved.
-    </footer>
+  <footer>
+    © {year} Coin999-長長久久隊伍. All rights reserved.
+  </footer>
 
   <script>
     const STORAGE_PREFIX = "coinmaster_claimed_";
