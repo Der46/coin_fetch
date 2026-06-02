@@ -11,8 +11,8 @@ on:
       - ".github/workflows/daily-fetch.yml"
   schedule:
     # GitHub Actions 使用 UTC
-    # 每 4 小時執行一次
-    - cron: "0 */4 * * *"
+    # 每 2 小時執行一次
+    - cron: "0 */2 * * *"
 
   workflow_dispatch:
 
