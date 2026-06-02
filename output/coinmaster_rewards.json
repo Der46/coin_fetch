@@ -1,5 +1,27 @@
 [
   {
+    "display_date": "06/02/2026",
+    "campaign_date": "20260602",
+    "reward": "50 能量",
+    "campaign": "coinmaster_daily_gift_2210475",
+    "url": "https://coinmaster-daily.com/?gift=2210475",
+    "mobile_url": "https://coinmaster-daily.com/?gift=2210475",
+    "source": "https://coinmaster-daily.com/",
+    "gift_id": "2210475",
+    "published_at": "2026-06-02 07:05:02"
+  },
+  {
+    "display_date": "06/02/2026",
+    "campaign_date": "20260602",
+    "reward": "25 能量",
+    "campaign": "coinmaster_daily_gift_2210474",
+    "url": "https://coinmaster-daily.com/?gift=2210474",
+    "mobile_url": "https://coinmaster-daily.com/?gift=2210474",
+    "source": "https://coinmaster-daily.com/",
+    "gift_id": "2210474",
+    "published_at": "2026-06-02 07:05:02"
+  },
+  {
     "display_date": "06/01/2026",
     "campaign_date": "20260601",
     "reward": "100 能量",
@@ -306,27 +328,5 @@
     "source": "https://coinmaster-daily.com/",
     "gift_id": "2210347",
     "published_at": "2026-05-29 17:25:02"
-  },
-  {
-    "display_date": "05/29/2026",
-    "campaign_date": "20260529",
-    "reward": "50 能量",
-    "campaign": "coinmaster_daily_gift_2210346",
-    "url": "https://coinmaster-daily.com/?gift=2210346",
-    "mobile_url": "https://coinmaster-daily.com/?gift=2210346",
-    "source": "https://coinmaster-daily.com/",
-    "gift_id": "2210346",
-    "published_at": "2026-05-29 17:25:02"
-  },
-  {
-    "display_date": "05/29/2026",
-    "campaign_date": "20260529",
-    "reward": "25 能量",
-    "campaign": "coinmaster_daily_gift_2210345",
-    "url": "https://coinmaster-daily.com/?gift=2210345",
-    "mobile_url": "https://coinmaster-daily.com/?gift=2210345",
-    "source": "https://coinmaster-daily.com/",
-    "gift_id": "2210345",
-    "published_at": "2026-05-29 17:25:01"
   }
 ]
