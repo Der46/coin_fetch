@@ -4,13 +4,14 @@ import os
 import re
 from datetime import datetime
 from zoneinfo import ZoneInfo
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse, parse_qs
 
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 
-PAGE_URL = "https://coinmaster-daily.com/"
+PAGE_URL = "https://mycoinmaster.com/"
+REWARD_URL_PREFIX = "https://rewards.coinmaster.com/rewards/rewards.html?c="
 
 
 def fetch_html(url):
@@ -25,7 +26,7 @@ def fetch_html(url):
             "text/html,application/xhtml+xml,application/xml;"
             "q=0.9,image/avif,image/webp,*/*;q=0.8"
         ),
-        "Referer": "https://coinmaster-daily.com/",
+        "Referer": PAGE_URL,
     }
 
     response = requests.get(url, headers=headers, timeout=30)
@@ -36,13 +37,17 @@ def fetch_html(url):
 def normalize_reward_text(text):
     text = re.sub(r"\s+", " ", text).strip()
 
-    match = re.search(r"(\d+)\s*(spins?|coins?)", text, re.IGNORECASE)
+    match = re.search(
+        r"(\d+)\s*(free\s*)?(spins?|coins?)",
+        text,
+        re.IGNORECASE
+    )
 
     if not match:
         return text
 
     amount = match.group(1)
-    reward_type = match.group(2).lower()
+    reward_type = match.group(3).lower()
 
     if reward_type.startswith("spin"):
         return f"{amount} 能量"
@@ -53,67 +58,70 @@ def normalize_reward_text(text):
     return text
 
 
-def parse_pub_datetime(text):
-    text = re.sub(r"\s+", " ", text).strip()
-
-    try:
-        return datetime.strptime(text, "%Y-%m-%d %H:%M:%S")
-    except Exception:
-        return None
-
-
-def datetime_to_campaign_date(dt):
-    if not dt:
-        return ""
-
-    return dt.strftime("%Y%m%d")
-
-
-def datetime_to_display_date(dt):
-    if not dt:
-        return "Unknown"
-
-    return dt.strftime("%m/%d/%Y")
-
-
-def build_reward_url(href):
-    return urljoin(PAGE_URL, href)
+def build_reward_url(raw_url):
+    return urljoin(PAGE_URL, raw_url)
 
 
 def build_mobile_reward_url(url):
     """
-    coinmaster-daily.com 這個來源目前只有 /?gift=xxxx 這種領取入口。
-    你前面已經把前端改成只顯示「領取」按鈕，所以 mobile_url 不會被使用。
-    這裡保留欄位只是為了相容舊版 JSON 結構。
+    mycoinmaster.com 的連結本身就是 rewards.coinmaster.com 官方領取入口。
+    mobile_url 保留是為了相容舊版 JSON 結構。
     """
     return url
 
 
-def extract_gift_id(block, url):
-    gift_id = block.get("data-id", "").strip()
-
-    if gift_id:
-        return gift_id
-
-    match = re.search(r"[?&]gift=(\d+)", url)
-
-    if match:
-        return match.group(1)
-
-    return ""
+def is_valid_reward_url(url):
+    """
+    只保留這種格式：
+    https://rewards.coinmaster.com/rewards/rewards.html?c=xxxx
+    """
+    return url.startswith(REWARD_URL_PREFIX)
 
 
-def extract_datetime_from_block(block):
-    meta_items = block.select(".fs-meta .fs-clicks")
+def extract_campaign_code(url):
+    """
+    從網址取得 c 參數。
+    例如：
+    https://rewards.coinmaster.com/rewards/rewards.html?c=pe_EMAILBNfzwg_20260531
 
-    for item in meta_items:
-        text = item.get_text(" ", strip=True)
-        dt = parse_pub_datetime(text)
+    回傳：
+    pe_EMAILBNfzwg_20260531
+    """
+    parsed = urlparse(url)
+    query = parse_qs(parsed.query)
 
-        if dt:
-            return dt
+    codes = query.get("c", [])
 
-    return None
+    if not codes:
+        return ""
+
+    return codes[0].strip()
+
+
+def extract_campaign_date_from_code(campaign_code):
+    """
+    從 campaign code 最後面抽出 YYYYMMDD。
+    例如：
+    pe_EMAILBNfzwg_20260531 -> 20260531
+    pe_FCBGZQHsy_20260603 -> 20260603
+    """
+    match = re.search(r"_(\d{8})$", campaign_code)
+
+    if not match:
+        return ""
+
+    return match.group(1)
+
+
+def campaign_date_to_display_date(campaign_date):
+    if not campaign_date:
+        return "Unknown"
+
+    try:
+        dt = datetime.strptime(campaign_date, "%Y%m%d")
+        return dt.strftime("%m/%d/%Y")
+    except Exception:
+        return "Unknown"
 
 
 def scrape_rewards(html):
@@ -125,32 +133,36 @@ def scrape_rewards(html):
 
     for block in blocks:
         bonus_el = block.select_one(".fs-bonus")
-        link_el = block.select_one(".fs-collect a[href]")
+        button_el = block.select_one(".fs-collect button[data-url]")
 
-        if not bonus_el or not link_el:
+        if not bonus_el or not button_el:
             continue
 
         reward_text = normalize_reward_text(
             bonus_el.get_text(" ", strip=True)
         )
 
-        href = link_el.get("href", "").strip()
+        raw_url = button_el.get("data-url", "").strip()
 
-        if not href:
+        if not raw_url:
             continue
 
-        reward_url = build_reward_url(href)
-        gift_id = extract_gift_id(block, reward_url)
+        reward_url = build_reward_url(raw_url)
 
-        if not gift_id:
+        if not is_valid_reward_url(reward_url):
             continue
 
-        published_dt = extract_datetime_from_block(block)
+        campaign_code = extract_campaign_code(reward_url)
 
-        campaign_date = datetime_to_campaign_date(published_dt)
-        display_date = datetime_to_display_date(published_dt)
+        if not campaign_code:
+            continue
 
-        campaign = f"coinmaster_daily_gift_{gift_id}"
+        campaign_date = extract_campaign_date_from_code(campaign_code)
+        display_date = campaign_date_to_display_date(campaign_date)
+
+        gift_id = button_el.get("data-id", "").strip()
+
+        campaign = f"coinmaster_reward_{campaign_code}"
 
         records.append({
             "display_date": display_date,
@@ -161,11 +173,8 @@ def scrape_rewards(html):
             "mobile_url": build_mobile_reward_url(reward_url),
             "source": PAGE_URL,
             "gift_id": gift_id,
-            "published_at": (
-                published_dt.strftime("%Y-%m-%d %H:%M:%S")
-                if published_dt
-                else ""
-            ),
+            "campaign_code": campaign_code,
+            "published_at": "",
         })
 
     unique = {}
@@ -178,8 +187,8 @@ def scrape_rewards(html):
     result.sort(
         key=lambda item: (
             item.get("campaign_date") or "",
-            item.get("published_at") or "",
             item.get("gift_id") or "",
+            item.get("campaign_code") or "",
         ),
         reverse=True
     )
@@ -232,7 +241,7 @@ def save_outputs(records, output_dir, prefix):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Fetch Coin Master reward links from coinmaster-daily.com"
+        description="Fetch Coin Master reward links from mycoinmaster.com"
     )
 
     parser.add_argument(
@@ -275,7 +284,7 @@ def main():
     html = fetch_html(PAGE_URL)
     records = scrape_rewards(html)
 
-    print(f"Total rewards found: {len(records)}")
+    print(f"Total valid rewards found: {len(records)}")
 
     filtered = filter_rewards(
         records,
