@@ -11,7 +11,9 @@ import requests
 from bs4 import BeautifulSoup
 
 PAGE_URL = "https://mycoinmaster.com/"
-REWARD_URL_PREFIX = "https://rewards.coinmaster.com/rewards/rewards.html?c="
+REWARD_URL_BASE_HOST = "rewards.coinmaster.com"
+REWARD_URL_BASE_PATH = "/rewards/rewards.html"
+DEFAULT_TIMEZONE = "Asia/Taipei"
 
 
 def fetch_html(url):
@@ -72,20 +74,42 @@ def build_mobile_reward_url(url):
 
 def is_valid_reward_url(url):
     """
-    只保留這種格式：
-    https://rewards.coinmaster.com/rewards/rewards.html?c=xxxx
+    只要符合 rewards.coinmaster.com/rewards/rewards.html 的連結就抓。
+
+    會抓：
+    https://rewards.coinmaster.com/rewards/rewards.html
+    https://rewards.coinmaster.com/rewards/rewards.html?c=pe_EMAILBNfzwg_20260531
+
+    不會抓：
+    https://coinmasterfreespins.online/
+    https://rewards.coinmaster.com/other.html?c=xxx
     """
-    return url.startswith(REWARD_URL_PREFIX)
+    parsed = urlparse(url)
+
+    if parsed.scheme not in ("http", "https"):
+        return False
+
+    if parsed.netloc.lower() != REWARD_URL_BASE_HOST:
+        return False
+
+    if parsed.path != REWARD_URL_BASE_PATH:
+        return False
+
+    return True
 
 
 def extract_campaign_code(url):
     """
     從網址取得 c 參數。
+    c 參數用於區分不同獎勵。
+
     例如：
     https://rewards.coinmaster.com/rewards/rewards.html?c=pe_EMAILBNfzwg_20260531
 
     回傳：
     pe_EMAILBNfzwg_20260531
+
+    如果沒有 c，回傳空字串。
     """
     parsed = urlparse(url)
     query = parse_qs(parsed.query)
@@ -101,9 +125,12 @@ def extract_campaign_code(url):
 def extract_campaign_date_from_code(campaign_code):
     """
     從 campaign code 最後面抽出 YYYYMMDD。
+
     例如：
     pe_EMAILBNfzwg_20260531 -> 20260531
     pe_FCBGZQHsy_20260603 -> 20260603
+
+    如果沒有日期格式，回傳空字串。
     """
     match = re.search(r"_(\d{8})$", campaign_code)
 
@@ -124,14 +151,170 @@ def campaign_date_to_display_date(campaign_date):
         return "Unknown"
 
 
+def extract_page_modified_date(soup):
+    """
+    從頁面的 meta dateModified 取得網站更新日期。
+
+    例如：
+    <meta name="dateModified" content="2026-06-03 09:00:10">
+
+    回傳：
+    20260603
+
+    如果沒有 dateModified，就用台北時區今天。
+    """
+    meta = soup.select_one('meta[name="dateModified"]')
+
+    if meta:
+        content = meta.get("content", "").strip()
+
+        for fmt in ("%Y-%m-%d %H:%M:%S", "%Y-%m-%d"):
+            try:
+                dt = datetime.strptime(content, fmt)
+                return dt.strftime("%Y%m%d")
+            except Exception:
+                pass
+
+    return datetime.now(ZoneInfo(DEFAULT_TIMEZONE)).strftime("%Y%m%d")
+
+
+def get_base_year_from_date(date_text):
+    if not date_text or len(date_text) < 4:
+        return datetime.now(ZoneInfo(DEFAULT_TIMEZONE)).year
+
+    try:
+        return int(date_text[:4])
+    except Exception:
+        return datetime.now(ZoneInfo(DEFAULT_TIMEZONE)).year
+
+
+def parse_heading_date(heading_text, page_date):
+    """
+    從 fs-heading 標題解析區塊日期。
+
+    可處理：
+    - Coin Master Free Spins Today
+    - Coin Master Free Spins 02-June
+    - Coin Master Free Spins 01-June
+    - Coin Master Free Spins Bonus
+
+    Today 使用頁面 dateModified。
+    02-June / 01-June 使用 page_date 的年份。
+    Bonus 無明確日期，回傳空字串。
+    """
+    heading_text = re.sub(r"\s+", " ", heading_text).strip()
+
+    if re.search(r"\bToday\b", heading_text, re.IGNORECASE):
+        return page_date
+
+    match = re.search(
+        r"(\d{1,2})\s*[- ]\s*"
+        r"(January|February|March|April|May|June|July|August|September|October|November|December|"
+        r"Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)",
+        heading_text,
+        re.IGNORECASE
+    )
+
+    if not match:
+        return ""
+
+    day = int(match.group(1))
+    month_name = match.group(2).lower()
+
+    month_map = {
+        "january": 1,
+        "jan": 1,
+        "february": 2,
+        "feb": 2,
+        "march": 3,
+        "mar": 3,
+        "april": 4,
+        "apr": 4,
+        "may": 5,
+        "june": 6,
+        "jun": 6,
+        "july": 7,
+        "jul": 7,
+        "august": 8,
+        "aug": 8,
+        "september": 9,
+        "sep": 9,
+        "sept": 9,
+        "october": 10,
+        "oct": 10,
+        "november": 11,
+        "nov": 11,
+        "december": 12,
+        "dec": 12,
+    }
+
+    month = month_map.get(month_name)
+
+    if not month:
+        return ""
+
+    year = get_base_year_from_date(page_date)
+
+    try:
+        dt = datetime(year, month, day)
+        return dt.strftime("%Y%m%d")
+    except Exception:
+        return ""
+
+
+def build_campaign_id(campaign_code, reward_url, gift_id):
+    """
+    建立唯一 campaign id。
+
+    優先順序：
+    1. 有 c 參數：用 c 參數區分不同獎勵
+    2. 沒有 c 參數但有 data-id：用 data-id
+    3. 都沒有：用完整 URL
+    """
+    if campaign_code:
+        return f"coinmaster_reward_{campaign_code}"
+
+    if gift_id:
+        return f"coinmaster_reward_id_{gift_id}"
+
+    safe_url = re.sub(r"[^a-zA-Z0-9]+", "_", reward_url).strip("_")
+    return f"coinmaster_reward_url_{safe_url}"
+
+
 def scrape_rewards(html):
     soup = BeautifulSoup(html, "lxml")
 
-    blocks = soup.select(".fs-wrapper .fs-block")
+    wrapper = soup.select_one(".fs-wrapper")
+
+    if not wrapper:
+        return []
+
+    page_date = extract_page_modified_date(soup)
 
     records = []
 
-    for block in blocks:
+    current_section_title = ""
+    current_section_date = ""
+
+    for child in wrapper.children:
+        if not getattr(child, "name", None):
+            continue
+
+        classes = child.get("class", [])
+
+        if "fs-heading" in classes:
+            current_section_title = child.get_text(" ", strip=True)
+            current_section_date = parse_heading_date(
+                current_section_title,
+                page_date
+            )
+            continue
+
+        if "fs-block" not in classes:
+            continue
+
+        block = child
+
         bonus_el = block.select_one(".fs-bonus")
         button_el = block.select_one(".fs-collect button[data-url]")
 
@@ -152,17 +335,19 @@ def scrape_rewards(html):
         if not is_valid_reward_url(reward_url):
             continue
 
-        campaign_code = extract_campaign_code(reward_url)
-
-        if not campaign_code:
-            continue
-
-        campaign_date = extract_campaign_date_from_code(campaign_code)
-        display_date = campaign_date_to_display_date(campaign_date)
-
         gift_id = button_el.get("data-id", "").strip()
 
-        campaign = f"coinmaster_reward_{campaign_code}"
+        campaign_code = extract_campaign_code(reward_url)
+        campaign_code_date = extract_campaign_date_from_code(campaign_code)
+
+        campaign_date = current_section_date
+        display_date = campaign_date_to_display_date(campaign_date)
+
+        campaign = build_campaign_id(
+            campaign_code=campaign_code,
+            reward_url=reward_url,
+            gift_id=gift_id
+        )
 
         records.append({
             "display_date": display_date,
@@ -174,6 +359,8 @@ def scrape_rewards(html):
             "source": PAGE_URL,
             "gift_id": gift_id,
             "campaign_code": campaign_code,
+            "campaign_code_date": campaign_code_date,
+            "section_title": current_section_title,
             "published_at": "",
         })
 
@@ -189,6 +376,7 @@ def scrape_rewards(html):
             item.get("campaign_date") or "",
             item.get("gift_id") or "",
             item.get("campaign_code") or "",
+            item.get("url") or "",
         ),
         reverse=True
     )
@@ -246,12 +434,12 @@ def main():
 
     parser.add_argument(
         "--date",
-        help="依日期過濾，格式 YYYYMMDD，例如 20260531"
+        help="依網頁區塊日期過濾，格式 YYYYMMDD，例如 20260603"
     )
 
     parser.add_argument(
         "--display-date",
-        help="依顯示日期過濾，格式例如 05/31/2026"
+        help="依顯示日期過濾，格式例如 06/03/2026"
     )
 
     parser.add_argument(
@@ -277,7 +465,7 @@ def main():
     target_date = args.date
 
     if args.today:
-        target_date = datetime.now(ZoneInfo("Asia/Taipei")).strftime("%Y%m%d")
+        target_date = datetime.now(ZoneInfo(DEFAULT_TIMEZONE)).strftime("%Y%m%d")
 
     print(f"Fetching page: {PAGE_URL}")
 
@@ -299,6 +487,7 @@ def main():
             f'{item["display_date"]} | '
             f'{item["campaign_date"]} | '
             f'{item["reward"]} | '
+            f'{item["section_title"]} | '
             f'{item["campaign"]} | '
             f'{item["url"]}'
         )
