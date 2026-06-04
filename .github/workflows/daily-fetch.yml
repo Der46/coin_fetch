@@ -40,11 +40,42 @@ jobs:
         run: |
           python fetch_rewards.py --output-dir output
 
+      - name: Check output changes
+        id: check_output_changes
+        shell: bash
+        run: |
+          echo "Checking whether output files changed..."
+
+          if git diff --quiet -- output; then
+            echo "No changes detected in output files."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "Changes detected in output files."
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Generate static site
+        if: steps.check_output_changes.outputs.changed == 'true'
         run: |
           python generate_site.py
 
+      - name: Check final changes
+        id: check_final_changes
+        if: steps.check_output_changes.outputs.changed == 'true'
+        shell: bash
+        run: |
+          echo "Checking final changes for output and docs/index.html..."
+
+          if git diff --quiet -- output docs/index.html; then
+            echo "No final changes to commit."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "Final changes detected."
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Commit and push changes
+        if: steps.check_final_changes.outputs.changed == 'true'
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: update daily Coin Master rewards"
