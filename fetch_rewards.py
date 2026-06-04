@@ -2,6 +2,7 @@ import argparse
 import json
 import os
 import re
+import time
 from datetime import datetime
 from zoneinfo import ZoneInfo
 from urllib.parse import urljoin, urlparse, parse_qs
@@ -16,7 +17,17 @@ REWARD_URL_BASE_PATH = "/rewards/rewards.html"
 DEFAULT_TIMEZONE = "Asia/Taipei"
 
 
-def fetch_html(url):
+def fetch_html(url, retries=3, timeout=30):
+    """
+    抓取 HTML，並在網路錯誤時自動重試。
+
+    可處理常見暫時性錯誤：
+    - Network is unreachable
+    - Connection timeout
+    - DNS 暫時失敗
+    - 5xx server error
+    - Connection reset
+    """
     headers = {
         "User-Agent": (
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -31,9 +42,148 @@ def fetch_html(url):
         "Referer": PAGE_URL,
     }
 
-    response = requests.get(url, headers=headers, timeout=30)
-    response.raise_for_status()
-    return response.text
+    last_error = None
+
+    for attempt in range(1, retries + 1):
+        try:
+            print(f"Fetch attempt {attempt}/{retries}: {url}")
+
+            response = requests.get(
+                url,
+                headers=headers,
+                timeout=timeout,
+            )
+            response.raise_for_status()
+
+            print("Fetch successful.")
+            return response.text
+
+        except requests.exceptions.RequestException as e:
+            last_error = e
+
+            print("")
+            print(f"WARNING: Fetch attempt {attempt}/{retries} failed.")
+            print(f"Reason: {e}")
+
+            if attempt < retries:
+                wait_seconds = attempt * 10
+                print(f"Retrying in {wait_seconds} seconds...")
+                print("")
+                time.sleep(wait_seconds)
+
+    raise last_error
+
+
+def get_existing_output_json_path(output_dir, prefix, target_date=None, display_date=None):
+    """
+    根據目前執行參數，推算本次應該使用的 JSON 檔案路徑。
+
+    一般排程沒有帶 --date 或 --display-date 時：
+    output/coinmaster_rewards.json
+
+    如果帶 --date 20260603：
+    output/coinmaster_rewards_20260603.json
+
+    如果帶 --display-date 06/03/2026：
+    output/coinmaster_rewards_06-03-2026.json
+    """
+    if target_date:
+        output_prefix = f"{prefix}_{target_date}"
+    elif display_date:
+        safe_display_date = display_date.replace("/", "-")
+        output_prefix = f"{prefix}_{safe_display_date}"
+    else:
+        output_prefix = prefix
+
+    return os.path.join(output_dir, f"{output_prefix}.json")
+
+
+def has_existing_output(output_dir, prefix, target_date=None, display_date=None):
+    """
+    檢查是否已有舊的 JSON 資料可沿用。
+
+    當來源網站暫時連不上時，只要這個檔案存在且不是空檔，
+    就讓 workflow 繼續執行，不要因為一次網路問題中斷。
+    """
+    json_path = get_existing_output_json_path(
+        output_dir=output_dir,
+        prefix=prefix,
+        target_date=target_date,
+        display_date=display_date,
+    )
+
+    return os.path.exists(json_path) and os.path.getsize(json_path) > 0
+
+
+def skip_fetch_with_existing_data(reason, output_dir, prefix, target_date=None, display_date=None):
+    """
+    抓取失敗但已有舊資料時，正常結束 fetch 階段。
+
+    注意：
+    這裡不要 raise exception。
+    直接 return，讓 Python 以 exit code 0 結束。
+    """
+    json_path = get_existing_output_json_path(
+        output_dir=output_dir,
+        prefix=prefix,
+        target_date=target_date,
+        display_date=display_date,
+    )
+
+    print("")
+    print("=" * 70)
+    print("WARNING: 無法抓取最新 Coin Master rewards。")
+    print("=" * 70)
+    print(f"原因：{reason}")
+    print("")
+    print(f"已找到既有資料：{json_path}")
+    print("本次將沿用舊資料，workflow 會繼續執行。")
+    print("=" * 70)
+    print("")
+
+
+def handle_fetch_failure(reason, output_dir, prefix, target_date=None, display_date=None):
+    """
+    統一處理抓取失敗的情況。
+
+    - 有舊資料：沿用舊資料並正常結束
+    - 沒舊資料：重新丟出錯誤，讓 workflow 失敗
+    """
+    if has_existing_output(
+        output_dir=output_dir,
+        prefix=prefix,
+        target_date=target_date,
+        display_date=display_date,
+    ):
+        skip_fetch_with_existing_data(
+            reason=reason,
+            output_dir=output_dir,
+            prefix=prefix,
+            target_date=target_date,
+            display_date=display_date,
+        )
+        return True
+
+    expected_json_path = get_existing_output_json_path(
+        output_dir=output_dir,
+        prefix=prefix,
+        target_date=target_date,
+        display_date=display_date,
+    )
+
+    print("")
+    print("=" * 70)
+    print("ERROR: 無法抓取資料，而且沒有既有 output 可沿用。")
+    print("=" * 70)
+    print(f"原因：{reason}")
+    print("")
+    print(f"找不到可沿用的既有資料：{expected_json_path}")
+    print("因為沒有舊資料，無法產生網站資料。")
+    print("這種情況下讓 workflow 失敗是合理的。")
+    print("=" * 70)
+    print("")
+
+    return False
 
 
 def normalize_reward_text(text):
@@ -469,7 +619,31 @@ def main():
 
     print(f"Fetching page: {PAGE_URL}")
 
-    html = fetch_html(PAGE_URL)
+    try:
+        html = fetch_html(PAGE_URL)
+    except requests.exceptions.RequestException as e:
+        if handle_fetch_failure(
+            reason=e,
+            output_dir=args.output_dir,
+            prefix=args.prefix,
+            target_date=target_date,
+            display_date=args.display_date,
+        ):
+            return
+
+        raise
+    except Exception as e:
+        if handle_fetch_failure(
+            reason=e,
+            output_dir=args.output_dir,
+            prefix=args.prefix,
+            target_date=target_date,
+            display_date=args.display_date,
+        ):
+            return
+
+        raise
+
     records = scrape_rewards(html)
 
     print(f"Total valid rewards found: {len(records)}")
