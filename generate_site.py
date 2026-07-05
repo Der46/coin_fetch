@@ -63,10 +63,12 @@ def generate_html(records):
 
             rows_html.append(f"""
             <article class="card reward-card" data-campaign="{campaign}">
-              <div class="claimed-badge">已領取</div>
+              <div class="claimed-badge" data-i18n="claimedBadge">已領取</div>
 
               <div class="reward">{reward}</div>
-              <div class="meta">Campaign Date：{campaign_date}</div>
+              <div class="meta">
+                <span data-i18n="campaignDateLabel">Campaign Date</span>：{campaign_date}
+              </div>
               <div class="campaign">{campaign}</div>
 
               <div class="actions">
@@ -131,6 +133,7 @@ def generate_html(records):
       color: white;
       padding: 40px 20px;
       text-align: center;
+      position: relative;
     }}
 
     header h1 {{
@@ -141,6 +144,37 @@ def generate_html(records):
     header p {{
       margin: 6px 0;
       opacity: 0.95;
+    }}
+
+    .language-switcher {{
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 999px;
+      padding: 8px 12px;
+      backdrop-filter: blur(8px);
+    }}
+
+    .language-switcher label {{
+      font-size: 14px;
+      font-weight: 700;
+      color: white;
+    }}
+
+    .language-switcher select {{
+      border: none;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-weight: 700;
+      color: var(--text);
+      background: white;
+      cursor: pointer;
+      outline: none;
     }}
 
     main {{
@@ -385,8 +419,18 @@ def generate_html(records):
     }}
 
     @media (max-width: 600px) {{
+      header {{
+        padding-top: 76px;
+      }}
+
       header h1 {{
         font-size: 26px;
+      }}
+
+      .language-switcher {{
+        top: 14px;
+        right: 50%;
+        transform: translateX(50%);
       }}
 
       .cards {{
@@ -410,31 +454,44 @@ def generate_html(records):
 
 <body>
   <header>
-    <h1>Coin Master 每日獎勵連結</h1>
-    <p>每日自動更新免費能量 / 旋轉 / 金幣連結</p>
-    <p>最後更新：{html.escape(now)} Asia/Taipei</p>
+    <div class="language-switcher">
+      <label for="languageSelect" data-i18n="languageLabel">語言</label>
+      <select id="languageSelect" aria-label="Language">
+        <option value="zh-Hant">繁體中文</option>
+        <option value="en">English</option>
+        <option value="vi">Tiếng Việt</option>
+      </select>
+    </div>
+
+    <h1 data-i18n="siteTitle">Coin Master 每日獎勵連結</h1>
+    <p data-i18n="siteSubtitle">每日自動更新免費能量 / 旋轉 / 金幣連結</p>
+    <p>
+      <span data-i18n="lastUpdated">最後更新</span>：{html.escape(now)} Asia/Taipei
+    </p>
   </header>
 
   <main>
     <div class="summary">
       <div>
-        目前共收錄 <strong>{total}</strong> 筆獎勵連結。
-        資料來源為公開網頁整理，點擊前請自行確認連結狀態。
+        <span data-i18n="summaryPrefix">目前共收錄</span>
+        <strong>{total}</strong>
+        <span data-i18n="summarySuffix">筆獎勵連結。</span>
+        <span data-i18n="summaryNotice">資料來源為公開網頁整理，點擊前請自行確認連結狀態。</span>
       </div>
 
       <div class="summary-controls">
         <label class="filter-control">
           <input type="checkbox" id="hideClaimed">
-          隱藏已領取
+          <span data-i18n="hideClaimed">隱藏已領取</span>
         </label>
 
-        <button type="button" id="clearClaimed" class="clear-claimed">
+        <button type="button" id="clearClaimed" class="clear-claimed" data-i18n="clearClaimed">
           清除已領取紀錄
         </button>
       </div>
     </div>
 
-    <div id="emptyMessage" class="empty-message">
+    <div id="emptyMessage" class="empty-message" data-i18n="emptyMessage">
       目前沒有可顯示的獎勵。可能全部都已標記為已領取。
     </div>
 
@@ -448,9 +505,125 @@ def generate_html(records):
   <script>
     const STORAGE_PREFIX = "coinmaster_claimed_";
     const HIDE_CLAIMED_KEY = "coinmaster_hide_claimed";
+    const LANGUAGE_KEY = "coinmaster_language";
+
+    const I18N = {{
+      "zh-Hant": {{
+        languageLabel: "語言",
+        siteTitle: "Coin Master 每日獎勵連結",
+        siteSubtitle: "每日自動更新免費能量 / 旋轉 / 金幣連結",
+        lastUpdated: "最後更新",
+        summaryPrefix: "目前共收錄",
+        summarySuffix: "筆獎勵連結。",
+        summaryNotice: "資料來源為公開網頁整理，點擊前請自行確認連結狀態。",
+        hideClaimed: "隱藏已領取",
+        clearClaimed: "清除已領取紀錄",
+        emptyMessage: "目前沒有可顯示的獎勵。可能全部都已標記為已領取。",
+        claimedBadge: "已領取",
+        campaignDateLabel: "Campaign Date",
+        claim: "領取",
+        claimed: "已領取",
+        markClaimed: "標記已領",
+        unmarkClaimed: "取消標記",
+        clearConfirm: "確定要清除所有已領取紀錄嗎？"
+      }},
+      "en": {{
+        languageLabel: "Language",
+        siteTitle: "Coin Master Daily Reward Links",
+        siteSubtitle: "Automatically updated daily free spins, energy, and coin links",
+        lastUpdated: "Last updated",
+        summaryPrefix: "Currently collected",
+        summarySuffix: "reward links.",
+        summaryNotice: "Data is collected from public webpages. Please verify each link before opening.",
+        hideClaimed: "Hide claimed",
+        clearClaimed: "Clear claimed records",
+        emptyMessage: "No rewards are currently visible. They may all be marked as claimed.",
+        claimedBadge: "Claimed",
+        campaignDateLabel: "Campaign Date",
+        claim: "Claim",
+        claimed: "Claimed",
+        markClaimed: "Mark claimed",
+        unmarkClaimed: "Unmark",
+        clearConfirm: "Are you sure you want to clear all claimed records?"
+      }},
+      "vi": {{
+        languageLabel: "Ngôn ngữ",
+        siteTitle: "Liên kết phần thưởng Coin Master hằng ngày",
+        siteSubtitle: "Tự động cập nhật liên kết vòng quay, năng lượng và xu miễn phí mỗi ngày",
+        lastUpdated: "Cập nhật lần cuối",
+        summaryPrefix: "Hiện có",
+        summarySuffix: "liên kết phần thưởng.",
+        summaryNotice: "Dữ liệu được tổng hợp từ các trang công khai. Vui lòng kiểm tra liên kết trước khi mở.",
+        hideClaimed: "Ẩn đã nhận",
+        clearClaimed: "Xóa lịch sử đã nhận",
+        emptyMessage: "Hiện không có phần thưởng nào để hiển thị. Có thể tất cả đã được đánh dấu là đã nhận.",
+        claimedBadge: "Đã nhận",
+        campaignDateLabel: "Ngày chiến dịch",
+        claim: "Nhận",
+        claimed: "Đã nhận",
+        markClaimed: "Đánh dấu đã nhận",
+        unmarkClaimed: "Bỏ đánh dấu",
+        clearConfirm: "Bạn có chắc muốn xóa toàn bộ lịch sử đã nhận không?"
+      }}
+    }};
+
+    function getCurrentLanguage() {{
+      const savedLanguage = localStorage.getItem(LANGUAGE_KEY);
+
+      if (savedLanguage && I18N[savedLanguage]) {{
+        return savedLanguage;
+      }}
+
+      return "zh-Hant";
+    }}
+
+    function t(key) {{
+      const language = getCurrentLanguage();
+      return I18N[language][key] || I18N["zh-Hant"][key] || key;
+    }}
 
     function getStorageKey(campaign) {{
       return STORAGE_PREFIX + campaign;
+    }}
+
+    function applyLanguage(language) {{
+      if (!I18N[language]) {{
+        language = "zh-Hant";
+      }}
+
+      localStorage.setItem(LANGUAGE_KEY, language);
+
+      document.documentElement.lang = language;
+
+      const title = I18N[language].siteTitle;
+      document.title = title;
+
+      document.querySelectorAll("[data-i18n]").forEach(element => {{
+        const key = element.dataset.i18n;
+
+        if (I18N[language][key]) {{
+          element.textContent = I18N[language][key];
+        }}
+      }});
+
+      const selector = document.querySelector("#languageSelect");
+
+      if (selector) {{
+        selector.value = language;
+      }}
+
+      refreshClaimTexts();
+    }}
+
+    function refreshClaimTexts() {{
+      document.querySelectorAll(".reward-card").forEach(card => {{
+        const campaign = card.dataset.campaign;
+
+        if (!campaign) return;
+
+        const claimed = localStorage.getItem(getStorageKey(campaign)) === "1";
+        applyClaimedState(card, claimed, false);
+      }});
     }}
 
     function applyEmptyMessage() {{
@@ -499,7 +672,7 @@ def generate_html(records):
       applyEmptyMessage();
     }}
 
-    function applyClaimedState(card, claimed) {{
+    function applyClaimedState(card, claimed, applyFilter = true) {{
       const button = card.querySelector(".claim-toggle");
       const link = card.querySelector(".claim-link");
 
@@ -507,25 +680,27 @@ def generate_html(records):
         card.classList.add("claimed");
 
         if (button) {{
-          button.textContent = "取消標記";
+          button.textContent = t("unmarkClaimed");
         }}
 
         if (link) {{
-          link.textContent = "已領取";
+          link.textContent = t("claimed");
         }}
       }} else {{
         card.classList.remove("claimed");
 
         if (button) {{
-          button.textContent = "標記已領";
+          button.textContent = t("markClaimed");
         }}
 
         if (link) {{
-          link.textContent = "領取";
+          link.textContent = t("claim");
         }}
       }}
 
-      applyHideClaimedFilter();
+      if (applyFilter) {{
+        applyHideClaimedFilter();
+      }}
     }}
 
     function markCardAsClaimed(card, campaign) {{
@@ -614,7 +789,7 @@ def generate_html(records):
       if (!button) return;
 
       button.addEventListener("click", () => {{
-        const confirmed = window.confirm("確定要清除所有已領取紀錄嗎？");
+        const confirmed = window.confirm(t("clearConfirm"));
 
         if (!confirmed) return;
 
@@ -638,7 +813,22 @@ def generate_html(records):
       }});
     }}
 
+    function bindLanguageSwitcher() {{
+      const selector = document.querySelector("#languageSelect");
+
+      if (!selector) return;
+
+      selector.value = getCurrentLanguage();
+
+      selector.addEventListener("change", () => {{
+        applyLanguage(selector.value);
+      }});
+    }}
+
     document.addEventListener("DOMContentLoaded", () => {{
+      bindLanguageSwitcher();
+      applyLanguage(getCurrentLanguage());
+
       initClaimedRewards();
       bindClaimLinks();
       bindClaimButtons();
