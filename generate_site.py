@@ -70,7 +70,16 @@ def generate_html(records):
               <div class="campaign">{campaign}</div>
 
               <div class="actions">
-                <a href="{url}" target="_blank" rel="noopener">領取</a>
+                <a
+                  href="{url}"
+                  target="_blank"
+                  rel="noopener"
+                  class="claim-link"
+                  data-campaign="{campaign}"
+                >
+                  領取
+                </a>
+
                 <button type="button" class="claim-toggle" data-campaign="{campaign}">
                   標記已領
                 </button>
@@ -102,6 +111,7 @@ def generate_html(records):
       --primary-dark: #dc2626;
       --border: #e5e7eb;
       --success: #16a34a;
+      --success-dark: #15803d;
       --dark: #374151;
     }}
 
@@ -236,7 +246,7 @@ def generate_html(records):
 
     .reward-card.claimed {{
       background: #f3f4f6;
-      opacity: 0.62;
+      opacity: 0.72;
       border-color: #d1d5db;
     }}
 
@@ -255,8 +265,8 @@ def generate_html(records):
     }}
 
     .reward-card.claimed .reward {{
-      background: #e5e7eb;
-      color: #6b7280;
+      background: #dcfce7;
+      color: var(--success-dark);
     }}
 
     .meta {{
@@ -314,10 +324,22 @@ def generate_html(records):
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      transition:
+        background-color 0.2s ease,
+        transform 0.15s ease,
+        opacity 0.2s ease;
     }}
 
     .actions a:hover {{
       background: var(--primary-dark);
+    }}
+
+    .reward-card.claimed .claim-link {{
+      background: var(--success);
+    }}
+
+    .reward-card.claimed .claim-link:hover {{
+      background: var(--success-dark);
     }}
 
     .claim-toggle {{
@@ -479,6 +501,7 @@ def generate_html(records):
 
     function applyClaimedState(card, claimed) {{
       const button = card.querySelector(".claim-toggle");
+      const link = card.querySelector(".claim-link");
 
       if (claimed) {{
         card.classList.add("claimed");
@@ -486,15 +509,32 @@ def generate_html(records):
         if (button) {{
           button.textContent = "取消標記";
         }}
+
+        if (link) {{
+          link.textContent = "已領取";
+        }}
       }} else {{
         card.classList.remove("claimed");
 
         if (button) {{
           button.textContent = "標記已領";
         }}
+
+        if (link) {{
+          link.textContent = "領取";
+        }}
       }}
 
       applyHideClaimedFilter();
+    }}
+
+    function markCardAsClaimed(card, campaign) {{
+      if (!campaign || !card) return;
+
+      const key = getStorageKey(campaign);
+
+      localStorage.setItem(key, "1");
+      applyClaimedState(card, true);
     }}
 
     function initClaimedRewards() {{
@@ -507,6 +547,19 @@ def generate_html(records):
 
         const claimed = localStorage.getItem(getStorageKey(campaign)) === "1";
         applyClaimedState(card, claimed);
+      }});
+    }}
+
+    function bindClaimLinks() {{
+      const links = document.querySelectorAll(".claim-link");
+
+      links.forEach(link => {{
+        link.addEventListener("click", () => {{
+          const campaign = link.dataset.campaign;
+          const card = link.closest(".reward-card");
+
+          markCardAsClaimed(card, campaign);
+        }});
       }});
     }}
 
@@ -587,6 +640,7 @@ def generate_html(records):
 
     document.addEventListener("DOMContentLoaded", () => {{
       initClaimedRewards();
+      bindClaimLinks();
       bindClaimButtons();
       bindHideClaimedFilter();
       bindClearClaimed();
