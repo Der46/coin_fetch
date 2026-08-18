@@ -7,7 +7,6 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 from urllib.parse import urljoin, urlparse, parse_qs
 
-import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 
@@ -217,7 +216,10 @@ def build_reward_url(raw_url):
 def build_mobile_reward_url(url):
     """
     mycoinmaster.com 的連結本身就是 rewards.coinmaster.com 官方領取入口。
+
     mobile_url 保留是為了相容舊版 JSON 結構。
+    雖然目前不再輸出 mobile txt，但 JSON 裡保留這個欄位，
+    可以避免前端或舊資料處理流程失效。
     """
     return url
 
@@ -552,29 +554,56 @@ def filter_rewards(records, target_date=None, display_date=None):
     return result
 
 
-def save_outputs(records, output_dir, prefix):
+def cleanup_legacy_outputs(output_dir, output_prefix):
+    """
+    清除舊版不再需要的輸出檔案。
+
+    目前專案只需要：
+    output/coinmaster_rewards.json
+
+    因此會刪除：
+    output/coinmaster_rewards.csv
+    output/coinmaster_rewards.txt
+    output/coinmaster_rewards_mobile.txt
+
+    如果使用 --date 或 --display-date 產生不同 prefix，
+    也會同步刪除對應的舊格式檔案。
+    """
+    legacy_paths = [
+        os.path.join(output_dir, f"{output_prefix}.csv"),
+        os.path.join(output_dir, f"{output_prefix}.txt"),
+        os.path.join(output_dir, f"{output_prefix}_mobile.txt"),
+    ]
+
+    for path in legacy_paths:
+        if os.path.exists(path):
+            os.remove(path)
+            print(f"Removed legacy output: {path}")
+
+
+def save_outputs(records, output_dir, output_prefix):
+    """
+    只輸出 JSON。
+
+    一般情況：
+    output/coinmaster_rewards.json
+
+    若有 --date：
+    output/coinmaster_rewards_YYYYMMDD.json
+
+    若有 --display-date：
+    output/coinmaster_rewards_MM-DD-YYYY.json
+    """
     os.makedirs(output_dir, exist_ok=True)
 
-    json_path = os.path.join(output_dir, f"{prefix}.json")
-    csv_path = os.path.join(output_dir, f"{prefix}.csv")
-    txt_path = os.path.join(output_dir, f"{prefix}.txt")
-    mobile_txt_path = os.path.join(output_dir, f"{prefix}_mobile.txt")
+    cleanup_legacy_outputs(output_dir, output_prefix)
+
+    json_path = os.path.join(output_dir, f"{output_prefix}.json")
 
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(records, f, ensure_ascii=False, indent=2)
 
-    df = pd.DataFrame(records)
-    df.to_csv(csv_path, index=False, encoding="utf-8-sig")
-
-    with open(txt_path, "w", encoding="utf-8") as f:
-        for item in records:
-            f.write(item["url"] + "\n")
-
-    with open(mobile_txt_path, "w", encoding="utf-8") as f:
-        for item in records:
-            f.write(item["mobile_url"] + "\n")
-
-    return json_path, csv_path, txt_path, mobile_txt_path
+    return json_path
 
 
 def main():
@@ -667,23 +696,21 @@ def main():
         )
 
     if target_date:
-        prefix = f"{args.prefix}_{target_date}"
+        output_prefix = f"{args.prefix}_{target_date}"
     elif args.display_date:
         safe_display_date = args.display_date.replace("/", "-")
-        prefix = f"{args.prefix}_{safe_display_date}"
+        output_prefix = f"{args.prefix}_{safe_display_date}"
     else:
-        prefix = args.prefix
+        output_prefix = args.prefix
 
-    output_paths = save_outputs(
-        filtered,
-        args.output_dir,
-        prefix
+    output_path = save_outputs(
+        records=filtered,
+        output_dir=args.output_dir,
+        output_prefix=output_prefix
     )
 
-    print("Output files:")
-
-    for path in output_paths:
-        print(path)
+    print("Output file:")
+    print(output_path)
 
 
 if __name__ == "__main__":

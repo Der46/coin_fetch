@@ -6,7 +6,299 @@ from collections import defaultdict
 import html
 
 INPUT_JSON = "output/coinmaster_rewards.json"
+
 OUTPUT_HTML = "docs/index.html"
+OUTPUT_MANIFEST = "docs/manifest.webmanifest"
+OUTPUT_SW = "docs/sw.js"
+
+DEFAULT_TIMEZONE = "Asia/Taipei"
+
+
+LANGUAGE_CONFIG = {
+    "zh-Hant": {
+        "label": "中文",
+        "timezone": "Asia/Taipei",
+        "timezone_label": "台北時間",
+        "locale": "zh-TW",
+    },
+    "en": {
+        "label": "English",
+        "timezone": "UTC",
+        "timezone_label": "UTC",
+        "locale": "en-US",
+    },
+    "vi": {
+        "label": "Tiếng Việt",
+        "timezone": "Asia/Ho_Chi_Minh",
+        "timezone_label": "Giờ Việt Nam",
+        "locale": "vi-VN",
+    },
+    "ja": {
+        "label": "日本語",
+        "timezone": "Asia/Tokyo",
+        "timezone_label": "日本時間",
+        "locale": "ja-JP",
+    },
+    "ko": {
+        "label": "한국어",
+        "timezone": "Asia/Seoul",
+        "timezone_label": "한국 시간",
+        "locale": "ko-KR",
+    },
+    "th": {
+        "label": "ไทย",
+        "timezone": "Asia/Bangkok",
+        "timezone_label": "เวลาไทย",
+        "locale": "th-TH",
+    },
+    "id": {
+        "label": "Bahasa Indonesia",
+        "timezone": "Asia/Jakarta",
+        "timezone_label": "Waktu Indonesia Barat",
+        "locale": "id-ID",
+    },
+    "es": {
+        "label": "Español",
+        "timezone": "Europe/Madrid",
+        "timezone_label": "Hora de España",
+        "locale": "es-ES",
+    },
+    "pt": {
+        "label": "Português",
+        "timezone": "Europe/Lisbon",
+        "timezone_label": "Hora de Portugal",
+        "locale": "pt-PT",
+    },
+}
+
+
+I18N = {
+    "zh-Hant": {
+        "languageLabel": "語言",
+        "siteTitle": "Coin Master 每日獎勵連結",
+        "siteSubtitle": "每日自動更新免費能量 / 旋轉 / 金幣連結",
+        "lastUpdated": "最後更新",
+        "baseTimeNotice": "系統以台北時間 UTC+8 更新，以下顯示為目前語言地區時間。",
+        "summaryPrefix": "目前共收錄",
+        "summarySuffix": "筆獎勵連結。",
+        "summaryNotice": "資料來源為公開網頁整理，點擊前請自行確認連結狀態。",
+        "hideClaimed": "隱藏已領取",
+        "clearClaimed": "清除已領取紀錄",
+        "emptyMessage": "目前沒有可顯示的獎勵。可能全部都已標記為已領取。",
+        "claimedBadge": "已領取",
+        "campaignDateLabel": "活動日期",
+        "claim": "領取",
+        "claimed": "已領取",
+        "markClaimed": "標記已領",
+        "unmarkClaimed": "取消標記",
+        "clearConfirm": "確定要清除所有已領取紀錄嗎？",
+        "installButton": "安裝到手機桌面",
+        "installUnavailable": "可透過瀏覽器選單加入主畫面",
+        "iosHintTitle": "iPhone / iPad 安裝提示",
+        "iosHintText": "請點選 Safari 分享按鈕，然後選擇「加入主畫面」。",
+        "footerText": "本頁僅整理公開獎勵連結，實際領取狀態以遊戲內顯示為準。",
+    },
+    "en": {
+        "languageLabel": "Language",
+        "siteTitle": "Coin Master Daily Reward Links",
+        "siteSubtitle": "Automatically updated daily free spins, energy, and coin links",
+        "lastUpdated": "Last updated",
+        "baseTimeNotice": "The system updates based on Taipei time UTC+8. The time below is shown in the selected language region.",
+        "summaryPrefix": "Currently collected",
+        "summarySuffix": "reward links.",
+        "summaryNotice": "Data is collected from public webpages. Please verify each link before opening.",
+        "hideClaimed": "Hide claimed",
+        "clearClaimed": "Clear claimed records",
+        "emptyMessage": "No rewards are currently visible. They may all be marked as claimed.",
+        "claimedBadge": "Claimed",
+        "campaignDateLabel": "Campaign Date",
+        "claim": "Claim",
+        "claimed": "Claimed",
+        "markClaimed": "Mark claimed",
+        "unmarkClaimed": "Unmark",
+        "clearConfirm": "Are you sure you want to clear all claimed records?",
+        "installButton": "Install to Home Screen",
+        "installUnavailable": "Use your browser menu to add this page to Home Screen",
+        "iosHintTitle": "iPhone / iPad install tip",
+        "iosHintText": "Tap the Safari Share button, then choose “Add to Home Screen”.",
+        "footerText": "This page only organizes public reward links. Actual claim status depends on the game.",
+    },
+    "vi": {
+        "languageLabel": "Ngôn ngữ",
+        "siteTitle": "Liên kết phần thưởng Coin Master hằng ngày",
+        "siteSubtitle": "Tự động cập nhật liên kết vòng quay, năng lượng và xu miễn phí mỗi ngày",
+        "lastUpdated": "Cập nhật lần cuối",
+        "baseTimeNotice": "Hệ thống cập nhật theo giờ Đài Bắc UTC+8. Thời gian bên dưới được hiển thị theo khu vực ngôn ngữ đã chọn.",
+        "summaryPrefix": "Hiện có",
+        "summarySuffix": "liên kết phần thưởng.",
+        "summaryNotice": "Dữ liệu được tổng hợp từ các trang công khai. Vui lòng kiểm tra liên kết trước khi mở.",
+        "hideClaimed": "Ẩn đã nhận",
+        "clearClaimed": "Xóa lịch sử đã nhận",
+        "emptyMessage": "Hiện không có phần thưởng nào để hiển thị. Có thể tất cả đã được đánh dấu là đã nhận.",
+        "claimedBadge": "Đã nhận",
+        "campaignDateLabel": "Ngày chiến dịch",
+        "claim": "Nhận",
+        "claimed": "Đã nhận",
+        "markClaimed": "Đánh dấu đã nhận",
+        "unmarkClaimed": "Bỏ đánh dấu",
+        "clearConfirm": "Bạn có chắc muốn xóa toàn bộ lịch sử đã nhận không?",
+        "installButton": "Cài vào màn hình chính",
+        "installUnavailable": "Dùng menu trình duyệt để thêm vào màn hình chính",
+        "iosHintTitle": "Gợi ý cài đặt trên iPhone / iPad",
+        "iosHintText": "Nhấn nút Chia sẻ trong Safari, rồi chọn “Thêm vào Màn hình chính”.",
+        "footerText": "Trang này chỉ tổng hợp liên kết quà công khai. Trạng thái nhận thực tế phụ thuộc vào trò chơi.",
+    },
+    "ja": {
+        "languageLabel": "言語",
+        "siteTitle": "Coin Master デイリー報酬リンク",
+        "siteSubtitle": "無料スピン、エネルギー、コインリンクを毎日自動更新",
+        "lastUpdated": "最終更新",
+        "baseTimeNotice": "システムは台北時間 UTC+8 を基準に更新されます。下記の時刻は選択した言語地域の時間で表示されます。",
+        "summaryPrefix": "現在",
+        "summarySuffix": "件の報酬リンクがあります。",
+        "summaryNotice": "データは公開ページから収集されています。リンクを開く前に状態をご確認ください。",
+        "hideClaimed": "受取済みを非表示",
+        "clearClaimed": "受取済み履歴を削除",
+        "emptyMessage": "表示できる報酬がありません。すべて受取済みに設定されている可能性があります。",
+        "claimedBadge": "受取済み",
+        "campaignDateLabel": "キャンペーン日",
+        "claim": "受け取る",
+        "claimed": "受取済み",
+        "markClaimed": "受取済みにする",
+        "unmarkClaimed": "解除",
+        "clearConfirm": "すべての受取済み履歴を削除しますか？",
+        "installButton": "ホーム画面にインストール",
+        "installUnavailable": "ブラウザメニューからホーム画面に追加できます",
+        "iosHintTitle": "iPhone / iPad インストール方法",
+        "iosHintText": "Safari の共有ボタンを押して、「ホーム画面に追加」を選択してください。",
+        "footerText": "このページは公開報酬リンクを整理したものです。実際の受取状況はゲーム内表示に従ってください。",
+    },
+    "ko": {
+        "languageLabel": "언어",
+        "siteTitle": "Coin Master 일일 보상 링크",
+        "siteSubtitle": "무료 스핀, 에너지, 코인 링크를 매일 자동 업데이트합니다",
+        "lastUpdated": "마지막 업데이트",
+        "baseTimeNotice": "시스템은 타이베이 시간 UTC+8 기준으로 업데이트됩니다. 아래 시간은 선택한 언어 지역 시간으로 표시됩니다.",
+        "summaryPrefix": "현재",
+        "summarySuffix": "개의 보상 링크가 있습니다.",
+        "summaryNotice": "데이터는 공개 웹페이지에서 수집되었습니다. 링크를 열기 전에 상태를 확인하세요.",
+        "hideClaimed": "수령 완료 숨기기",
+        "clearClaimed": "수령 기록 삭제",
+        "emptyMessage": "현재 표시할 보상이 없습니다. 모두 수령 완료로 표시되었을 수 있습니다.",
+        "claimedBadge": "수령 완료",
+        "campaignDateLabel": "캠페인 날짜",
+        "claim": "받기",
+        "claimed": "수령 완료",
+        "markClaimed": "수령 표시",
+        "unmarkClaimed": "표시 해제",
+        "clearConfirm": "모든 수령 기록을 삭제하시겠습니까?",
+        "installButton": "홈 화면에 설치",
+        "installUnavailable": "브라우저 메뉴에서 홈 화면에 추가할 수 있습니다",
+        "iosHintTitle": "iPhone / iPad 설치 안내",
+        "iosHintText": "Safari 공유 버튼을 누른 뒤 “홈 화면에 추가”를 선택하세요.",
+        "footerText": "이 페이지는 공개 보상 링크를 정리한 것입니다. 실제 수령 상태는 게임 내 표시를 따릅니다.",
+    },
+    "th": {
+        "languageLabel": "ภาษา",
+        "siteTitle": "ลิงก์รางวัลรายวัน Coin Master",
+        "siteSubtitle": "อัปเดตลิงก์ฟรีสปิน พลังงาน และเหรียญโดยอัตโนมัติทุกวัน",
+        "lastUpdated": "อัปเดตล่าสุด",
+        "baseTimeNotice": "ระบบอัปเดตตามเวลาไทเป UTC+8 เวลาด้านล่างจะแสดงตามภูมิภาคของภาษาที่เลือก",
+        "summaryPrefix": "ขณะนี้มี",
+        "summarySuffix": "ลิงก์รางวัล",
+        "summaryNotice": "ข้อมูลรวบรวมจากหน้าเว็บสาธารณะ โปรดตรวจสอบลิงก์ก่อนเปิด",
+        "hideClaimed": "ซ่อนที่รับแล้ว",
+        "clearClaimed": "ล้างประวัติที่รับแล้ว",
+        "emptyMessage": "ไม่มีรางวัลที่แสดงได้ในขณะนี้ อาจถูกทำเครื่องหมายว่ารับแล้วทั้งหมด",
+        "claimedBadge": "รับแล้ว",
+        "campaignDateLabel": "วันที่แคมเปญ",
+        "claim": "รับ",
+        "claimed": "รับแล้ว",
+        "markClaimed": "ทำเครื่องหมายว่ารับแล้ว",
+        "unmarkClaimed": "ยกเลิกเครื่องหมาย",
+        "clearConfirm": "คุณแน่ใจหรือไม่ว่าต้องการล้างประวัติที่รับแล้วทั้งหมด?",
+        "installButton": "ติดตั้งไปยังหน้าจอหลัก",
+        "installUnavailable": "ใช้เมนูเบราว์เซอร์เพื่อเพิ่มไปยังหน้าจอหลัก",
+        "iosHintTitle": "วิธีติดตั้งบน iPhone / iPad",
+        "iosHintText": "แตะปุ่มแชร์ใน Safari แล้วเลือก “เพิ่มไปยังหน้าจอโฮม”",
+        "footerText": "หน้านี้รวบรวมเฉพาะลิงก์รางวัลสาธารณะ สถานะการรับจริงขึ้นอยู่กับในเกม",
+    },
+    "id": {
+        "languageLabel": "Bahasa",
+        "siteTitle": "Tautan Hadiah Harian Coin Master",
+        "siteSubtitle": "Tautan spin gratis, energi, dan koin diperbarui otomatis setiap hari",
+        "lastUpdated": "Terakhir diperbarui",
+        "baseTimeNotice": "Sistem diperbarui berdasarkan waktu Taipei UTC+8. Waktu di bawah ini ditampilkan sesuai wilayah bahasa yang dipilih.",
+        "summaryPrefix": "Saat ini ada",
+        "summarySuffix": "tautan hadiah.",
+        "summaryNotice": "Data dikumpulkan dari halaman publik. Harap periksa tautan sebelum membukanya.",
+        "hideClaimed": "Sembunyikan yang diklaim",
+        "clearClaimed": "Hapus riwayat klaim",
+        "emptyMessage": "Tidak ada hadiah yang dapat ditampilkan. Mungkin semuanya telah ditandai sebagai diklaim.",
+        "claimedBadge": "Diklaim",
+        "campaignDateLabel": "Tanggal Kampanye",
+        "claim": "Klaim",
+        "claimed": "Diklaim",
+        "markClaimed": "Tandai diklaim",
+        "unmarkClaimed": "Batalkan tanda",
+        "clearConfirm": "Yakin ingin menghapus semua riwayat klaim?",
+        "installButton": "Instal ke Layar Utama",
+        "installUnavailable": "Gunakan menu browser untuk menambahkan ke Layar Utama",
+        "iosHintTitle": "Tips instal iPhone / iPad",
+        "iosHintText": "Ketuk tombol Bagikan di Safari, lalu pilih “Tambahkan ke Layar Utama”.",
+        "footerText": "Halaman ini hanya mengatur tautan hadiah publik. Status klaim sebenarnya bergantung pada game.",
+    },
+    "es": {
+        "languageLabel": "Idioma",
+        "siteTitle": "Enlaces diarios de recompensas de Coin Master",
+        "siteSubtitle": "Actualización automática diaria de giros, energía y monedas gratis",
+        "lastUpdated": "Última actualización",
+        "baseTimeNotice": "El sistema se actualiza según la hora de Taipéi UTC+8. La hora inferior se muestra según la región del idioma seleccionado.",
+        "summaryPrefix": "Hay",
+        "summarySuffix": "enlaces de recompensa.",
+        "summaryNotice": "Los datos se recopilan de páginas públicas. Verifica cada enlace antes de abrirlo.",
+        "hideClaimed": "Ocultar reclamados",
+        "clearClaimed": "Borrar registros reclamados",
+        "emptyMessage": "No hay recompensas visibles. Puede que todas estén marcadas como reclamadas.",
+        "claimedBadge": "Reclamado",
+        "campaignDateLabel": "Fecha de campaña",
+        "claim": "Reclamar",
+        "claimed": "Reclamado",
+        "markClaimed": "Marcar reclamado",
+        "unmarkClaimed": "Desmarcar",
+        "clearConfirm": "¿Seguro que quieres borrar todos los registros reclamados?",
+        "installButton": "Instalar en la pantalla de inicio",
+        "installUnavailable": "Usa el menú del navegador para añadirlo a la pantalla de inicio",
+        "iosHintTitle": "Consejo de instalación en iPhone / iPad",
+        "iosHintText": "Toca el botón Compartir en Safari y elige “Añadir a pantalla de inicio”.",
+        "footerText": "Esta página solo organiza enlaces públicos de recompensa. El estado real depende del juego.",
+    },
+    "pt": {
+        "languageLabel": "Idioma",
+        "siteTitle": "Links diários de recompensas Coin Master",
+        "siteSubtitle": "Links de giros, energia e moedas grátis atualizados automaticamente todos os dias",
+        "lastUpdated": "Última atualização",
+        "baseTimeNotice": "O sistema é atualizado com base no horário de Taipei UTC+8. A hora abaixo é exibida conforme a região do idioma selecionado.",
+        "summaryPrefix": "Há",
+        "summarySuffix": "links de recompensa.",
+        "summaryNotice": "Os dados são coletados de páginas públicas. Verifique cada link antes de abrir.",
+        "hideClaimed": "Ocultar resgatados",
+        "clearClaimed": "Limpar registros resgatados",
+        "emptyMessage": "Nenhuma recompensa está visível. Talvez todas estejam marcadas como resgatadas.",
+        "claimedBadge": "Resgatado",
+        "campaignDateLabel": "Data da campanha",
+        "claim": "Resgatar",
+        "claimed": "Resgatado",
+        "markClaimed": "Marcar como resgatado",
+        "unmarkClaimed": "Desmarcar",
+        "clearConfirm": "Tem certeza de que deseja limpar todos os registros resgatados?",
+        "installButton": "Instalar na tela inicial",
+        "installUnavailable": "Use o menu do navegador para adicionar à tela inicial",
+        "iosHintTitle": "Dica de instalação no iPhone / iPad",
+        "iosHintText": "Toque no botão Compartilhar no Safari e escolha “Adicionar à Tela de Início”.",
+        "footerText": "Esta página apenas organiza links públicos de recompensa. O status real depende do jogo.",
+    },
+}
 
 
 def load_rewards():
@@ -15,6 +307,11 @@ def load_rewards():
 
     with open(INPUT_JSON, "r", encoding="utf-8") as f:
         return json.load(f)
+
+
+def ensure_docs_dir():
+    os.makedirs("docs", exist_ok=True)
+    os.makedirs("docs/icons", exist_ok=True)
 
 
 def group_by_display_date(records):
@@ -34,15 +331,39 @@ def date_sort_key(date_text):
         return datetime.min
 
 
-def generate_html(records):
-    current_time = datetime.now(ZoneInfo("Asia/Taipei"))
-    now = current_time.strftime("%Y-%m-%d %H:%M:%S")
-    year = current_time.year
+def escape_json_for_script(data):
+    return (
+        json.dumps(data, ensure_ascii=False)
+        .replace("</", "<\\/")
+        .replace("\u2028", "\\u2028")
+        .replace("\u2029", "\\u2029")
+    )
 
+
+def build_local_update_times(base_time):
+    """
+    base_time 是 Asia/Taipei 的 datetime。
+    這裡將同一個更新時間換算成各語言對應地區的當地時間。
+    """
+    result = {}
+
+    for lang, config in LANGUAGE_CONFIG.items():
+        timezone_name = config["timezone"]
+        local_time = base_time.astimezone(ZoneInfo(timezone_name))
+
+        result[lang] = {
+            "time": local_time.strftime("%Y-%m-%d %H:%M:%S"),
+            "timezone": timezone_name,
+            "timezone_label": config["timezone_label"],
+            "locale": config["locale"],
+        }
+
+    return result
+
+
+def build_rows_html(records):
     grouped = group_by_display_date(records)
     sorted_dates = sorted(grouped.keys(), key=date_sort_key, reverse=True)
-
-    total = len(records)
 
     rows_html = []
 
@@ -60,16 +381,24 @@ def generate_html(records):
             campaign = html.escape(item.get("campaign", ""))
             campaign_date = html.escape(item.get("campaign_date", ""))
             url = html.escape(item.get("url", ""))
+            section_title = html.escape(item.get("section_title", ""))
 
             rows_html.append(f"""
-            <article class="card reward-card" data-campaign="{campaign}">
+            <article
+              class="card reward-card"
+              data-campaign="{campaign}"
+            >
               <div class="claimed-badge" data-i18n="claimedBadge">已領取</div>
 
               <div class="reward">{reward}</div>
+
               <div class="meta">
-                <span data-i18n="campaignDateLabel">Campaign Date</span>：{campaign_date}
+                <span data-i18n="campaignDateLabel">活動日期</span>：{campaign_date}
               </div>
+
               <div class="campaign">{campaign}</div>
+
+              <div class="section-title">{section_title}</div>
 
               <div class="actions">
                 <a
@@ -94,14 +423,37 @@ def generate_html(records):
         </section>
         """)
 
-    body = "\n".join(rows_html)
+    return "\n".join(rows_html)
+
+def generate_html(records):
+    current_time_taipei = datetime.now(ZoneInfo(DEFAULT_TIMEZONE))
+    year = current_time_taipei.year
+    total = len(records)
+
+    body = build_rows_html(records)
+
+    local_update_times = build_local_update_times(current_time_taipei)
+
+    i18n_json = escape_json_for_script(I18N)
+    language_config_json = escape_json_for_script(LANGUAGE_CONFIG)
+    update_times_json = escape_json_for_script(local_update_times)
 
     return f"""<!doctype html>
 <html lang="zh-Hant">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+  <meta name="theme-color" content="#ff4848">
+  <meta name="description" content="Coin Master daily reward links with multilingual and PWA support.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Coin Rewards">
+
   <title>Coin Master 每日獎勵連結</title>
+
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
 
   <style>
     :root {{
@@ -115,6 +467,9 @@ def generate_html(records):
       --success: #16a34a;
       --success-dark: #15803d;
       --dark: #374151;
+      --warning-bg: #fff7ed;
+      --warning-border: #fed7aa;
+      --warning-text: #9a3412;
     }}
 
     * {{
@@ -123,7 +478,16 @@ def generate_html(records):
 
     body {{
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        "Noto Sans TC",
+        "Noto Sans JP",
+        "Noto Sans KR",
+        "Noto Sans Thai",
+        "Microsoft JhengHei",
+        sans-serif;
       background: var(--bg);
       color: var(--text);
     }}
@@ -131,14 +495,16 @@ def generate_html(records):
     header {{
       background: linear-gradient(135deg, #ff4848, #ff8a65);
       color: white;
-      padding: 40px 20px;
+      padding: 24px 20px 42px;
       text-align: center;
       position: relative;
+      overflow: hidden;
     }}
 
     header h1 {{
       margin: 0 0 10px;
-      font-size: 32px;
+      font-size: clamp(26px, 5vw, 36px);
+      line-height: 1.2;
     }}
 
     header p {{
@@ -146,10 +512,18 @@ def generate_html(records):
       opacity: 0.95;
     }}
 
+    .top-controls {{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 22px;
+      position: relative;
+      z-index: 2;
+    }}
+
     .language-switcher {{
-      position: absolute;
-      top: 16px;
-      right: 16px;
       display: inline-flex;
       align-items: center;
       gap: 8px;
@@ -158,23 +532,50 @@ def generate_html(records):
       border-radius: 999px;
       padding: 8px 12px;
       backdrop-filter: blur(8px);
+      max-width: 100%;
     }}
 
     .language-switcher label {{
       font-size: 14px;
       font-weight: 700;
       color: white;
+      white-space: nowrap;
     }}
 
     .language-switcher select {{
       border: none;
       border-radius: 999px;
-      padding: 6px 10px;
+      padding: 7px 12px;
       font-weight: 700;
       color: var(--text);
       background: white;
       cursor: pointer;
       outline: none;
+      min-width: 160px;
+      max-width: 100%;
+    }}
+
+    .install-button {{
+      display: none;
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      background: rgba(255, 255, 255, 0.18);
+      color: white;
+      border-radius: 999px;
+      padding: 9px 14px;
+      font-weight: 800;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+    }}
+
+    .install-button:hover {{
+      background: rgba(255, 255, 255, 0.28);
+    }}
+
+    .update-notice {{
+      max-width: 760px;
+      margin: 8px auto 0;
+      font-size: 14px;
+      opacity: 0.9;
     }}
 
     main {{
@@ -190,12 +591,13 @@ def generate_html(records):
       padding: 18px 20px;
       margin-top: -24px;
       box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
-
       display: flex;
       justify-content: space-between;
       gap: 14px;
       align-items: center;
       flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
     }}
 
     .summary strong {{
@@ -238,6 +640,22 @@ def generate_html(records):
     .clear-claimed:hover {{
       color: var(--primary-dark);
       border-color: var(--primary);
+    }}
+
+    .ios-hint {{
+      display: none;
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: var(--warning-bg);
+      border: 1px solid var(--warning-border);
+      color: var(--warning-text);
+      font-weight: 650;
+    }}
+
+    .ios-hint strong {{
+      display: block;
+      margin-bottom: 4px;
     }}
 
     .date-section {{
@@ -316,7 +734,15 @@ def generate_html(records):
       padding: 8px;
       border-radius: 8px;
       word-break: break-all;
+      margin-bottom: 10px;
+    }}
+
+    .section-title {{
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
       margin-bottom: 14px;
+      min-height: 18px;
     }}
 
     .reward-card.claimed .campaign {{
@@ -418,23 +844,38 @@ def generate_html(records):
       font-size: 14px;
     }}
 
-    @media (max-width: 600px) {{
+    @media (display-mode: standalone) {{
+      .install-button {{
+        display: none !important;
+      }}
+    }}
+
+    @media (max-width: 720px) {{
       header {{
-        padding-top: 76px;
+        padding: 20px 16px 38px;
       }}
 
-      header h1 {{
-        font-size: 26px;
+      .top-controls {{
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 20px;
       }}
 
       .language-switcher {{
-        top: 14px;
-        right: 50%;
-        transform: translateX(50%);
+        width: 100%;
+        justify-content: center;
+        border-radius: 18px;
       }}
 
-      .cards {{
-        grid-template-columns: 1fr;
+      .language-switcher select {{
+        flex: 1;
+        max-width: 320px;
+        min-width: 0;
+      }}
+
+      .install-button {{
+        width: 100%;
+        justify-content: center;
       }}
 
       .summary {{
@@ -448,25 +889,54 @@ def generate_html(records):
       .clear-claimed {{
         width: 100%;
       }}
+
+      .cards {{
+        grid-template-columns: 1fr;
+      }}
+    }}
+
+    @media (max-width: 600px) {{
+      header h1 {{
+        font-size: 26px;
+      }}
     }}
   </style>
 </head>
 
 <body>
   <header>
-    <div class="language-switcher">
-      <label for="languageSelect" data-i18n="languageLabel">語言</label>
-      <select id="languageSelect" aria-label="Language">
-        <option value="zh-Hant">繁體中文</option>
-        <option value="en">English</option>
-        <option value="vi">Tiếng Việt</option>
-      </select>
+    <div class="top-controls">
+      <div class="language-switcher">
+        <label for="languageSelect" data-i18n="languageLabel">語言</label>
+        <select id="languageSelect" aria-label="Language">
+          <option value="zh-Hant">中文</option>
+          <option value="en">English</option>
+          <option value="vi">Tiếng Việt</option>
+          <option value="ja">日本語</option>
+          <option value="ko">한국어</option>
+          <option value="th">ไทย</option>
+          <option value="id">Bahasa Indonesia</option>
+          <option value="es">Español</option>
+          <option value="pt">Português</option>
+        </select>
+      </div>
+
+      <button id="installButton" class="install-button" type="button" data-i18n="installButton">
+        安裝到手機桌面
+      </button>
     </div>
 
     <h1 data-i18n="siteTitle">Coin Master 每日獎勵連結</h1>
     <p data-i18n="siteSubtitle">每日自動更新免費能量 / 旋轉 / 金幣連結</p>
+
     <p>
-      <span data-i18n="lastUpdated">最後更新</span>：{html.escape(now)} Asia/Taipei
+      <span data-i18n="lastUpdated">最後更新</span>：
+      <strong id="localizedUpdateTime"></strong>
+      <span id="localizedTimezoneLabel"></span>
+    </p>
+
+    <p class="update-notice" data-i18n="baseTimeNotice">
+      系統以台北時間 UTC+8 更新，以下顯示為目前語言地區時間。
     </p>
   </header>
 
@@ -491,6 +961,11 @@ def generate_html(records):
       </div>
     </div>
 
+    <section class="ios-hint" id="iosHint">
+      <strong data-i18n="iosHintTitle">iPhone / iPad 安裝提示</strong>
+      <span data-i18n="iosHintText">請點選 Safari 分享按鈕，然後選擇「加入主畫面」。</span>
+    </section>
+
     <div id="emptyMessage" class="empty-message" data-i18n="emptyMessage">
       目前沒有可顯示的獎勵。可能全部都已標記為已領取。
     </div>
@@ -499,6 +974,8 @@ def generate_html(records):
   </main>
 
   <footer>
+    <span data-i18n="footerText">本頁僅整理公開獎勵連結，實際領取狀態以遊戲內顯示為準。</span>
+    <br>
     © {year} Coin999-長長久久隊伍. All rights reserved.
   </footer>
 
@@ -507,65 +984,11 @@ def generate_html(records):
     const HIDE_CLAIMED_KEY = "coinmaster_hide_claimed";
     const LANGUAGE_KEY = "coinmaster_language";
 
-    const I18N = {{
-      "zh-Hant": {{
-        languageLabel: "語言",
-        siteTitle: "Coin Master 每日獎勵連結",
-        siteSubtitle: "每日自動更新免費能量 / 旋轉 / 金幣連結",
-        lastUpdated: "最後更新",
-        summaryPrefix: "目前共收錄",
-        summarySuffix: "筆獎勵連結。",
-        summaryNotice: "資料來源為公開網頁整理，點擊前請自行確認連結狀態。",
-        hideClaimed: "隱藏已領取",
-        clearClaimed: "清除已領取紀錄",
-        emptyMessage: "目前沒有可顯示的獎勵。可能全部都已標記為已領取。",
-        claimedBadge: "已領取",
-        campaignDateLabel: "Campaign Date",
-        claim: "領取",
-        claimed: "已領取",
-        markClaimed: "標記已領",
-        unmarkClaimed: "取消標記",
-        clearConfirm: "確定要清除所有已領取紀錄嗎？"
-      }},
-      "en": {{
-        languageLabel: "Language",
-        siteTitle: "Coin Master Daily Reward Links",
-        siteSubtitle: "Automatically updated daily free spins, energy, and coin links",
-        lastUpdated: "Last updated",
-        summaryPrefix: "Currently collected",
-        summarySuffix: "reward links.",
-        summaryNotice: "Data is collected from public webpages. Please verify each link before opening.",
-        hideClaimed: "Hide claimed",
-        clearClaimed: "Clear claimed records",
-        emptyMessage: "No rewards are currently visible. They may all be marked as claimed.",
-        claimedBadge: "Claimed",
-        campaignDateLabel: "Campaign Date",
-        claim: "Claim",
-        claimed: "Claimed",
-        markClaimed: "Mark claimed",
-        unmarkClaimed: "Unmark",
-        clearConfirm: "Are you sure you want to clear all claimed records?"
-      }},
-      "vi": {{
-        languageLabel: "Ngôn ngữ",
-        siteTitle: "Liên kết phần thưởng Coin Master hằng ngày",
-        siteSubtitle: "Tự động cập nhật liên kết vòng quay, năng lượng và xu miễn phí mỗi ngày",
-        lastUpdated: "Cập nhật lần cuối",
-        summaryPrefix: "Hiện có",
-        summarySuffix: "liên kết phần thưởng.",
-        summaryNotice: "Dữ liệu được tổng hợp từ các trang công khai. Vui lòng kiểm tra liên kết trước khi mở.",
-        hideClaimed: "Ẩn đã nhận",
-        clearClaimed: "Xóa lịch sử đã nhận",
-        emptyMessage: "Hiện không có phần thưởng nào để hiển thị. Có thể tất cả đã được đánh dấu là đã nhận.",
-        claimedBadge: "Đã nhận",
-        campaignDateLabel: "Ngày chiến dịch",
-        claim: "Nhận",
-        claimed: "Đã nhận",
-        markClaimed: "Đánh dấu đã nhận",
-        unmarkClaimed: "Bỏ đánh dấu",
-        clearConfirm: "Bạn có chắc muốn xóa toàn bộ lịch sử đã nhận không?"
-      }}
-    }};
+    const I18N = {i18n_json};
+    const LANGUAGE_CONFIG = {language_config_json};
+    const UPDATE_TIMES = {update_times_json};
+
+    let deferredInstallPrompt = null;
 
     function getCurrentLanguage() {{
       const savedLanguage = localStorage.getItem(LANGUAGE_KEY);
@@ -574,16 +997,47 @@ def generate_html(records):
         return savedLanguage;
       }}
 
+      const browserLang = navigator.language || navigator.userLanguage || "";
+
+      if (browserLang.startsWith("zh")) return "zh-Hant";
+      if (browserLang.startsWith("en")) return "en";
+      if (browserLang.startsWith("vi")) return "vi";
+      if (browserLang.startsWith("ja")) return "ja";
+      if (browserLang.startsWith("ko")) return "ko";
+      if (browserLang.startsWith("th")) return "th";
+      if (browserLang.startsWith("id")) return "id";
+      if (browserLang.startsWith("es")) return "es";
+      if (browserLang.startsWith("pt")) return "pt";
+
       return "zh-Hant";
     }}
 
     function t(key) {{
       const language = getCurrentLanguage();
-      return I18N[language][key] || I18N["zh-Hant"][key] || key;
+
+      return (
+        I18N[language]?.[key] ||
+        I18N["zh-Hant"]?.[key] ||
+        key
+      );
     }}
 
     function getStorageKey(campaign) {{
       return STORAGE_PREFIX + campaign;
+    }}
+
+    function updateLocalizedTime(language) {{
+      const timeElement = document.querySelector("#localizedUpdateTime");
+      const timezoneElement = document.querySelector("#localizedTimezoneLabel");
+
+      if (!timeElement || !timezoneElement) return;
+
+      const updateInfo = UPDATE_TIMES[language] || UPDATE_TIMES["zh-Hant"];
+
+      timeElement.textContent = updateInfo.time;
+      timezoneElement.textContent = updateInfo.timezone_label
+        ? " " + updateInfo.timezone_label
+        : " " + updateInfo.timezone;
     }}
 
     function applyLanguage(language) {{
@@ -592,11 +1046,9 @@ def generate_html(records):
       }}
 
       localStorage.setItem(LANGUAGE_KEY, language);
-
       document.documentElement.lang = language;
 
-      const title = I18N[language].siteTitle;
-      document.title = title;
+      document.title = I18N[language].siteTitle || I18N["zh-Hant"].siteTitle;
 
       document.querySelectorAll("[data-i18n]").forEach(element => {{
         const key = element.dataset.i18n;
@@ -612,6 +1064,7 @@ def generate_html(records):
         selector.value = language;
       }}
 
+      updateLocalizedTime(language);
       refreshClaimTexts();
     }}
 
@@ -825,6 +1278,66 @@ def generate_html(records):
       }});
     }}
 
+    function isIosDevice() {{
+      return /iphone|ipad|ipod/i.test(window.navigator.userAgent);
+    }}
+
+    function isStandaloneMode() {{
+      return window.matchMedia("(display-mode: standalone)").matches ||
+        window.navigator.standalone === true;
+    }}
+
+    function setupPwaInstall() {{
+      const installButton = document.querySelector("#installButton");
+      const iosHint = document.querySelector("#iosHint");
+
+      if (iosHint && isIosDevice() && !isStandaloneMode()) {{
+        iosHint.style.display = "block";
+      }}
+
+      window.addEventListener("beforeinstallprompt", event => {{
+        event.preventDefault();
+        deferredInstallPrompt = event;
+
+        if (installButton) {{
+          installButton.style.display = "inline-flex";
+        }}
+      }});
+
+      if (installButton) {{
+        installButton.addEventListener("click", async () => {{
+          if (!deferredInstallPrompt) {{
+            alert(t("installUnavailable"));
+            return;
+          }}
+
+          deferredInstallPrompt.prompt();
+          await deferredInstallPrompt.userChoice;
+
+          deferredInstallPrompt = null;
+          installButton.style.display = "none";
+        }});
+      }}
+
+      window.addEventListener("appinstalled", () => {{
+        deferredInstallPrompt = null;
+
+        if (installButton) {{
+          installButton.style.display = "none";
+        }}
+      }});
+    }}
+
+    function registerServiceWorker() {{
+      if ("serviceWorker" in navigator) {{
+        window.addEventListener("load", () => {{
+          navigator.serviceWorker.register("./sw.js").catch(error => {{
+            console.warn("Service Worker registration failed:", error);
+          }});
+        }});
+      }}
+    }}
+
     document.addEventListener("DOMContentLoaded", () => {{
       bindLanguageSwitcher();
       applyLanguage(getCurrentLanguage());
@@ -834,24 +1347,151 @@ def generate_html(records):
       bindClaimButtons();
       bindHideClaimedFilter();
       bindClearClaimed();
+
+      setupPwaInstall();
+      registerServiceWorker();
     }});
   </script>
 </body>
 </html>
 """
 
+def generate_manifest():
+    manifest = {
+        "name": "Coin Master Daily Rewards",
+        "short_name": "Coin Rewards",
+        "description": "Daily Coin Master reward links with multilingual and offline support.",
+        "start_url": "./index.html",
+        "scope": "./",
+        "display": "standalone",
+        "background_color": "#f6f7fb",
+        "theme_color": "#ff4848",
+        "orientation": "portrait-primary",
+        "lang": "zh-Hant",
+        "icons": [
+            {
+                "src": "./icons/icon-192.png",
+                "sizes": "192x192",
+                "type": "image/png",
+                "purpose": "any maskable",
+            },
+            {
+                "src": "./icons/icon-512.png",
+                "sizes": "512x512",
+                "type": "image/png",
+                "purpose": "any maskable",
+            },
+        ],
+        "categories": ["utilities", "games"],
+    }
+
+    with open(OUTPUT_MANIFEST, "w", encoding="utf-8") as f:
+        json.dump(manifest, f, ensure_ascii=False, indent=2)
+
+
+def generate_service_worker():
+    cache_version = datetime.now(ZoneInfo(DEFAULT_TIMEZONE)).strftime("%Y%m%d%H%M%S")
+
+    sw = f"""const CACHE_NAME = "coinmaster-rewards-{cache_version}";
+
+const APP_SHELL = [
+  "./",
+  "./index.html",
+  "./manifest.webmanifest",
+  "./icons/icon-192.png",
+  "./icons/icon-512.png"
+];
+
+self.addEventListener("install", event => {{
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(APP_SHELL))
+      .catch(() => null)
+  );
+
+  self.skipWaiting();
+}});
+
+self.addEventListener("activate", event => {{
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(
+        keys
+          .filter(key => key !== CACHE_NAME)
+          .map(key => caches.delete(key))
+      )
+    )
+  );
+
+  self.clients.claim();
+}});
+
+self.addEventListener("fetch", event => {{
+  if (event.request.method !== "GET") {{
+    return;
+  }}
+
+  const requestUrl = new URL(event.request.url);
+
+  if (requestUrl.origin !== location.origin) {{
+    return;
+  }}
+
+  event.respondWith(
+    fetch(event.request)
+      .then(response => {{
+        const responseClone = response.clone();
+
+        caches.open(CACHE_NAME).then(cache => {{
+          cache.put(event.request, responseClone);
+        }});
+
+        return response;
+      }})
+      .catch(() => caches.match(event.request).then(cachedResponse => {{
+        return cachedResponse || caches.match("./index.html");
+      }}))
+  );
+}});
+"""
+
+    with open(OUTPUT_SW, "w", encoding="utf-8") as f:
+        f.write(sw)
+
+
+def cleanup_legacy_docs_files():
+    """
+    專案目前只需要 output/coinmaster_rewards.json 作為資料來源。
+
+    不再需要：
+    docs/coinmaster_rewards.json
+    """
+    legacy_files = [
+        "docs/coinmaster_rewards.json",
+    ]
+
+    for path in legacy_files:
+        if os.path.exists(path):
+            os.remove(path)
+            print(f"Removed legacy docs file: {path}")
+
 
 def main():
+    ensure_docs_dir()
+    cleanup_legacy_docs_files()
+
     records = load_rewards()
-
-    os.makedirs("docs", exist_ok=True)
-
     html_content = generate_html(records)
 
     with open(OUTPUT_HTML, "w", encoding="utf-8") as f:
         f.write(html_content)
 
+    generate_manifest()
+    generate_service_worker()
+
     print(f"Generated {OUTPUT_HTML}")
+    print(f"Generated {OUTPUT_MANIFEST}")
+    print(f"Generated {OUTPUT_SW}")
 
 
 if __name__ == "__main__":
