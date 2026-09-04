@@ -43,6 +43,26 @@ jobs:
         run: |
           python fetch_rewards.py --output-dir output
 
+      - name: Show reward output debug
+        shell: bash
+        run: |
+          echo "===== output directory ====="
+          ls -lah output || true
+
+          echo ""
+          echo "===== rewards json size ====="
+          wc -c output/coinmaster_rewards.json || true
+
+          echo ""
+          echo "===== first 80 lines of rewards json ====="
+          sed -n '1,80p' output/coinmaster_rewards.json || true
+
+          echo ""
+          echo "===== grep reward markers from debug html ====="
+          grep -o "coinmaster.onelink.me" output/debug_mycoinmaster.html | head || true
+          grep -o "fs-wrapper" output/debug_mycoinmaster.html | head || true
+          grep -o "button data-id" output/debug_mycoinmaster.html | head || true
+
       - name: Check output changes
         id: check_output_changes
         shell: bash
