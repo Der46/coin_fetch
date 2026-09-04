@@ -11,8 +11,15 @@ import requests
 from bs4 import BeautifulSoup
 
 PAGE_URL = "https://mycoinmaster.com/"
+
+# 舊版 Coin Master rewards 入口
 REWARD_URL_BASE_HOST = "rewards.coinmaster.com"
 REWARD_URL_BASE_PATH = "/rewards/rewards.html"
+
+# 新版 MyCoinMaster 目前使用 AppsFlyer OneLink
+ONELINK_REWARD_HOST = "coinmaster.onelink.me"
+ONELINK_REWARD_PATH = "/2792196939"
+
 DEFAULT_TIMEZONE = "Asia/Taipei"
 
 
@@ -39,6 +46,8 @@ def fetch_html(url, retries=3, timeout=30):
             "q=0.9,image/avif,image/webp,*/*;q=0.8"
         ),
         "Referer": PAGE_URL,
+        "Cache-Control": "no-cache",
+        "Pragma": "no-cache",
     }
 
     last_error = None
@@ -186,6 +195,14 @@ def handle_fetch_failure(reason, output_dir, prefix, target_date=None, display_d
 
 
 def normalize_reward_text(text):
+    """
+    將網頁上的獎勵文字轉成前端使用格式。
+
+    例如：
+    +75 Free Spins -> 75 能量
+    100 free spins -> 100 能量
+    1M coins -> 1M 金幣，目前只支援純數字 coins。
+    """
     text = re.sub(r"\s+", " ", text).strip()
 
     match = re.search(
@@ -210,44 +227,21 @@ def normalize_reward_text(text):
 
 
 def build_reward_url(raw_url):
+    """
+    將 data-url 轉成完整 URL。
+
+    BeautifulSoup 通常會自動把 &amp; 還原成 &，
+    這裡仍保險處理一次。
+    """
+    raw_url = raw_url.replace("&amp;", "&").strip()
     return urljoin(PAGE_URL, raw_url)
 
 
 def build_mobile_reward_url(url):
     """
-    mycoinmaster.com 的連結本身就是 rewards.coinmaster.com 官方領取入口。
-
     mobile_url 保留是為了相容舊版 JSON 結構。
-    雖然目前不再輸出 mobile txt，但 JSON 裡保留這個欄位，
-    可以避免前端或舊資料處理流程失效。
     """
     return url
-
-
-def is_valid_reward_url(url):
-    """
-    只要符合 rewards.coinmaster.com/rewards/rewards.html 的連結就抓。
-
-    會抓：
-    https://rewards.coinmaster.com/rewards/rewards.html
-    https://rewards.coinmaster.com/rewards/rewards.html?c=pe_EMAILBNfzwg_20260531
-
-    不會抓：
-    https://coinmasterfreespins.online/
-    https://rewards.coinmaster.com/other.html?c=xxx
-    """
-    parsed = urlparse(url)
-
-    if parsed.scheme not in ("http", "https"):
-        return False
-
-    if parsed.netloc.lower() != REWARD_URL_BASE_HOST:
-        return False
-
-    if parsed.path != REWARD_URL_BASE_PATH:
-        return False
-
-    return True
 
 
 def extract_campaign_code(url):
@@ -256,7 +250,7 @@ def extract_campaign_code(url):
     c 參數用於區分不同獎勵。
 
     例如：
-    https://rewards.coinmaster.com/rewards/rewards.html?c=pe_EMAILBNfzwg_20260531
+    https://coinmaster.onelink.me/2792196939?...&c=pe_EMAILBNfzwg_20260531
 
     回傳：
     pe_EMAILBNfzwg_20260531
@@ -272,6 +266,65 @@ def extract_campaign_code(url):
         return ""
 
     return codes[0].strip()
+
+
+def is_valid_campaign_code(campaign_code):
+    """
+    判斷 campaign code 是否像 Coin Master rewards。
+
+    常見格式：
+    pe_EMAILBNfzwg_20260531
+    pe_FCBGZQHsy_20260603
+    pe_CHATBZTVhEc_20260904
+    """
+    if not campaign_code:
+        return False
+
+    return bool(re.match(r"^pe_[A-Za-z0-9]+_\d{8}$", campaign_code))
+
+
+def is_valid_reward_url(url):
+    """
+    判斷是否為可接受的 Coin Master reward URL。
+
+    支援新版：
+    https://coinmaster.onelink.me/2792196939?...&c=pe_xxx_YYYYMMDD
+
+    支援舊版：
+    https://rewards.coinmaster.com/rewards/rewards.html?c=pe_xxx_YYYYMMDD
+
+    注意：
+    目前 mycoinmaster.com 的按鈕 data-url 已改成 coinmaster.onelink.me，
+    如果只允許 rewards.coinmaster.com，會導致 JSON 變成 []。
+    """
+    parsed = urlparse(url)
+    host = parsed.netloc.lower()
+    path = parsed.path
+
+    if parsed.scheme not in ("http", "https"):
+        return False
+
+    campaign_code = extract_campaign_code(url)
+
+    # 新版 AppsFlyer OneLink
+    if host == ONELINK_REWARD_HOST and path == ONELINK_REWARD_PATH:
+        return True
+
+    # 舊版 rewards.coinmaster.com
+    if host == REWARD_URL_BASE_HOST and path == REWARD_URL_BASE_PATH:
+        return True
+
+    # 額外容錯：
+    # 如果未來 path 有小改，但 host 是可信的 Coin Master 連結且 c 參數格式正確，也接受。
+    trusted_hosts = {
+        ONELINK_REWARD_HOST,
+        REWARD_URL_BASE_HOST,
+    }
+
+    if host in trusted_hosts and is_valid_campaign_code(campaign_code):
+        return True
+
+    return False
 
 
 def extract_campaign_date_from_code(campaign_code):
@@ -308,10 +361,10 @@ def extract_page_modified_date(soup):
     從頁面的 meta dateModified 取得網站更新日期。
 
     例如：
-    <meta name="dateModified" content="2026-06-03 09:00:10">
+    <meta name="dateModified" content="2026-09-04 16:00:07">
 
     回傳：
-    20260603
+    20260904
 
     如果沒有 dateModified，就用台北時區今天。
     """
@@ -346,12 +399,13 @@ def parse_heading_date(heading_text, page_date):
 
     可處理：
     - Coin Master Free Spins Today
-    - Coin Master Free Spins 02-June
-    - Coin Master Free Spins 01-June
+    - Coin Master Free Spins 03 - September
+    - Coin Master Free Spins 02-September
+    - Coin Master Free Spins 02 September
     - Coin Master Free Spins Bonus
 
     Today 使用頁面 dateModified。
-    02-June / 01-June 使用 page_date 的年份。
+    02-September / 03 - September 使用 page_date 的年份。
     Bonus 無明確日期，回傳空字串。
     """
     heading_text = re.sub(r"\s+", " ", heading_text).strip()
@@ -439,6 +493,7 @@ def scrape_rewards(html):
     wrapper = soup.select_one(".fs-wrapper")
 
     if not wrapper:
+        print("WARNING: 找不到 .fs-wrapper，可能網頁結構已變更。")
         return []
 
     page_date = extract_page_modified_date(soup)
@@ -447,6 +502,10 @@ def scrape_rewards(html):
 
     current_section_title = ""
     current_section_date = ""
+
+    total_blocks = 0
+    skipped_invalid_url = 0
+    skipped_missing_data = 0
 
     for child in wrapper.children:
         if not getattr(child, "name", None):
@@ -465,12 +524,14 @@ def scrape_rewards(html):
         if "fs-block" not in classes:
             continue
 
+        total_blocks += 1
         block = child
 
         bonus_el = block.select_one(".fs-bonus")
         button_el = block.select_one(".fs-collect button[data-url]")
 
         if not bonus_el or not button_el:
+            skipped_missing_data += 1
             continue
 
         reward_text = normalize_reward_text(
@@ -478,13 +539,16 @@ def scrape_rewards(html):
         )
 
         raw_url = button_el.get("data-url", "").strip()
+        raw_url = raw_url.replace("&amp;", "&")
 
         if not raw_url:
+            skipped_missing_data += 1
             continue
 
         reward_url = build_reward_url(raw_url)
 
         if not is_valid_reward_url(reward_url):
+            skipped_invalid_url += 1
             continue
 
         gift_id = button_el.get("data-id", "").strip()
@@ -492,7 +556,9 @@ def scrape_rewards(html):
         campaign_code = extract_campaign_code(reward_url)
         campaign_code_date = extract_campaign_date_from_code(campaign_code)
 
-        campaign_date = current_section_date
+        # 優先使用 URL c 參數裡的日期。
+        # 若沒有，才退回區塊標題日期。
+        campaign_date = campaign_code_date or current_section_date
         display_date = campaign_date_to_display_date(campaign_date)
 
         campaign = build_campaign_id(
@@ -526,12 +592,17 @@ def scrape_rewards(html):
     result.sort(
         key=lambda item: (
             item.get("campaign_date") or "",
-            item.get("gift_id") or "",
+            int(item.get("gift_id") or 0) if str(item.get("gift_id") or "").isdigit() else 0,
             item.get("campaign_code") or "",
             item.get("url") or "",
         ),
         reverse=True
     )
+
+    print(f"Debug: total .fs-block found: {total_blocks}")
+    print(f"Debug: skipped missing data: {skipped_missing_data}")
+    print(f"Debug: skipped invalid url: {skipped_invalid_url}")
+    print(f"Debug: unique valid rewards: {len(result)}")
 
     return result
 
@@ -613,12 +684,12 @@ def main():
 
     parser.add_argument(
         "--date",
-        help="依網頁區塊日期過濾，格式 YYYYMMDD，例如 20260603"
+        help="依 campaign 日期過濾，格式 YYYYMMDD，例如 20260904"
     )
 
     parser.add_argument(
         "--display-date",
-        help="依顯示日期過濾，格式例如 06/03/2026"
+        help="依顯示日期過濾，格式例如 09/04/2026"
     )
 
     parser.add_argument(
