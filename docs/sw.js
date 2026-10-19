@@ -1,4 +1,4 @@
-const CACHE_NAME = "coinmaster-rewards-20261019075524";
+const CACHE_NAME = "coinmaster-rewards-20261019112824";
 
 const APP_SHELL = [
   "./",
