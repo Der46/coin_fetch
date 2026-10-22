@@ -453,7 +453,9 @@ def generate_html(records):
   <title>Coin Master 每日獎勵連結</title>
 
   <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+  <link rel="icon" type="image/svg+xml" href="./icons/icon.svg">
+  <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
 
   <style>
     :root {{
@@ -1370,6 +1372,12 @@ def generate_manifest():
         "lang": "zh-Hant",
         "icons": [
             {
+                "src": "./icons/icon.svg",
+                "sizes": "any",
+                "type": "image/svg+xml",
+                "purpose": "any",
+            },
+            {
                 "src": "./icons/icon-192.png",
                 "sizes": "192x192",
                 "type": "image/png",
@@ -1398,8 +1406,10 @@ const APP_SHELL = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
+  "./icons/icon.svg",
   "./icons/icon-192.png",
-  "./icons/icon-512.png"
+  "./icons/icon-512.png",
+  "./icons/apple-touch-icon.png"
 ];
 
 self.addEventListener("install", event => {{
