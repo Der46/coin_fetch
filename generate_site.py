@@ -78,7 +78,7 @@ I18N = {
         "siteTitle": "Coin Master 每日獎勵連結",
         "siteSubtitle": "每日自動更新免費能量 / 旋轉 / 金幣連結",
         "lastUpdated": "最後更新",
-        "baseTimeNotice": "系統以台北時間 UTC+8 更新，以下顯示為目前語言地區時間。",
+        "baseTimeNotice": "由Coin999-長長久久隊伍製作",
         "summaryPrefix": "目前共收錄",
         "summarySuffix": "筆獎勵連結。",
         "summaryNotice": "資料來源為公開網頁整理，點擊前請自行確認連結狀態。",
@@ -103,7 +103,7 @@ I18N = {
         "siteTitle": "Coin Master Daily Reward Links",
         "siteSubtitle": "Automatically updated daily free spins, energy, and coin links",
         "lastUpdated": "Last updated",
-        "baseTimeNotice": "The system updates based on Taipei time UTC+8. The time below is shown in the selected language region.",
+        "baseTimeNotice": "Made by team Coin999-長長久久",
         "summaryPrefix": "Currently collected",
         "summarySuffix": "reward links.",
         "summaryNotice": "Data is collected from public webpages. Please verify each link before opening.",
@@ -128,7 +128,7 @@ I18N = {
         "siteTitle": "Liên kết phần thưởng Coin Master hằng ngày",
         "siteSubtitle": "Tự động cập nhật liên kết vòng quay, năng lượng và xu miễn phí mỗi ngày",
         "lastUpdated": "Cập nhật lần cuối",
-        "baseTimeNotice": "Hệ thống cập nhật theo giờ Đài Bắc UTC+8. Thời gian bên dưới được hiển thị theo khu vực ngôn ngữ đã chọn.",
+        "baseTimeNotice": "Được thực hiện bởi đội Coin999-長長久久",
         "summaryPrefix": "Hiện có",
         "summarySuffix": "liên kết phần thưởng.",
         "summaryNotice": "Dữ liệu được tổng hợp từ các trang công khai. Vui lòng kiểm tra liên kết trước khi mở.",
@@ -153,7 +153,7 @@ I18N = {
         "siteTitle": "Coin Master デイリー報酬リンク",
         "siteSubtitle": "無料スピン、エネルギー、コインリンクを毎日自動更新",
         "lastUpdated": "最終更新",
-        "baseTimeNotice": "システムは台北時間 UTC+8 を基準に更新されます。下記の時刻は選択した言語地域の時間で表示されます。",
+        "baseTimeNotice": "Coin999-長長久久 チーム制作",
         "summaryPrefix": "現在",
         "summarySuffix": "件の報酬リンクがあります。",
         "summaryNotice": "データは公開ページから収集されています。リンクを開く前に状態をご確認ください。",
@@ -178,7 +178,7 @@ I18N = {
         "siteTitle": "Coin Master 일일 보상 링크",
         "siteSubtitle": "무료 스핀, 에너지, 코인 링크를 매일 자동 업데이트합니다",
         "lastUpdated": "마지막 업데이트",
-        "baseTimeNotice": "시스템은 타이베이 시간 UTC+8 기준으로 업데이트됩니다. 아래 시간은 선택한 언어 지역 시간으로 표시됩니다.",
+        "baseTimeNotice": "Coin999-長長久久 팀 제작",
         "summaryPrefix": "현재",
         "summarySuffix": "개의 보상 링크가 있습니다.",
         "summaryNotice": "데이터는 공개 웹페이지에서 수집되었습니다. 링크를 열기 전에 상태를 확인하세요.",
@@ -203,7 +203,7 @@ I18N = {
         "siteTitle": "ลิงก์รางวัลรายวัน Coin Master",
         "siteSubtitle": "อัปเดตลิงก์ฟรีสปิน พลังงาน และเหรียญโดยอัตโนมัติทุกวัน",
         "lastUpdated": "อัปเดตล่าสุด",
-        "baseTimeNotice": "ระบบอัปเดตตามเวลาไทเป UTC+8 เวลาด้านล่างจะแสดงตามภูมิภาคของภาษาที่เลือก",
+        "baseTimeNotice": "จัดทำโดยทีม Coin999-長長久久",
         "summaryPrefix": "ขณะนี้มี",
         "summarySuffix": "ลิงก์รางวัล",
         "summaryNotice": "ข้อมูลรวบรวมจากหน้าเว็บสาธารณะ โปรดตรวจสอบลิงก์ก่อนเปิด",
@@ -228,7 +228,7 @@ I18N = {
         "siteTitle": "Tautan Hadiah Harian Coin Master",
         "siteSubtitle": "Tautan spin gratis, energi, dan koin diperbarui otomatis setiap hari",
         "lastUpdated": "Terakhir diperbarui",
-        "baseTimeNotice": "Sistem diperbarui berdasarkan waktu Taipei UTC+8. Waktu di bawah ini ditampilkan sesuai wilayah bahasa yang dipilih.",
+        "baseTimeNotice": "Dibuat oleh tim Coin999-長長久久",
         "summaryPrefix": "Saat ini ada",
         "summarySuffix": "tautan hadiah.",
         "summaryNotice": "Data dikumpulkan dari halaman publik. Harap periksa tautan sebelum membukanya.",
@@ -253,7 +253,7 @@ I18N = {
         "siteTitle": "Enlaces diarios de recompensas de Coin Master",
         "siteSubtitle": "Actualización automática diaria de giros, energía y monedas gratis",
         "lastUpdated": "Última actualización",
-        "baseTimeNotice": "El sistema se actualiza según la hora de Taipéi UTC+8. La hora inferior se muestra según la región del idioma seleccionado.",
+        "baseTimeNotice": "Hecho por el equipo Coin999-長長久久",
         "summaryPrefix": "Hay",
         "summarySuffix": "enlaces de recompensa.",
         "summaryNotice": "Los datos se recopilan de páginas públicas. Verifica cada enlace antes de abrirlo.",
@@ -278,7 +278,7 @@ I18N = {
         "siteTitle": "Links diários de recompensas Coin Master",
         "siteSubtitle": "Links de giros, energia e moedas grátis atualizados automaticamente todos os dias",
         "lastUpdated": "Última atualização",
-        "baseTimeNotice": "O sistema é atualizado com base no horário de Taipei UTC+8. A hora abaixo é exibida conforme a região do idioma selecionado.",
+        "baseTimeNotice": "Feito pela equipe Coin999-長長久久",
         "summaryPrefix": "Há",
         "summarySuffix": "links de recompensa.",
         "summaryNotice": "Os dados são coletados de páginas públicas. Verifique cada link antes de abrir.",
@@ -938,7 +938,7 @@ def generate_html(records):
     </p>
 
     <p class="update-notice" data-i18n="baseTimeNotice">
-      系統以台北時間 UTC+8 更新，以下顯示為目前語言地區時間。
+      由Coin999-長長久久隊伍製作
     </p>
   </header>
 
