@@ -1,4 +1,4 @@
-const CACHE_NAME = "coinmaster-rewards-20261124223349";
+const CACHE_NAME = "coinmaster-rewards-20261125001124";
 
 const APP_SHELL = [
   "./",
@@ -48,16 +48,22 @@ self.addEventListener("fetch", event => {
   event.respondWith(
     fetch(event.request)
       .then(response => {
-        const responseClone = response.clone();
-
-        caches.open(CACHE_NAME).then(cache => {
-          cache.put(event.request, responseClone);
-        });
+        if (response.ok) {
+          const responseClone = response.clone();
+          event.waitUntil(
+            caches.open(CACHE_NAME).then(cache => cache.put(event.request, responseClone))
+          );
+        }
 
         return response;
       })
-      .catch(() => caches.match(event.request).then(cachedResponse => {
-        return cachedResponse || caches.match("./index.html");
-      }))
+      .catch(async () => {
+        const cachedResponse = await caches.match(event.request);
+
+        if (cachedResponse) return cachedResponse;
+        if (event.request.mode === "navigate") return caches.match("./index.html");
+
+        return Response.error();
+      })
   );
 });

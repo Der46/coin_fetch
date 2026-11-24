@@ -3,11 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
 
-  <meta name="theme-color" content="#ff4848">
+  <meta name="theme-color" content="#c62828">
   <meta name="description" content="Coin Master daily reward links with multilingual and PWA support.">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Coin Rewards">
 
   <title>Coin Master 每日獎勵連結</title>
@@ -19,30 +21,82 @@
 
   <style>
     :root {
+      color-scheme: light dark;
+
       --bg: #f6f7fb;
-      --card: #ffffff;
+      --surface: #ffffff;
+      --surface-muted: #f3f4f6;
       --text: #1f2937;
-      --muted: #6b7280;
-      --primary: #ff4848;
-      --primary-dark: #dc2626;
+      --muted: #5b6472;
       --border: #e5e7eb;
-      --success: #16a34a;
-      --success-dark: #15803d;
-      --dark: #374151;
-      --warning-bg: #fff7ed;
-      --warning-border: #fed7aa;
-      --warning-text: #9a3412;
+      --shadow: 0 8px 24px rgb(15 23 42 / 0.06);
+      --shadow-hover: 0 14px 32px rgb(15 23 42 / 0.12);
+
+      /* 白字需 >= 4.5:1：#c62828 = 5.62、#15803d = 5.02 */
+      --brand: #c62828;
+      --brand-hover: #a51d1d;
+      --brand-soft: #fdecec;
+      --brand-soft-text: #a51d1d;
+      --success: #15803d;
+      --success-hover: #166534;
+      --success-soft: #dcfce7;
+      --success-soft-text: #166534;
+      --neutral: #374151;
+      --neutral-hover: #111827;
+      --claimed-surface: #f1f3f5;
+      --hint-bg: #fff7ed;
+      --hint-border: #fed7aa;
+      --hint-text: #9a3412;
+      --focus: #1d4ed8;
+
+      --radius-lg: 16px;
+      --radius-md: 10px;
+      --tap: 44px;
+
+      accent-color: var(--brand);
     }
 
-    * {
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f1115;
+        --surface: #191c22;
+        --surface-muted: #22262e;
+        --text: #e5e7eb;
+        --muted: #a1a8b3;
+        --border: #2c313a;
+        --shadow: 0 8px 24px rgb(0 0 0 / 0.35);
+        --shadow-hover: 0 14px 32px rgb(0 0 0 / 0.5);
+
+        --brand-soft: #3a1d1d;
+        --brand-soft-text: #fca5a5;
+        --success-soft: #14301f;
+        --success-soft-text: #86efac;
+        --neutral: #3b4250;
+        --neutral-hover: #4b5363;
+        --claimed-surface: #15171c;
+        --hint-bg: #2b1d12;
+        --hint-border: #7c2d12;
+        --hint-text: #fdba74;
+        --focus: #93c5fd;
+
+        accent-color: #f87171;
+      }
+    }
+
+    *, *::before, *::after {
       box-sizing: border-box;
+    }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
     }
 
     body {
       margin: 0;
       font-family:
+        system-ui,
         -apple-system,
-        BlinkMacSystemFont,
         "Segoe UI",
         "Noto Sans TC",
         "Noto Sans JP",
@@ -50,28 +104,53 @@
         "Noto Sans Thai",
         "Microsoft JhengHei",
         sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
       background: var(--bg);
       color: var(--text);
     }
 
-    header {
-      background: linear-gradient(135deg, #ff4848, #ff8a65);
-      color: white;
-      padding: 24px 20px 42px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
+    h1, h2 {
+      text-wrap: balance;
     }
 
-    header h1 {
-      margin: 0 0 10px;
-      font-size: clamp(26px, 5vw, 36px);
+    p {
+      text-wrap: pretty;
+    }
+
+    :where(a, button, input, select, summary):focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    /* ---------- Header ---------- */
+
+    .site-header {
+      --focus: #ffffff;
+      background: linear-gradient(135deg, #c62828, #bf360c);
+      color: #ffffff;
+      padding:
+        max(24px, env(safe-area-inset-top))
+        max(20px, env(safe-area-inset-right))
+        44px
+        max(20px, env(safe-area-inset-left));
+      text-align: center;
+    }
+
+    .site-header h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.625rem, 5vw, 2.25rem);
       line-height: 1.2;
     }
 
-    header p {
-      margin: 6px 0;
-      opacity: 0.95;
+    .site-header p {
+      margin: 4px auto;
+      max-width: 760px;
+    }
+
+    .update-notice {
+      font-size: 0.875rem;
+      opacity: 0.92;
     }
 
     .top-controls {
@@ -80,95 +159,128 @@
       justify-content: center;
       gap: 10px;
       flex-wrap: wrap;
-      margin-bottom: 22px;
-      position: relative;
-      z-index: 2;
+      margin-bottom: 20px;
     }
 
     .language-switcher {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: rgba(255, 255, 255, 0.18);
-      border: 1px solid rgba(255, 255, 255, 0.35);
+      background: rgb(255 255 255 / 0.16);
+      border: 1px solid rgb(255 255 255 / 0.35);
       border-radius: 999px;
-      padding: 8px 12px;
-      backdrop-filter: blur(8px);
+      padding: 6px 6px 6px 14px;
       max-width: 100%;
     }
 
     .language-switcher label {
-      font-size: 14px;
+      font-size: 0.875rem;
       font-weight: 700;
-      color: white;
       white-space: nowrap;
     }
 
     .language-switcher select {
-      border: none;
-      border-radius: 999px;
-      padding: 7px 12px;
-      font-weight: 700;
-      color: var(--text);
-      background: white;
-      cursor: pointer;
-      outline: none;
+      color-scheme: light;
+      min-height: 36px;
       min-width: 160px;
       max-width: 100%;
+      border: none;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font: inherit;
+      font-weight: 700;
+      color: #1f2937;
+      background-color: #ffffff;
+      cursor: pointer;
     }
 
     .install-button {
-      display: none;
-      border: 1px solid rgba(255, 255, 255, 0.55);
-      background: rgba(255, 255, 255, 0.18);
-      color: white;
+      min-height: var(--tap);
+      border: 1px solid rgb(255 255 255 / 0.6);
+      background: rgb(255 255 255 / 0.16);
+      color: #ffffff;
       border-radius: 999px;
-      padding: 9px 14px;
+      padding: 8px 16px;
+      font: inherit;
       font-weight: 800;
       cursor: pointer;
-      backdrop-filter: blur(8px);
+      transition: background-color 150ms ease-out;
     }
 
     .install-button:hover {
-      background: rgba(255, 255, 255, 0.28);
+      background: rgb(255 255 255 / 0.28);
     }
 
-    .update-notice {
-      max-width: 760px;
-      margin: 8px auto 0;
-      font-size: 14px;
-      opacity: 0.9;
+    .install-button[hidden] {
+      display: none;
     }
+
+    @media (display-mode: standalone) {
+      .install-button {
+        display: none;
+      }
+    }
+
+    /* ---------- Main ---------- */
 
     main {
       max-width: 1100px;
       margin: 0 auto;
-      padding: 24px 16px 60px;
+      padding:
+        0
+        max(16px, env(safe-area-inset-right))
+        48px
+        max(16px, env(safe-area-inset-left));
     }
 
     .summary {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 18px 20px;
-      margin-top: -24px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
-      display: flex;
-      justify-content: space-between;
-      gap: 14px;
-      align-items: center;
-      flex-wrap: wrap;
       position: relative;
-      z-index: 1;
+      margin-top: -24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+      box-shadow: var(--shadow);
+      display: grid;
+      gap: 14px;
+    }
+
+    .summary p {
+      margin: 0;
     }
 
     .summary strong {
-      color: var(--primary);
+      color: var(--brand-soft-text);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .summary-notice {
+      color: var(--muted);
+      font-size: 0.875rem;
+    }
+
+    .progress-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .progress-row progress {
+      flex: 1;
+      min-width: 0;
+      height: 10px;
+    }
+
+    .progress-text {
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
     }
 
     .summary-controls {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 12px;
       flex-wrap: wrap;
     }
@@ -176,43 +288,39 @@
     .filter-control {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      color: var(--muted);
+      gap: 10px;
+      min-height: var(--tap);
       font-weight: 600;
       cursor: pointer;
       user-select: none;
     }
 
     .filter-control input {
-      width: 18px;
-      height: 18px;
+      width: 20px;
+      height: 20px;
+      margin: 0;
       cursor: pointer;
-    }
-
-    .clear-claimed {
-      border: 1px solid var(--border);
-      background: white;
-      color: var(--muted);
-      padding: 8px 12px;
-      border-radius: 10px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .clear-claimed:hover {
-      color: var(--primary-dark);
-      border-color: var(--primary);
     }
 
     .ios-hint {
-      display: none;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
       margin-top: 16px;
-      padding: 14px 16px;
-      border-radius: 16px;
-      background: var(--warning-bg);
-      border: 1px solid var(--warning-border);
-      color: var(--warning-text);
-      font-weight: 650;
+      padding: 14px 8px 14px 16px;
+      border-radius: var(--radius-lg);
+      background: var(--hint-bg);
+      border: 1px solid var(--hint-border);
+      color: var(--hint-text);
+      font-weight: 600;
+    }
+
+    .ios-hint[hidden] {
+      display: none;
+    }
+
+    .ios-hint > div {
+      flex: 1;
     }
 
     .ios-hint strong {
@@ -220,140 +328,215 @@
       margin-bottom: 4px;
     }
 
+    .icon-button {
+      flex: none;
+      display: inline-grid;
+      place-items: center;
+      width: var(--tap);
+      height: var(--tap);
+      margin: -8px 0;
+      border: none;
+      border-radius: 999px;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .icon-button:hover {
+      background: rgb(127 127 127 / 0.15);
+    }
+
     .date-section {
-      margin-top: 30px;
+      margin-top: 32px;
+    }
+
+    .date-section[hidden] {
+      display: none;
     }
 
     .date-section h2 {
-      font-size: 24px;
-      border-left: 6px solid var(--primary);
+      font-size: 1.375rem;
+      border-left: 6px solid var(--brand);
       padding-left: 12px;
-      margin-bottom: 16px;
+      margin: 0 0 16px;
     }
 
     .cards {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
       gap: 16px;
     }
 
+    /* ---------- Card ---------- */
+
     .card {
-      background: var(--card);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 16px;
+      border-radius: var(--radius-lg);
       padding: 18px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
-    }
-
-    .reward-card {
-      position: relative;
+      box-shadow: var(--shadow);
       transition:
-        opacity 0.2s ease,
-        transform 0.2s ease,
-        background-color 0.2s ease,
-        border-color 0.2s ease;
+        translate 200ms ease-out,
+        box-shadow 200ms ease-out,
+        background-color 200ms ease-out,
+        border-color 200ms ease-out;
     }
 
-    .reward-card:hover {
-      transform: translateY(-2px);
+    .card[hidden] {
+      display: none;
     }
 
-    .reward-card.claimed {
-      background: #f3f4f6;
-      opacity: 0.72;
-      border-color: #d1d5db;
+    .card p {
+      margin: 0;
     }
 
-    .reward-card.claimed:hover {
-      transform: none;
+    @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+      .reward-card:not(.claimed):hover {
+        translate: 0 -2px;
+        box-shadow: var(--shadow-hover);
+      }
+    }
+
+    .card-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
     }
 
     .reward {
-      display: inline-block;
-      background: #fff1f1;
-      color: var(--primary-dark);
+      background: var(--brand-soft);
+      color: var(--brand-soft-text);
       font-weight: 700;
       padding: 6px 12px;
       border-radius: 999px;
-      margin-bottom: 12px;
-    }
-
-    .reward-card.claimed .reward {
-      background: #dcfce7;
-      color: var(--success-dark);
-    }
-
-    .meta {
-      color: var(--muted);
-      font-size: 14px;
-      margin-bottom: 8px;
-    }
-
-    .campaign {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 13px;
-      background: #f3f4f6;
-      padding: 8px;
-      border-radius: 8px;
-      word-break: break-all;
-      margin-bottom: 10px;
-    }
-
-    .section-title {
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.45;
-      margin-bottom: 14px;
-      min-height: 18px;
-    }
-
-    .reward-card.claimed .campaign {
-      color: #6b7280;
-      text-decoration: line-through;
     }
 
     .claimed-badge {
       display: none;
-      position: absolute;
-      top: 14px;
-      right: 14px;
+      flex: none;
       background: var(--success);
-      color: white;
-      font-size: 13px;
+      color: #ffffff;
+      font-size: 0.8125rem;
       font-weight: 700;
-      padding: 5px 10px;
+      padding: 4px 10px;
       border-radius: 999px;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 0.875rem;
+    }
+
+    .campaign {
+      display: block;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.8125rem;
+      background: var(--surface-muted);
+      padding: 8px 10px;
+      border-radius: 8px;
+      overflow-wrap: anywhere;
+    }
+
+    .section-title {
+      color: var(--muted);
+      font-size: 0.8125rem;
+      line-height: 1.45;
+    }
+
+    .section-title:empty {
+      display: none;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      margin-top: auto;
+      padding-top: 4px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: var(--tap);
+      padding: 8px 14px;
+      border: none;
+      border-radius: var(--radius-md);
+      font: inherit;
+      font-size: 0.9375rem;
+      font-weight: 700;
+      text-decoration: none;
+      color: #ffffff;
+      cursor: pointer;
+      transition:
+        background-color 150ms ease-out,
+        color 150ms ease-out,
+        border-color 150ms ease-out,
+        scale 150ms ease-out;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .btn:active {
+        scale: 0.97;
+      }
+    }
+
+    .btn-primary {
+      flex: 1;
+      background: var(--brand);
+    }
+
+    .btn-primary:hover,
+    .btn-danger:hover {
+      background: var(--brand-hover);
+    }
+
+    .btn-danger {
+      background: var(--brand);
+    }
+
+    .btn-secondary {
+      background: var(--neutral);
+    }
+
+    .btn-secondary:hover {
+      background: var(--neutral-hover);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    .btn-ghost:hover {
+      color: var(--brand-soft-text);
+      border-color: currentColor;
+    }
+
+    /* Claimed state */
+
+    .reward-card.claimed {
+      background: var(--claimed-surface);
+      box-shadow: none;
+    }
+
+    .reward-card.claimed .reward {
+      background: var(--success-soft);
+      color: var(--success-soft-text);
     }
 
     .reward-card.claimed .claimed-badge {
       display: inline-block;
     }
 
-    .actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .actions a {
-      text-decoration: none;
-      background: var(--primary);
-      color: white;
-      padding: 9px 12px;
-      border-radius: 10px;
-      font-weight: 600;
-      font-size: 14px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      transition:
-        background-color 0.2s ease,
-        transform 0.15s ease,
-        opacity 0.2s ease;
-    }
-
-    .actions a:hover {
-      background: var(--primary-dark);
+    .reward-card.claimed .campaign {
+      color: var(--muted);
+      text-decoration: line-through;
     }
 
     .reward-card.claimed .claim-link {
@@ -361,68 +544,85 @@
     }
 
     .reward-card.claimed .claim-link:hover {
-      background: var(--success-dark);
-    }
-
-    .claim-toggle {
-      border: none;
-      cursor: pointer;
-      background: var(--dark);
-      color: white;
-      padding: 9px 12px;
-      border-radius: 10px;
-      font-weight: 600;
-      font-size: 14px;
-    }
-
-    .claim-toggle:hover {
-      background: #111827;
-    }
-
-    .reward-card.claimed .claim-toggle {
-      background: #9ca3af;
-    }
-
-    .reward-card.claimed .claim-toggle:hover {
-      background: #6b7280;
+      background: var(--success-hover);
     }
 
     .empty-message {
-      display: none;
       margin-top: 24px;
       padding: 18px 20px;
-      background: white;
+      background: var(--surface);
       border: 1px dashed var(--border);
-      border-radius: 16px;
+      border-radius: var(--radius-lg);
       color: var(--muted);
       text-align: center;
       font-weight: 600;
     }
 
-    footer {
-      text-align: center;
-      color: var(--muted);
-      padding: 24px 12px;
-      font-size: 14px;
+    .empty-message[hidden] {
+      display: none;
     }
 
-    @media (display-mode: standalone) {
-      .install-button {
-        display: none !important;
+    /* ---------- Confirm dialog ---------- */
+
+    dialog {
+      width: min(100% - 32px, 420px);
+      padding: 24px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      color: var(--text);
+      box-shadow: 0 24px 60px rgb(0 0 0 / 0.3);
+    }
+
+    dialog:modal {
+      overscroll-behavior: contain;
+    }
+
+    dialog::backdrop {
+      background: rgb(15 23 42 / 0.55);
+      overflow: hidden;
+      overscroll-behavior: contain;
+    }
+
+    dialog h1 {
+      margin: 0 0 20px;
+      font-size: 1.125rem;
+      line-height: 1.4;
+    }
+
+    .dialog-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      dialog[open] {
+        animation: dialog-in 200ms ease-out;
       }
+    }
+
+    @keyframes dialog-in {
+      from {
+        opacity: 0;
+        scale: 0.96;
+      }
+    }
+
+    /* ---------- Footer ---------- */
+
+    .site-footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 24px 16px max(24px, env(safe-area-inset-bottom));
+      font-size: 0.875rem;
+    }
+
+    .site-footer p {
+      margin: 0 0 4px;
     }
 
     @media (max-width: 720px) {
-      header {
-        padding: 20px 16px 38px;
-      }
-
-      .top-controls {
-        width: 100%;
-        justify-content: center;
-        margin-bottom: 20px;
-      }
-
       .language-switcher {
         width: 100%;
         justify-content: center;
@@ -431,61 +631,40 @@
 
       .language-switcher select {
         flex: 1;
-        max-width: 320px;
         min-width: 0;
+        max-width: 320px;
       }
 
       .install-button {
         width: 100%;
-        justify-content: center;
       }
 
-      .summary {
-        align-items: flex-start;
-      }
-
-      .summary-controls {
+      .summary-controls .btn {
         width: 100%;
-      }
-
-      .clear-claimed {
-        width: 100%;
-      }
-
-      .cards {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 600px) {
-      header h1 {
-        font-size: 26px;
       }
     }
   </style>
 </head>
 
 <body>
-  <header>
+  <header class="site-header">
     <div class="top-controls">
       <div class="language-switcher">
         <label for="languageSelect" data-i18n="languageLabel">語言</label>
-        <select id="languageSelect" aria-label="Language">
-          <option value="zh-Hant">中文</option>
-          <option value="en">English</option>
-          <option value="vi">Tiếng Việt</option>
-          <option value="ja">日本語</option>
-          <option value="ko">한국어</option>
-          <option value="th">ไทย</option>
-          <option value="id">Bahasa Indonesia</option>
-          <option value="es">Español</option>
-          <option value="pt">Português</option>
+        <select id="languageSelect">
+          <option value="zh-Hant" lang="zh-Hant">中文</option>
+          <option value="en" lang="en">English</option>
+          <option value="vi" lang="vi">Tiếng Việt</option>
+          <option value="ja" lang="ja">日本語</option>
+          <option value="ko" lang="ko">한국어</option>
+          <option value="th" lang="th">ไทย</option>
+          <option value="id" lang="id">Bahasa Indonesia</option>
+          <option value="es" lang="es">Español</option>
+          <option value="pt" lang="pt">Português</option>
         </select>
       </div>
 
-      <button id="installButton" class="install-button" type="button" data-i18n="installButton">
-        安裝到手機桌面
-      </button>
+      <button id="installButton" class="install-button" type="button" hidden data-i18n="installButton">安裝到手機桌面</button>
     </div>
 
     <h1 data-i18n="siteTitle">Coin Master 每日獎勵連結</h1>
@@ -493,286 +672,243 @@
 
     <p>
       <span data-i18n="lastUpdated">最後更新</span>：
-      <strong id="localizedUpdateTime"></strong>
+      <strong><time id="localizedUpdateTime" datetime="2026-11-25T00:11:24+08:00"></time></strong>
       <span id="localizedTimezoneLabel"></span>
     </p>
 
-    <p class="update-notice" data-i18n="baseTimeNotice">
-      由Coin999-長長久久隊伍製作
-    </p>
+    <p class="update-notice" data-i18n="baseTimeNotice">由Coin999-長長久久隊伍製作</p>
   </header>
 
   <main>
-    <div class="summary">
+    <section class="summary">
       <div>
-        <span data-i18n="summaryPrefix">目前共收錄</span>
-        <strong>31</strong>
-        <span data-i18n="summarySuffix">筆獎勵連結。</span>
-        <span data-i18n="summaryNotice">資料來源為公開網頁整理，點擊前請自行確認連結狀態。</span>
+        <p>
+          <span data-i18n="summaryPrefix">目前共收錄</span>
+          <strong>31</strong>
+          <span data-i18n="summarySuffix">筆獎勵連結。</span>
+        </p>
+        <p class="summary-notice" data-i18n="summaryNotice">資料來源為公開網頁整理，點擊前請自行確認連結狀態。</p>
+      </div>
+
+      <div class="progress-row">
+        <progress id="claimProgress" max="31" value="0" aria-labelledby="claimProgressText"></progress>
+        <span id="claimProgressText" class="progress-text" aria-live="polite"></span>
       </div>
 
       <div class="summary-controls">
         <label class="filter-control">
-          <input type="checkbox" id="hideClaimed">
+          <input type="checkbox" switch id="hideClaimed">
           <span data-i18n="hideClaimed">隱藏已領取</span>
         </label>
 
-        <button type="button" id="clearClaimed" class="clear-claimed" data-i18n="clearClaimed">
-          清除已領取紀錄
-        </button>
+        <button type="button" id="clearClaimed" class="btn btn-ghost" data-i18n="clearClaimed">清除已領取紀錄</button>
       </div>
-    </div>
-
-    <section class="ios-hint" id="iosHint">
-      <strong data-i18n="iosHintTitle">iPhone / iPad 安裝提示</strong>
-      <span data-i18n="iosHintText">請點選 Safari 分享按鈕，然後選擇「加入主畫面」。</span>
     </section>
 
-    <div id="emptyMessage" class="empty-message" data-i18n="emptyMessage">
-      目前沒有可顯示的獎勵。可能全部都已標記為已領取。
-    </div>
+    <aside class="ios-hint" id="iosHint" hidden>
+      <div>
+        <strong data-i18n="iosHintTitle">iPhone / iPad 安裝提示</strong>
+        <span data-i18n="iosHintText">請點選 Safari 分享按鈕，然後選擇「加入主畫面」。</span>
+      </div>
+      <button type="button" class="icon-button" id="iosHintClose" aria-label="關閉" data-i18n-aria="close">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </aside>
 
-    
+    <p id="emptyMessage" class="empty-message" data-i18n="emptyMessage" hidden>目前沒有可顯示的獎勵。可能全部都已標記為已領取。</p>
+
+
         <section class="date-section">
-          <h2>11/24/2026</h2>
+          <h2><time datetime="2026-11-24">11/24/2026</time></h2>
           <div class="cards">
         
 
-            <article
-              class="card reward-card"
-              data-campaign="coinmaster_reward_pe_LINECmHgkg_20261124"
-            >
-              <div class="claimed-badge" data-i18n="claimedBadge">已領取</div>
+            <article class="card reward-card" data-campaign="coinmaster_reward_pe_LINECmHgkg_20261124">
+              <header class="card-head">
+                <span class="reward">50 能量</span>
+                <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
+              </header>
 
-              <div class="reward">50 能量</div>
-
-              <div class="meta">
+              <p class="meta">
                 <span data-i18n="campaignDateLabel">活動日期</span>：20261124
-              </div>
+              </p>
 
-              <div class="campaign">coinmaster_reward_pe_LINECmHgkg_20261124</div>
+              <code class="campaign">coinmaster_reward_pe_LINECmHgkg_20261124</code>
 
-              <div class="section-title">Coin Master Free Spins Today</div>
+              <p class="section-title">Coin Master Free Spins Today</p>
 
-              <div class="actions">
+              <footer class="actions">
                 <a
                   href="https://coinmaster.onelink.me/2792196939?af_xp=social&amp;pid=Reward%20link&amp;deep_link_value=coinmaster%3A%2F%2F&amp;deep_link_sub1=promotions&amp;af_dp=coinmaster%3A%2F%2Fpromotions&amp;af_force_deeplink=true&amp;c=pe_LINECmHgkg_20261124&amp;af_web_dp=https%3A%2F%2Frewards.coinmaster.com%2Frewards%2Fplayonmobile.png&amp;af_adset=no_source&amp;af_ad=no_refferer"
                   target="_blank"
-                  rel="noopener"
-                  class="claim-link"
-                  data-campaign="coinmaster_reward_pe_LINECmHgkg_20261124"
-                >
-                  領取
-                </a>
+                  rel="noopener noreferrer"
+                  class="btn btn-primary claim-link"
+                >領取</a>
 
-                <button type="button" class="claim-toggle" data-campaign="coinmaster_reward_pe_LINECmHgkg_20261124">
-                  標記已領
-                </button>
-              </div>
+                <button type="button" class="btn btn-secondary claim-toggle">標記已領</button>
+              </footer>
             </article>
             
 
-            <article
-              class="card reward-card"
-              data-campaign="coinmaster_reward_pe_CHATBObCQxj_20261124"
-            >
-              <div class="claimed-badge" data-i18n="claimedBadge">已領取</div>
+            <article class="card reward-card" data-campaign="coinmaster_reward_pe_CHATBObCQxj_20261124">
+              <header class="card-head">
+                <span class="reward">200 能量</span>
+                <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
+              </header>
 
-              <div class="reward">200 能量</div>
-
-              <div class="meta">
+              <p class="meta">
                 <span data-i18n="campaignDateLabel">活動日期</span>：20261124
-              </div>
+              </p>
 
-              <div class="campaign">coinmaster_reward_pe_CHATBObCQxj_20261124</div>
+              <code class="campaign">coinmaster_reward_pe_CHATBObCQxj_20261124</code>
 
-              <div class="section-title">Coin Master Free Spins Today</div>
+              <p class="section-title">Coin Master Free Spins Today</p>
 
-              <div class="actions">
+              <footer class="actions">
                 <a
                   href="https://coinmaster.onelink.me/2792196939?af_xp=social&amp;pid=Reward%20link&amp;deep_link_value=coinmaster%3A%2F%2F&amp;deep_link_sub1=promotions&amp;af_dp=coinmaster%3A%2F%2Fpromotions&amp;af_force_deeplink=true&amp;c=pe_CHATBObCQxj_20261124&amp;af_web_dp=https%3A%2F%2Frewards.coinmaster.com%2Frewards%2Fplayonmobile.png&amp;af_adset=no_source&amp;af_ad=no_refferer"
                   target="_blank"
-                  rel="noopener"
-                  class="claim-link"
-                  data-campaign="coinmaster_reward_pe_CHATBObCQxj_20261124"
-                >
-                  領取
-                </a>
+                  rel="noopener noreferrer"
+                  class="btn btn-primary claim-link"
+                >領取</a>
 
-                <button type="button" class="claim-toggle" data-campaign="coinmaster_reward_pe_CHATBObCQxj_20261124">
-                  標記已領
-                </button>
-              </div>
+                <button type="button" class="btn btn-secondary claim-toggle">標記已領</button>
+              </footer>
             </article>
             
 
-            <article
-              class="card reward-card"
-              data-campaign="coinmaster_reward_pe_TWIIcxcmX_20261124"
-            >
-              <div class="claimed-badge" data-i18n="claimedBadge">已領取</div>
+            <article class="card reward-card" data-campaign="coinmaster_reward_pe_TWIIcxcmX_20261124">
+              <header class="card-head">
+                <span class="reward">50 能量</span>
+                <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
+              </header>
 
-              <div class="reward">50 能量</div>
-
-              <div class="meta">
+              <p class="meta">
                 <span data-i18n="campaignDateLabel">活動日期</span>：20261124
-              </div>
+              </p>
 
-              <div class="campaign">coinmaster_reward_pe_TWIIcxcmX_20261124</div>
+              <code class="campaign">coinmaster_reward_pe_TWIIcxcmX_20261124</code>
 
-              <div class="section-title">Coin Master Free Spins Today</div>
+              <p class="section-title">Coin Master Free Spins Today</p>
 
-              <div class="actions">
+              <footer class="actions">
                 <a
                   href="https://coinmaster.onelink.me/2792196939?af_xp=social&amp;pid=Reward%20link&amp;deep_link_value=coinmaster%3A%2F%2F&amp;deep_link_sub1=promotions&amp;af_dp=coinmaster%3A%2F%2Fpromotions&amp;af_force_deeplink=true&amp;c=pe_TWIIcxcmX_20261124&amp;af_web_dp=https%3A%2F%2Frewards.coinmaster.com%2Frewards%2Fplayonmobile.png&amp;af_adset=no_source&amp;af_ad=no_refferer"
                   target="_blank"
-                  rel="noopener"
-                  class="claim-link"
-                  data-campaign="coinmaster_reward_pe_TWIIcxcmX_20261124"
-                >
-                  領取
-                </a>
+                  rel="noopener noreferrer"
+                  class="btn btn-primary claim-link"
+                >領取</a>
 
-                <button type="button" class="claim-toggle" data-campaign="coinmaster_reward_pe_TWIIcxcmX_20261124">
-                  標記已領
-                </button>
-              </div>
+                <button type="button" class="btn btn-secondary claim-toggle">標記已領</button>
+              </footer>
             </article>
             
 
-            <article
-              class="card reward-card"
-              data-campaign="coinmaster_reward_pe_INScDwGIj_20261124"
-            >
-              <div class="claimed-badge" data-i18n="claimedBadge">已領取</div>
+            <article class="card reward-card" data-campaign="coinmaster_reward_pe_INScDwGIj_20261124">
+              <header class="card-head">
+                <span class="reward">50 能量</span>
+                <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
+              </header>
 
-              <div class="reward">50 能量</div>
-
-              <div class="meta">
+              <p class="meta">
                 <span data-i18n="campaignDateLabel">活動日期</span>：20261124
-              </div>
+              </p>
 
-              <div class="campaign">coinmaster_reward_pe_INScDwGIj_20261124</div>
+              <code class="campaign">coinmaster_reward_pe_INScDwGIj_20261124</code>
 
-              <div class="section-title">Coin Master Free Spins Today</div>
+              <p class="section-title">Coin Master Free Spins Today</p>
 
-              <div class="actions">
+              <footer class="actions">
                 <a
                   href="https://coinmaster.onelink.me/2792196939?af_xp=social&amp;pid=Reward%20link&amp;deep_link_value=coinmaster%3A%2F%2F&amp;deep_link_sub1=promotions&amp;af_dp=coinmaster%3A%2F%2Fpromotions&amp;af_force_deeplink=true&amp;c=pe_INScDwGIj_20261124&amp;af_web_dp=https%3A%2F%2Frewards.coinmaster.com%2Frewards%2Fplayonmobile.png&amp;af_adset=no_source&amp;af_ad=no_refferer"
                   target="_blank"
-                  rel="noopener"
-                  class="claim-link"
-                  data-campaign="coinmaster_reward_pe_INScDwGIj_20261124"
-                >
-                  領取
-                </a>
+                  rel="noopener noreferrer"
+                  class="btn btn-primary claim-link"
+                >領取</a>
 
-                <button type="button" class="claim-toggle" data-campaign="coinmaster_reward_pe_INScDwGIj_20261124">
-                  標記已領
-                </button>
-              </div>
+                <button type="button" class="btn btn-secondary claim-toggle">標記已領</button>
+              </footer>
             </article>
             
 
-            <article
-              class="card reward-card"
-              data-campaign="coinmaster_reward_pe_FCBgyxHPU_20261124"
-            >
-              <div class="claimed-badge" data-i18n="claimedBadge">已領取</div>
+            <article class="card reward-card" data-campaign="coinmaster_reward_pe_FCBgyxHPU_20261124">
+              <header class="card-head">
+                <span class="reward">50 能量</span>
+                <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
+              </header>
 
-              <div class="reward">50 能量</div>
-
-              <div class="meta">
+              <p class="meta">
                 <span data-i18n="campaignDateLabel">活動日期</span>：20261124
-              </div>
+              </p>
 
-              <div class="campaign">coinmaster_reward_pe_FCBgyxHPU_20261124</div>
+              <code class="campaign">coinmaster_reward_pe_FCBgyxHPU_20261124</code>
 
-              <div class="section-title">Coin Master Free Spins Today</div>
+              <p class="section-title">Coin Master Free Spins Today</p>
 
-              <div class="actions">
+              <footer class="actions">
                 <a
                   href="https://coinmaster.onelink.me/2792196939?af_xp=social&amp;pid=Reward%20link&amp;deep_link_value=coinmaster%3A%2F%2F&amp;deep_link_sub1=promotions&amp;af_dp=coinmaster%3A%2F%2Fpromotions&amp;af_force_deeplink=true&amp;c=pe_FCBgyxHPU_20261124&amp;af_web_dp=https%3A%2F%2Frewards.coinmaster.com%2Frewards%2Fplayonmobile.png&amp;af_adset=no_source&amp;af_ad=no_refferer"
                   target="_blank"
-                  rel="noopener"
-                  class="claim-link"
-                  data-campaign="coinmaster_reward_pe_FCBgyxHPU_20261124"
-                >
-                  領取
-                </a>
+                  rel="noopener noreferrer"
+                  class="btn btn-primary claim-link"
+                >領取</a>
 
-                <button type="button" class="claim-toggle" data-campaign="coinmaster_reward_pe_FCBgyxHPU_20261124">
-                  標記已領
-                </button>
-              </div>
+                <button type="button" class="btn btn-secondary claim-toggle">標記已領</button>
+              </footer>
             </article>
             
 
-            <article
-              class="card reward-card"
-              data-campaign="coinmaster_reward_pe_FCBrZYRFe_20261124"
-            >
-              <div class="claimed-badge" data-i18n="claimedBadge">已領取</div>
+            <article class="card reward-card" data-campaign="coinmaster_reward_pe_FCBrZYRFe_20261124">
+              <header class="card-head">
+                <span class="reward">50 能量</span>
+                <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
+              </header>
 
-              <div class="reward">50 能量</div>
-
-              <div class="meta">
+              <p class="meta">
                 <span data-i18n="campaignDateLabel">活動日期</span>：20261124
-              </div>
+              </p>
 
-              <div class="campaign">coinmaster_reward_pe_FCBrZYRFe_20261124</div>
+              <code class="campaign">coinmaster_reward_pe_FCBrZYRFe_20261124</code>
 
-              <div class="section-title">Coin Master Free Spins Today</div>
+              <p class="section-title">Coin Master Free Spins Today</p>
 
-              <div class="actions">
+              <footer class="actions">
                 <a
                   href="https://coinmaster.onelink.me/2792196939?af_xp=social&amp;pid=Reward%20link&amp;deep_link_value=coinmaster%3A%2F%2F&amp;deep_link_sub1=promotions&amp;af_dp=coinmaster%3A%2F%2Fpromotions&amp;af_force_deeplink=true&amp;c=pe_FCBrZYRFe_20261124&amp;af_web_dp=https%3A%2F%2Frewards.coinmaster.com%2Frewards%2Fplayonmobile.png&amp;af_adset=no_source&amp;af_ad=no_refferer"
                   target="_blank"
-                  rel="noopener"
-                  class="claim-link"
-                  data-campaign="coinmaster_reward_pe_FCBrZYRFe_20261124"
-                >
-                  領取
-                </a>
+                  rel="noopener noreferrer"
+                  class="btn btn-primary claim-link"
+                >領取</a>
 
-                <button type="button" class="claim-toggle" data-campaign="coinmaster_reward_pe_FCBrZYRFe_20261124">
-                  標記已領
-                </button>
-              </div>
+                <button type="button" class="btn btn-secondary claim-toggle">標記已領</button>
+              </footer>
             </article>
             
 
-            <article
-              class="card reward-card"
-              data-campaign="coinmaster_reward_pe_HELPqiNpyY_20261124"
-            >
-              <div class="claimed-badge" data-i18n="claimedBadge">已領取</div>
+            <article class="card reward-card" data-campaign="coinmaster_reward_pe_HELPqiNpyY_20261124">
+              <header class="card-head">
+                <span class="reward">100 能量</span>
+                <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
+              </header>
 
-              <div class="reward">100 能量</div>
-
-              <div class="meta">
+              <p class="meta">
                 <span data-i18n="campaignDateLabel">活動日期</span>：20261124
-              </div>
+              </p>
 
-              <div class="campaign">coinmaster_reward_pe_HELPqiNpyY_20261124</div>
+              <code class="campaign">coinmaster_reward_pe_HELPqiNpyY_20261124</code>
 
-              <div class="section-title">Coin Master Free Spins Today</div>
+              <p class="section-title">Coin Master Free Spins Today</p>
 
-              <div class="actions">
+              <footer class="actions">
                 <a
                   href="https://coinmaster.onelink.me/2792196939?af_xp=social&amp;pid=Reward%20link&amp;deep_link_value=coinmaster%3A%2F%2F&amp;deep_link_sub1=promotions&amp;af_dp=coinmaster%3A%2F%2Fpromotions&amp;af_force_deeplink=true&amp;c=pe_HELPqiNpyY_20261124&amp;af_web_dp=https%3A%2F%2Frewards.coinmaster.com%2Frewards%2Fplayonmobile.png&amp;af_adset=no_source&amp;af_ad=no_refferer"
                   target="_blank"
-                  rel="noopener"
-                  class="claim-link"
-                  data-campaign="coinmaster_reward_pe_HELPqiNpyY_20261124"
-                >
-                  領取
-                </a>
+                  rel="noopener noreferrer"
+                  class="btn btn-primary claim-link"
+                >領取</a>
 
-                <button type="button" class="claim-toggle" data-campaign="coinmaster_reward_pe_HELPqiNpyY_20261124">
-                  標記已領
-                </button>
-              </div>
+                <button type="button" class="btn btn-secondary claim-toggle">標記已領</button>
+              </footer>
             </article>
             
 
@@ -781,279 +917,223 @@
         
 
         <section class="date-section">
-          <h2>11/23/2026</h2>
+          <h2><time datetime="2026-11-23">11/23/2026</time></h2>
           <div class="cards">
         
 
-            <article
-              class="card reward-card"
-              data-campaign="coinmaster_reward_pe_EMAILMkIMSC_20261123"
-            >
-              <div class="claimed-badge" data-i18n="claimedBadge">已領取</div>
+            <article class="card reward-card" data-campaign="coinmaster_reward_pe_EMAILMkIMSC_20261123">
+              <header class="card-head">
+                <span class="reward">18 能量</span>
+                <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
+              </header>
 
-              <div class="reward">18 能量</div>
-
-              <div class="meta">
+              <p class="meta">
                 <span data-i18n="campaignDateLabel">活動日期</span>：20261123
-              </div>
+              </p>
 
-              <div class="campaign">coinmaster_reward_pe_EMAILMkIMSC_20261123</div>
+              <code class="campaign">coinmaster_reward_pe_EMAILMkIMSC_20261123</code>
 
-              <div class="section-title">Coin Master Free Spins Today</div>
+              <p class="section-title">Coin Master Free Spins Today</p>
 
-              <div class="actions">
+              <footer class="actions">
                 <a
                   href="https://coinmaster.onelink.me/2792196939?af_xp=social&amp;pid=Reward%20link&amp;deep_link_value=coinmaster%3A%2F%2F&amp;deep_link_sub1=promotions&amp;af_dp=coinmaster%3A%2F%2Fpromotions&amp;af_force_deeplink=true&amp;c=pe_EMAILMkIMSC_20261123&amp;af_web_dp=https%3A%2F%2Frewards.coinmaster.com%2Frewards%2Fplayonmobile.png&amp;af_adset=no_source&amp;af_ad=no_refferer"
                   target="_blank"
-                  rel="noopener"
-                  class="claim-link"
-                  data-campaign="coinmaster_reward_pe_EMAILMkIMSC_20261123"
-                >
-                  領取
-                </a>
+                  rel="noopener noreferrer"
+                  class="btn btn-primary claim-link"
+                >領取</a>
 
-                <button type="button" class="claim-toggle" data-campaign="coinmaster_reward_pe_EMAILMkIMSC_20261123">
-                  標記已領
-                </button>
-              </div>
+                <button type="button" class="btn btn-secondary claim-toggle">標記已領</button>
+              </footer>
             </article>
             
 
-            <article
-              class="card reward-card"
-              data-campaign="coinmaster_reward_pe_CHATBjUWflb_20261123"
-            >
-              <div class="claimed-badge" data-i18n="claimedBadge">已領取</div>
+            <article class="card reward-card" data-campaign="coinmaster_reward_pe_CHATBjUWflb_20261123">
+              <header class="card-head">
+                <span class="reward">100 能量</span>
+                <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
+              </header>
 
-              <div class="reward">100 能量</div>
-
-              <div class="meta">
+              <p class="meta">
                 <span data-i18n="campaignDateLabel">活動日期</span>：20261123
-              </div>
+              </p>
 
-              <div class="campaign">coinmaster_reward_pe_CHATBjUWflb_20261123</div>
+              <code class="campaign">coinmaster_reward_pe_CHATBjUWflb_20261123</code>
 
-              <div class="section-title">Coin Master Free Spins 23 - November</div>
+              <p class="section-title">Coin Master Free Spins 23 - November</p>
 
-              <div class="actions">
+              <footer class="actions">
                 <a
                   href="https://coinmaster.onelink.me/2792196939?af_xp=social&amp;pid=Reward%20link&amp;deep_link_value=coinmaster%3A%2F%2F&amp;deep_link_sub1=promotions&amp;af_dp=coinmaster%3A%2F%2Fpromotions&amp;af_force_deeplink=true&amp;c=pe_CHATBjUWflb_20261123&amp;af_web_dp=https%3A%2F%2Frewards.coinmaster.com%2Frewards%2Fplayonmobile.png&amp;af_adset=no_source&amp;af_ad=no_refferer"
                   target="_blank"
-                  rel="noopener"
-                  class="claim-link"
-                  data-campaign="coinmaster_reward_pe_CHATBjUWflb_20261123"
-                >
-                  領取
-                </a>
+                  rel="noopener noreferrer"
+                  class="btn btn-primary claim-link"
+                >領取</a>
 
-                <button type="button" class="claim-toggle" data-campaign="coinmaster_reward_pe_CHATBjUWflb_20261123">
-                  標記已領
-                </button>
-              </div>
+                <button type="button" class="btn btn-secondary claim-toggle">標記已領</button>
+              </footer>
             </article>
             
 
-            <article
-              class="card reward-card"
-              data-campaign="coinmaster_reward_pe_TWItIZikB_20261123"
-            >
-              <div class="claimed-badge" data-i18n="claimedBadge">已領取</div>
+            <article class="card reward-card" data-campaign="coinmaster_reward_pe_TWItIZikB_20261123">
+              <header class="card-head">
+                <span class="reward">50 能量</span>
+                <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
+              </header>
 
-              <div class="reward">50 能量</div>
-
-              <div class="meta">
+              <p class="meta">
                 <span data-i18n="campaignDateLabel">活動日期</span>：20261123
-              </div>
+              </p>
 
-              <div class="campaign">coinmaster_reward_pe_TWItIZikB_20261123</div>
+              <code class="campaign">coinmaster_reward_pe_TWItIZikB_20261123</code>
 
-              <div class="section-title">Coin Master Free Spins 23 - November</div>
+              <p class="section-title">Coin Master Free Spins 23 - November</p>
 
-              <div class="actions">
+              <footer class="actions">
                 <a
                   href="https://coinmaster.onelink.me/2792196939?af_xp=social&amp;pid=Reward%20link&amp;deep_link_value=coinmaster%3A%2F%2F&amp;deep_link_sub1=promotions&amp;af_dp=coinmaster%3A%2F%2Fpromotions&amp;af_force_deeplink=true&amp;c=pe_TWItIZikB_20261123&amp;af_web_dp=https%3A%2F%2Frewards.coinmaster.com%2Frewards%2Fplayonmobile.png&amp;af_adset=no_source&amp;af_ad=no_refferer"
                   target="_blank"
-                  rel="noopener"
-                  class="claim-link"
-                  data-campaign="coinmaster_reward_pe_TWItIZikB_20261123"
-                >
-                  領取
-                </a>
+                  rel="noopener noreferrer"
+                  class="btn btn-primary claim-link"
+                >領取</a>
 
-                <button type="button" class="claim-toggle" data-campaign="coinmaster_reward_pe_TWItIZikB_20261123">
-                  標記已領
-                </button>
-              </div>
+                <button type="button" class="btn btn-secondary claim-toggle">標記已領</button>
+              </footer>
             </article>
             
 
-            <article
-              class="card reward-card"
-              data-campaign="coinmaster_reward_pe_LINEVCDQWJ_20261123"
-            >
-              <div class="claimed-badge" data-i18n="claimedBadge">已領取</div>
+            <article class="card reward-card" data-campaign="coinmaster_reward_pe_LINEVCDQWJ_20261123">
+              <header class="card-head">
+                <span class="reward">50 能量</span>
+                <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
+              </header>
 
-              <div class="reward">50 能量</div>
-
-              <div class="meta">
+              <p class="meta">
                 <span data-i18n="campaignDateLabel">活動日期</span>：20261123
-              </div>
+              </p>
 
-              <div class="campaign">coinmaster_reward_pe_LINEVCDQWJ_20261123</div>
+              <code class="campaign">coinmaster_reward_pe_LINEVCDQWJ_20261123</code>
 
-              <div class="section-title">Coin Master Free Spins 23 - November</div>
+              <p class="section-title">Coin Master Free Spins 23 - November</p>
 
-              <div class="actions">
+              <footer class="actions">
                 <a
                   href="https://coinmaster.onelink.me/2792196939?af_xp=social&amp;pid=Reward%20link&amp;deep_link_value=coinmaster%3A%2F%2F&amp;deep_link_sub1=promotions&amp;af_dp=coinmaster%3A%2F%2Fpromotions&amp;af_force_deeplink=true&amp;c=pe_LINEVCDQWJ_20261123&amp;af_web_dp=https%3A%2F%2Frewards.coinmaster.com%2Frewards%2Fplayonmobile.png&amp;af_adset=no_source&amp;af_ad=no_refferer"
                   target="_blank"
-                  rel="noopener"
-                  class="claim-link"
-                  data-campaign="coinmaster_reward_pe_LINEVCDQWJ_20261123"
-                >
-                  領取
-                </a>
+                  rel="noopener noreferrer"
+                  class="btn btn-primary claim-link"
+                >領取</a>
 
-                <button type="button" class="claim-toggle" data-campaign="coinmaster_reward_pe_LINEVCDQWJ_20261123">
-                  標記已領
-                </button>
-              </div>
+                <button type="button" class="btn btn-secondary claim-toggle">標記已領</button>
+              </footer>
             </article>
             
 
-            <article
-              class="card reward-card"
-              data-campaign="coinmaster_reward_pe_INSoTpZSi_20261123"
-            >
-              <div class="claimed-badge" data-i18n="claimedBadge">已領取</div>
+            <article class="card reward-card" data-campaign="coinmaster_reward_pe_INSoTpZSi_20261123">
+              <header class="card-head">
+                <span class="reward">50 能量</span>
+                <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
+              </header>
 
-              <div class="reward">50 能量</div>
-
-              <div class="meta">
+              <p class="meta">
                 <span data-i18n="campaignDateLabel">活動日期</span>：20261123
-              </div>
+              </p>
 
-              <div class="campaign">coinmaster_reward_pe_INSoTpZSi_20261123</div>
+              <code class="campaign">coinmaster_reward_pe_INSoTpZSi_20261123</code>
 
-              <div class="section-title">Coin Master Free Spins 23 - November</div>
+              <p class="section-title">Coin Master Free Spins 23 - November</p>
 
-              <div class="actions">
+              <footer class="actions">
                 <a
                   href="https://coinmaster.onelink.me/2792196939?af_xp=social&amp;pid=Reward%20link&amp;deep_link_value=coinmaster%3A%2F%2F&amp;deep_link_sub1=promotions&amp;af_dp=coinmaster%3A%2F%2Fpromotions&amp;af_force_deeplink=true&amp;c=pe_INSoTpZSi_20261123&amp;af_web_dp=https%3A%2F%2Frewards.coinmaster.com%2Frewards%2Fplayonmobile.png&amp;af_adset=no_source&amp;af_ad=no_refferer"
                   target="_blank"
-                  rel="noopener"
-                  class="claim-link"
-                  data-campaign="coinmaster_reward_pe_INSoTpZSi_20261123"
-                >
-                  領取
-                </a>
+                  rel="noopener noreferrer"
+                  class="btn btn-primary claim-link"
+                >領取</a>
 
-                <button type="button" class="claim-toggle" data-campaign="coinmaster_reward_pe_INSoTpZSi_20261123">
-                  標記已領
-                </button>
-              </div>
+                <button type="button" class="btn btn-secondary claim-toggle">標記已領</button>
+              </footer>
             </article>
             
 
-            <article
-              class="card reward-card"
-              data-campaign="coinmaster_reward_pe_FCBSkBYPE_20261123"
-            >
-              <div class="claimed-badge" data-i18n="claimedBadge">已領取</div>
+            <article class="card reward-card" data-campaign="coinmaster_reward_pe_FCBSkBYPE_20261123">
+              <header class="card-head">
+                <span class="reward">50 能量</span>
+                <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
+              </header>
 
-              <div class="reward">50 能量</div>
-
-              <div class="meta">
+              <p class="meta">
                 <span data-i18n="campaignDateLabel">活動日期</span>：20261123
-              </div>
+              </p>
 
-              <div class="campaign">coinmaster_reward_pe_FCBSkBYPE_20261123</div>
+              <code class="campaign">coinmaster_reward_pe_FCBSkBYPE_20261123</code>
 
-              <div class="section-title">Coin Master Free Spins 23 - November</div>
+              <p class="section-title">Coin Master Free Spins 23 - November</p>
 
-              <div class="actions">
+              <footer class="actions">
                 <a
                   href="https://coinmaster.onelink.me/2792196939?af_xp=social&amp;pid=Reward%20link&amp;deep_link_value=coinmaster%3A%2F%2F&amp;deep_link_sub1=promotions&amp;af_dp=coinmaster%3A%2F%2Fpromotions&amp;af_force_deeplink=true&amp;c=pe_FCBSkBYPE_20261123&amp;af_web_dp=https%3A%2F%2Frewards.coinmaster.com%2Frewards%2Fplayonmobile.png&amp;af_adset=no_source&amp;af_ad=no_refferer"
                   target="_blank"
-                  rel="noopener"
-                  class="claim-link"
-                  data-campaign="coinmaster_reward_pe_FCBSkBYPE_20261123"
-                >
-                  領取
-                </a>
+                  rel="noopener noreferrer"
+                  class="btn btn-primary claim-link"
+                >領取</a>
 
-                <button type="button" class="claim-toggle" data-campaign="coinmaster_reward_pe_FCBSkBYPE_20261123">
-                  標記已領
-                </button>
-              </div>
+                <button type="button" class="btn btn-secondary claim-toggle">標記已領</button>
+              </footer>
             </article>
             
 
-            <article
-              class="card reward-card"
-              data-campaign="coinmaster_reward_pe_FCBmapLjK_20261123"
-            >
-              <div class="claimed-badge" data-i18n="claimedBadge">已領取</div>
+            <article class="card reward-card" data-campaign="coinmaster_reward_pe_FCBmapLjK_20261123">
+              <header class="card-head">
+                <span class="reward">50 能量</span>
+                <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
+              </header>
 
-              <div class="reward">50 能量</div>
-
-              <div class="meta">
+              <p class="meta">
                 <span data-i18n="campaignDateLabel">活動日期</span>：20261123
-              </div>
+              </p>
 
-              <div class="campaign">coinmaster_reward_pe_FCBmapLjK_20261123</div>
+              <code class="campaign">coinmaster_reward_pe_FCBmapLjK_20261123</code>
 
-              <div class="section-title">Coin Master Free Spins 23 - November</div>
+              <p class="section-title">Coin Master Free Spins 23 - November</p>
 
-              <div class="actions">
+              <footer class="actions">
                 <a
                   href="https://coinmaster.onelink.me/2792196939?af_xp=social&amp;pid=Reward%20link&amp;deep_link_value=coinmaster%3A%2F%2F&amp;deep_link_sub1=promotions&amp;af_dp=coinmaster%3A%2F%2Fpromotions&amp;af_force_deeplink=true&amp;c=pe_FCBmapLjK_20261123&amp;af_web_dp=https%3A%2F%2Frewards.coinmaster.com%2Frewards%2Fplayonmobile.png&amp;af_adset=no_source&amp;af_ad=no_refferer"
                   target="_blank"
-                  rel="noopener"
-                  class="claim-link"
-                  data-campaign="coinmaster_reward_pe_FCBmapLjK_20261123"
-                >
-                  領取
-                </a>
+                  rel="noopener noreferrer"
+                  class="btn btn-primary claim-link"
+                >領取</a>
 
-                <button type="button" class="claim-toggle" data-campaign="coinmaster_reward_pe_FCBmapLjK_20261123">
-                  標記已領
-                </button>
-              </div>
+                <button type="button" class="btn btn-secondary claim-toggle">標記已領</button>
+              </footer>
             </article>
             
 
-            <article
-              class="card reward-card"
-              data-campaign="coinmaster_reward_pe_HELPzyTbHr_20261123"
-            >
-              <div class="claimed-badge" data-i18n="claimedBadge">已領取</div>
+            <article class="card reward-card" data-campaign="coinmaster_reward_pe_HELPzyTbHr_20261123">
+              <header class="card-head">
+                <span class="reward">100 能量</span>
+                <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
+              </header>
 
-              <div class="reward">100 能量</div>
-
-              <div class="meta">
+              <p class="meta">
                 <span data-i18n="campaignDateLabel">活動日期</span>：20261123
-              </div>
+              </p>
 
-              <div class="campaign">coinmaster_reward_pe_HELPzyTbHr_20261123</div>
+              <code class="campaign">coinmaster_reward_pe_HELPzyTbHr_20261123</code>
 
-              <div class="section-title">Coin Master Free Spins 23 - November</div>
+              <p class="section-title">Coin Master Free Spins 23 - November</p>
 
-              <div class="actions">
+              <footer class="actions">
                 <a
                   href="https://coinmaster.onelink.me/2792196939?af_xp=social&amp;pid=Reward%20link&amp;deep_link_value=coinmaster%3A%2F%2F&amp;deep_link_sub1=promotions&amp;af_dp=coinmaster%3A%2F%2Fpromotions&amp;af_force_deeplink=true&amp;c=pe_HELPzyTbHr_20261123&amp;af_web_dp=https%3A%2F%2Frewards.coinmaster.com%2Frewards%2Fplayonmobile.png&amp;af_adset=no_source&amp;af_ad=no_refferer"
                   target="_blank"
-                  rel="noopener"
-                  class="claim-link"
-                  data-campaign="coinmaster_reward_pe_HELPzyTbHr_20261123"
-                >
-                  領取
-                </a>
+                  rel="noopener noreferrer"
+                  class="btn btn-primary claim-link"
+                >領取</a>
 
-                <button type="button" class="claim-toggle" data-campaign="coinmaster_reward_pe_HELPzyTbHr_20261123">
-                  標記已領
-                </button>
-              </div>
+                <button type="button" class="btn btn-secondary claim-toggle">標記已領</button>
+              </footer>
             </article>
             
 
@@ -1062,279 +1142,223 @@
         
 
         <section class="date-section">
-          <h2>11/22/2026</h2>
+          <h2><time datetime="2026-11-22">11/22/2026</time></h2>
           <div class="cards">
         
 
-            <article
-              class="card reward-card"
-              data-campaign="coinmaster_reward_pe_EMAILDWvgmZ_20261122"
-            >
-              <div class="claimed-badge" data-i18n="claimedBadge">已領取</div>
+            <article class="card reward-card" data-campaign="coinmaster_reward_pe_EMAILDWvgmZ_20261122">
+              <header class="card-head">
+                <span class="reward">100 能量</span>
+                <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
+              </header>
 
-              <div class="reward">100 能量</div>
-
-              <div class="meta">
+              <p class="meta">
                 <span data-i18n="campaignDateLabel">活動日期</span>：20261122
-              </div>
+              </p>
 
-              <div class="campaign">coinmaster_reward_pe_EMAILDWvgmZ_20261122</div>
+              <code class="campaign">coinmaster_reward_pe_EMAILDWvgmZ_20261122</code>
 
-              <div class="section-title">Coin Master Free Spins 23 - November</div>
+              <p class="section-title">Coin Master Free Spins 23 - November</p>
 
-              <div class="actions">
+              <footer class="actions">
                 <a
                   href="https://coinmaster.onelink.me/2792196939?af_xp=social&amp;pid=Reward%20link&amp;deep_link_value=coinmaster%3A%2F%2F&amp;deep_link_sub1=promotions&amp;af_dp=coinmaster%3A%2F%2Fpromotions&amp;af_force_deeplink=true&amp;c=pe_EMAILDWvgmZ_20261122&amp;af_web_dp=https%3A%2F%2Frewards.coinmaster.com%2Frewards%2Fplayonmobile.png&amp;af_adset=no_source&amp;af_ad=no_refferer"
                   target="_blank"
-                  rel="noopener"
-                  class="claim-link"
-                  data-campaign="coinmaster_reward_pe_EMAILDWvgmZ_20261122"
-                >
-                  領取
-                </a>
+                  rel="noopener noreferrer"
+                  class="btn btn-primary claim-link"
+                >領取</a>
 
-                <button type="button" class="claim-toggle" data-campaign="coinmaster_reward_pe_EMAILDWvgmZ_20261122">
-                  標記已領
-                </button>
-              </div>
+                <button type="button" class="btn btn-secondary claim-toggle">標記已領</button>
+              </footer>
             </article>
             
 
-            <article
-              class="card reward-card"
-              data-campaign="coinmaster_reward_pe_LINEIBFZnf_20261122"
-            >
-              <div class="claimed-badge" data-i18n="claimedBadge">已領取</div>
+            <article class="card reward-card" data-campaign="coinmaster_reward_pe_LINEIBFZnf_20261122">
+              <header class="card-head">
+                <span class="reward">50 能量</span>
+                <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
+              </header>
 
-              <div class="reward">50 能量</div>
-
-              <div class="meta">
+              <p class="meta">
                 <span data-i18n="campaignDateLabel">活動日期</span>：20261122
-              </div>
+              </p>
 
-              <div class="campaign">coinmaster_reward_pe_LINEIBFZnf_20261122</div>
+              <code class="campaign">coinmaster_reward_pe_LINEIBFZnf_20261122</code>
 
-              <div class="section-title">Coin Master Free Spins 22 - November</div>
+              <p class="section-title">Coin Master Free Spins 22 - November</p>
 
-              <div class="actions">
+              <footer class="actions">
                 <a
                   href="https://coinmaster.onelink.me/2792196939?af_xp=social&amp;pid=Reward%20link&amp;deep_link_value=coinmaster%3A%2F%2F&amp;deep_link_sub1=promotions&amp;af_dp=coinmaster%3A%2F%2Fpromotions&amp;af_force_deeplink=true&amp;c=pe_LINEIBFZnf_20261122&amp;af_web_dp=https%3A%2F%2Frewards.coinmaster.com%2Frewards%2Fplayonmobile.png&amp;af_adset=no_source&amp;af_ad=no_refferer"
                   target="_blank"
-                  rel="noopener"
-                  class="claim-link"
-                  data-campaign="coinmaster_reward_pe_LINEIBFZnf_20261122"
-                >
-                  領取
-                </a>
+                  rel="noopener noreferrer"
+                  class="btn btn-primary claim-link"
+                >領取</a>
 
-                <button type="button" class="claim-toggle" data-campaign="coinmaster_reward_pe_LINEIBFZnf_20261122">
-                  標記已領
-                </button>
-              </div>
+                <button type="button" class="btn btn-secondary claim-toggle">標記已領</button>
+              </footer>
             </article>
             
 
-            <article
-              class="card reward-card"
-              data-campaign="coinmaster_reward_pe_CHATBFSWlvy_20261122"
-            >
-              <div class="claimed-badge" data-i18n="claimedBadge">已領取</div>
+            <article class="card reward-card" data-campaign="coinmaster_reward_pe_CHATBFSWlvy_20261122">
+              <header class="card-head">
+                <span class="reward">50 能量</span>
+                <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
+              </header>
 
-              <div class="reward">50 能量</div>
-
-              <div class="meta">
+              <p class="meta">
                 <span data-i18n="campaignDateLabel">活動日期</span>：20261122
-              </div>
+              </p>
 
-              <div class="campaign">coinmaster_reward_pe_CHATBFSWlvy_20261122</div>
+              <code class="campaign">coinmaster_reward_pe_CHATBFSWlvy_20261122</code>
 
-              <div class="section-title">Coin Master Free Spins 22 - November</div>
+              <p class="section-title">Coin Master Free Spins 22 - November</p>
 
-              <div class="actions">
+              <footer class="actions">
                 <a
                   href="https://coinmaster.onelink.me/2792196939?af_xp=social&amp;pid=Reward%20link&amp;deep_link_value=coinmaster%3A%2F%2F&amp;deep_link_sub1=promotions&amp;af_dp=coinmaster%3A%2F%2Fpromotions&amp;af_force_deeplink=true&amp;c=pe_CHATBFSWlvy_20261122&amp;af_web_dp=https%3A%2F%2Frewards.coinmaster.com%2Frewards%2Fplayonmobile.png&amp;af_adset=no_source&amp;af_ad=no_refferer"
                   target="_blank"
-                  rel="noopener"
-                  class="claim-link"
-                  data-campaign="coinmaster_reward_pe_CHATBFSWlvy_20261122"
-                >
-                  領取
-                </a>
+                  rel="noopener noreferrer"
+                  class="btn btn-primary claim-link"
+                >領取</a>
 
-                <button type="button" class="claim-toggle" data-campaign="coinmaster_reward_pe_CHATBFSWlvy_20261122">
-                  標記已領
-                </button>
-              </div>
+                <button type="button" class="btn btn-secondary claim-toggle">標記已領</button>
+              </footer>
             </article>
             
 
-            <article
-              class="card reward-card"
-              data-campaign="coinmaster_reward_pe_TWIgZZWZe_20261122"
-            >
-              <div class="claimed-badge" data-i18n="claimedBadge">已領取</div>
+            <article class="card reward-card" data-campaign="coinmaster_reward_pe_TWIgZZWZe_20261122">
+              <header class="card-head">
+                <span class="reward">50 能量</span>
+                <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
+              </header>
 
-              <div class="reward">50 能量</div>
-
-              <div class="meta">
+              <p class="meta">
                 <span data-i18n="campaignDateLabel">活動日期</span>：20261122
-              </div>
+              </p>
 
-              <div class="campaign">coinmaster_reward_pe_TWIgZZWZe_20261122</div>
+              <code class="campaign">coinmaster_reward_pe_TWIgZZWZe_20261122</code>
 
-              <div class="section-title">Coin Master Free Spins 22 - November</div>
+              <p class="section-title">Coin Master Free Spins 22 - November</p>
 
-              <div class="actions">
+              <footer class="actions">
                 <a
                   href="https://coinmaster.onelink.me/2792196939?af_xp=social&amp;pid=Reward%20link&amp;deep_link_value=coinmaster%3A%2F%2F&amp;deep_link_sub1=promotions&amp;af_dp=coinmaster%3A%2F%2Fpromotions&amp;af_force_deeplink=true&amp;c=pe_TWIgZZWZe_20261122&amp;af_web_dp=https%3A%2F%2Frewards.coinmaster.com%2Frewards%2Fplayonmobile.png&amp;af_adset=no_source&amp;af_ad=no_refferer"
                   target="_blank"
-                  rel="noopener"
-                  class="claim-link"
-                  data-campaign="coinmaster_reward_pe_TWIgZZWZe_20261122"
-                >
-                  領取
-                </a>
+                  rel="noopener noreferrer"
+                  class="btn btn-primary claim-link"
+                >領取</a>
 
-                <button type="button" class="claim-toggle" data-campaign="coinmaster_reward_pe_TWIgZZWZe_20261122">
-                  標記已領
-                </button>
-              </div>
+                <button type="button" class="btn btn-secondary claim-toggle">標記已領</button>
+              </footer>
             </article>
             
 
-            <article
-              class="card reward-card"
-              data-campaign="coinmaster_reward_pe_INStIjVAL_20261122"
-            >
-              <div class="claimed-badge" data-i18n="claimedBadge">已領取</div>
+            <article class="card reward-card" data-campaign="coinmaster_reward_pe_INStIjVAL_20261122">
+              <header class="card-head">
+                <span class="reward">50 能量</span>
+                <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
+              </header>
 
-              <div class="reward">50 能量</div>
-
-              <div class="meta">
+              <p class="meta">
                 <span data-i18n="campaignDateLabel">活動日期</span>：20261122
-              </div>
+              </p>
 
-              <div class="campaign">coinmaster_reward_pe_INStIjVAL_20261122</div>
+              <code class="campaign">coinmaster_reward_pe_INStIjVAL_20261122</code>
 
-              <div class="section-title">Coin Master Free Spins 22 - November</div>
+              <p class="section-title">Coin Master Free Spins 22 - November</p>
 
-              <div class="actions">
+              <footer class="actions">
                 <a
                   href="https://coinmaster.onelink.me/2792196939?af_xp=social&amp;pid=Reward%20link&amp;deep_link_value=coinmaster%3A%2F%2F&amp;deep_link_sub1=promotions&amp;af_dp=coinmaster%3A%2F%2Fpromotions&amp;af_force_deeplink=true&amp;c=pe_INStIjVAL_20261122&amp;af_web_dp=https%3A%2F%2Frewards.coinmaster.com%2Frewards%2Fplayonmobile.png&amp;af_adset=no_source&amp;af_ad=no_refferer"
                   target="_blank"
-                  rel="noopener"
-                  class="claim-link"
-                  data-campaign="coinmaster_reward_pe_INStIjVAL_20261122"
-                >
-                  領取
-                </a>
+                  rel="noopener noreferrer"
+                  class="btn btn-primary claim-link"
+                >領取</a>
 
-                <button type="button" class="claim-toggle" data-campaign="coinmaster_reward_pe_INStIjVAL_20261122">
-                  標記已領
-                </button>
-              </div>
+                <button type="button" class="btn btn-secondary claim-toggle">標記已領</button>
+              </footer>
             </article>
             
 
-            <article
-              class="card reward-card"
-              data-campaign="coinmaster_reward_pe_FCBuVaCLI_20261122"
-            >
-              <div class="claimed-badge" data-i18n="claimedBadge">已領取</div>
+            <article class="card reward-card" data-campaign="coinmaster_reward_pe_FCBuVaCLI_20261122">
+              <header class="card-head">
+                <span class="reward">50 能量</span>
+                <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
+              </header>
 
-              <div class="reward">50 能量</div>
-
-              <div class="meta">
+              <p class="meta">
                 <span data-i18n="campaignDateLabel">活動日期</span>：20261122
-              </div>
+              </p>
 
-              <div class="campaign">coinmaster_reward_pe_FCBuVaCLI_20261122</div>
+              <code class="campaign">coinmaster_reward_pe_FCBuVaCLI_20261122</code>
 
-              <div class="section-title">Coin Master Free Spins 22 - November</div>
+              <p class="section-title">Coin Master Free Spins 22 - November</p>
 
-              <div class="actions">
+              <footer class="actions">
                 <a
                   href="https://coinmaster.onelink.me/2792196939?af_xp=social&amp;pid=Reward%20link&amp;deep_link_value=coinmaster%3A%2F%2F&amp;deep_link_sub1=promotions&amp;af_dp=coinmaster%3A%2F%2Fpromotions&amp;af_force_deeplink=true&amp;c=pe_FCBuVaCLI_20261122&amp;af_web_dp=https%3A%2F%2Frewards.coinmaster.com%2Frewards%2Fplayonmobile.png&amp;af_adset=no_source&amp;af_ad=no_refferer"
                   target="_blank"
-                  rel="noopener"
-                  class="claim-link"
-                  data-campaign="coinmaster_reward_pe_FCBuVaCLI_20261122"
-                >
-                  領取
-                </a>
+                  rel="noopener noreferrer"
+                  class="btn btn-primary claim-link"
+                >領取</a>
 
-                <button type="button" class="claim-toggle" data-campaign="coinmaster_reward_pe_FCBuVaCLI_20261122">
-                  標記已領
-                </button>
-              </div>
+                <button type="button" class="btn btn-secondary claim-toggle">標記已領</button>
+              </footer>
             </article>
             
 
-            <article
-              class="card reward-card"
-              data-campaign="coinmaster_reward_pe_FCBaiATNp_20261122"
-            >
-              <div class="claimed-badge" data-i18n="claimedBadge">已領取</div>
+            <article class="card reward-card" data-campaign="coinmaster_reward_pe_FCBaiATNp_20261122">
+              <header class="card-head">
+                <span class="reward">50 能量</span>
+                <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
+              </header>
 
-              <div class="reward">50 能量</div>
-
-              <div class="meta">
+              <p class="meta">
                 <span data-i18n="campaignDateLabel">活動日期</span>：20261122
-              </div>
+              </p>
 
-              <div class="campaign">coinmaster_reward_pe_FCBaiATNp_20261122</div>
+              <code class="campaign">coinmaster_reward_pe_FCBaiATNp_20261122</code>
 
-              <div class="section-title">Coin Master Free Spins 22 - November</div>
+              <p class="section-title">Coin Master Free Spins 22 - November</p>
 
-              <div class="actions">
+              <footer class="actions">
                 <a
                   href="https://coinmaster.onelink.me/2792196939?af_xp=social&amp;pid=Reward%20link&amp;deep_link_value=coinmaster%3A%2F%2F&amp;deep_link_sub1=promotions&amp;af_dp=coinmaster%3A%2F%2Fpromotions&amp;af_force_deeplink=true&amp;c=pe_FCBaiATNp_20261122&amp;af_web_dp=https%3A%2F%2Frewards.coinmaster.com%2Frewards%2Fplayonmobile.png&amp;af_adset=no_source&amp;af_ad=no_refferer"
                   target="_blank"
-                  rel="noopener"
-                  class="claim-link"
-                  data-campaign="coinmaster_reward_pe_FCBaiATNp_20261122"
-                >
-                  領取
-                </a>
+                  rel="noopener noreferrer"
+                  class="btn btn-primary claim-link"
+                >領取</a>
 
-                <button type="button" class="claim-toggle" data-campaign="coinmaster_reward_pe_FCBaiATNp_20261122">
-                  標記已領
-                </button>
-              </div>
+                <button type="button" class="btn btn-secondary claim-toggle">標記已領</button>
+              </footer>
             </article>
             
 
-            <article
-              class="card reward-card"
-              data-campaign="coinmaster_reward_pe_HELPsRpAmM_20261122"
-            >
-              <div class="claimed-badge" data-i18n="claimedBadge">已領取</div>
+            <article class="card reward-card" data-campaign="coinmaster_reward_pe_HELPsRpAmM_20261122">
+              <header class="card-head">
+                <span class="reward">100 能量</span>
+                <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
+              </header>
 
-              <div class="reward">100 能量</div>
-
-              <div class="meta">
+              <p class="meta">
                 <span data-i18n="campaignDateLabel">活動日期</span>：20261122
-              </div>
+              </p>
 
-              <div class="campaign">coinmaster_reward_pe_HELPsRpAmM_20261122</div>
+              <code class="campaign">coinmaster_reward_pe_HELPsRpAmM_20261122</code>
 
-              <div class="section-title">Coin Master Free Spins 22 - November</div>
+              <p class="section-title">Coin Master Free Spins 22 - November</p>
 
-              <div class="actions">
+              <footer class="actions">
                 <a
                   href="https://coinmaster.onelink.me/2792196939?af_xp=social&amp;pid=Reward%20link&amp;deep_link_value=coinmaster%3A%2F%2F&amp;deep_link_sub1=promotions&amp;af_dp=coinmaster%3A%2F%2Fpromotions&amp;af_force_deeplink=true&amp;c=pe_HELPsRpAmM_20261122&amp;af_web_dp=https%3A%2F%2Frewards.coinmaster.com%2Frewards%2Fplayonmobile.png&amp;af_adset=no_source&amp;af_ad=no_refferer"
                   target="_blank"
-                  rel="noopener"
-                  class="claim-link"
-                  data-campaign="coinmaster_reward_pe_HELPsRpAmM_20261122"
-                >
-                  領取
-                </a>
+                  rel="noopener noreferrer"
+                  class="btn btn-primary claim-link"
+                >領取</a>
 
-                <button type="button" class="claim-toggle" data-campaign="coinmaster_reward_pe_HELPsRpAmM_20261122">
-                  標記已領
-                </button>
-              </div>
+                <button type="button" class="btn btn-secondary claim-toggle">標記已領</button>
+              </footer>
             </article>
             
 
@@ -1343,41 +1367,34 @@
         
 
         <section class="date-section">
-          <h2>11/21/2026</h2>
+          <h2><time datetime="2026-11-21">11/21/2026</time></h2>
           <div class="cards">
         
 
-            <article
-              class="card reward-card"
-              data-campaign="coinmaster_reward_pe_EMAILkjJsBJ_20261121"
-            >
-              <div class="claimed-badge" data-i18n="claimedBadge">已領取</div>
+            <article class="card reward-card" data-campaign="coinmaster_reward_pe_EMAILkjJsBJ_20261121">
+              <header class="card-head">
+                <span class="reward">100 能量</span>
+                <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
+              </header>
 
-              <div class="reward">100 能量</div>
-
-              <div class="meta">
+              <p class="meta">
                 <span data-i18n="campaignDateLabel">活動日期</span>：20261121
-              </div>
+              </p>
 
-              <div class="campaign">coinmaster_reward_pe_EMAILkjJsBJ_20261121</div>
+              <code class="campaign">coinmaster_reward_pe_EMAILkjJsBJ_20261121</code>
 
-              <div class="section-title">Coin Master Free Spins 22 - November</div>
+              <p class="section-title">Coin Master Free Spins 22 - November</p>
 
-              <div class="actions">
+              <footer class="actions">
                 <a
                   href="https://coinmaster.onelink.me/2792196939?af_xp=social&amp;pid=Reward%20link&amp;deep_link_value=coinmaster%3A%2F%2F&amp;deep_link_sub1=promotions&amp;af_dp=coinmaster%3A%2F%2Fpromotions&amp;af_force_deeplink=true&amp;c=pe_EMAILkjJsBJ_20261121&amp;af_web_dp=https%3A%2F%2Frewards.coinmaster.com%2Frewards%2Fplayonmobile.png&amp;af_adset=no_source&amp;af_ad=no_refferer"
                   target="_blank"
-                  rel="noopener"
-                  class="claim-link"
-                  data-campaign="coinmaster_reward_pe_EMAILkjJsBJ_20261121"
-                >
-                  領取
-                </a>
+                  rel="noopener noreferrer"
+                  class="btn btn-primary claim-link"
+                >領取</a>
 
-                <button type="button" class="claim-toggle" data-campaign="coinmaster_reward_pe_EMAILkjJsBJ_20261121">
-                  標記已領
-                </button>
-              </div>
+                <button type="button" class="btn btn-secondary claim-toggle">標記已領</button>
+              </footer>
             </article>
             
 
@@ -1386,75 +1403,61 @@
         
 
         <section class="date-section">
-          <h2>11/20/2026</h2>
+          <h2><time datetime="2026-11-20">11/20/2026</time></h2>
           <div class="cards">
         
 
-            <article
-              class="card reward-card"
-              data-campaign="coinmaster_reward_pe_EMAILpCiKeU_20261120"
-            >
-              <div class="claimed-badge" data-i18n="claimedBadge">已領取</div>
+            <article class="card reward-card" data-campaign="coinmaster_reward_pe_EMAILpCiKeU_20261120">
+              <header class="card-head">
+                <span class="reward">100 能量</span>
+                <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
+              </header>
 
-              <div class="reward">100 能量</div>
-
-              <div class="meta">
+              <p class="meta">
                 <span data-i18n="campaignDateLabel">活動日期</span>：20261120
-              </div>
+              </p>
 
-              <div class="campaign">coinmaster_reward_pe_EMAILpCiKeU_20261120</div>
+              <code class="campaign">coinmaster_reward_pe_EMAILpCiKeU_20261120</code>
 
-              <div class="section-title">Coin Master Free Spins 22 - November</div>
+              <p class="section-title">Coin Master Free Spins 22 - November</p>
 
-              <div class="actions">
+              <footer class="actions">
                 <a
                   href="https://coinmaster.onelink.me/2792196939?af_xp=social&amp;pid=Reward%20link&amp;deep_link_value=coinmaster%3A%2F%2F&amp;deep_link_sub1=promotions&amp;af_dp=coinmaster%3A%2F%2Fpromotions&amp;af_force_deeplink=true&amp;c=pe_EMAILpCiKeU_20261120&amp;af_web_dp=https%3A%2F%2Frewards.coinmaster.com%2Frewards%2Fplayonmobile.png&amp;af_adset=no_source&amp;af_ad=no_refferer"
                   target="_blank"
-                  rel="noopener"
-                  class="claim-link"
-                  data-campaign="coinmaster_reward_pe_EMAILpCiKeU_20261120"
-                >
-                  領取
-                </a>
+                  rel="noopener noreferrer"
+                  class="btn btn-primary claim-link"
+                >領取</a>
 
-                <button type="button" class="claim-toggle" data-campaign="coinmaster_reward_pe_EMAILpCiKeU_20261120">
-                  標記已領
-                </button>
-              </div>
+                <button type="button" class="btn btn-secondary claim-toggle">標記已領</button>
+              </footer>
             </article>
             
 
-            <article
-              class="card reward-card"
-              data-campaign="coinmaster_reward_pe_EMAILhURxpX_20261120"
-            >
-              <div class="claimed-badge" data-i18n="claimedBadge">已領取</div>
+            <article class="card reward-card" data-campaign="coinmaster_reward_pe_EMAILhURxpX_20261120">
+              <header class="card-head">
+                <span class="reward">100 能量</span>
+                <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
+              </header>
 
-              <div class="reward">100 能量</div>
-
-              <div class="meta">
+              <p class="meta">
                 <span data-i18n="campaignDateLabel">活動日期</span>：20261120
-              </div>
+              </p>
 
-              <div class="campaign">coinmaster_reward_pe_EMAILhURxpX_20261120</div>
+              <code class="campaign">coinmaster_reward_pe_EMAILhURxpX_20261120</code>
 
-              <div class="section-title">Coin Master Free Spins Bonus</div>
+              <p class="section-title">Coin Master Free Spins Bonus</p>
 
-              <div class="actions">
+              <footer class="actions">
                 <a
                   href="https://coinmaster.onelink.me/2792196939?af_xp=social&amp;pid=Reward%20link&amp;deep_link_value=coinmaster%3A%2F%2F&amp;deep_link_sub1=promotions&amp;af_dp=coinmaster%3A%2F%2Fpromotions&amp;af_force_deeplink=true&amp;c=pe_EMAILhURxpX_20261120&amp;af_web_dp=https%3A%2F%2Frewards.coinmaster.com%2Frewards%2Fplayonmobile.png&amp;af_adset=no_source&amp;af_ad=no_refferer"
                   target="_blank"
-                  rel="noopener"
-                  class="claim-link"
-                  data-campaign="coinmaster_reward_pe_EMAILhURxpX_20261120"
-                >
-                  領取
-                </a>
+                  rel="noopener noreferrer"
+                  class="btn btn-primary claim-link"
+                >領取</a>
 
-                <button type="button" class="claim-toggle" data-campaign="coinmaster_reward_pe_EMAILhURxpX_20261120">
-                  標記已領
-                </button>
-              </div>
+                <button type="button" class="btn btn-secondary claim-toggle">標記已領</button>
+              </footer>
             </article>
             
 
@@ -1463,41 +1466,34 @@
         
 
         <section class="date-section">
-          <h2>11/19/2026</h2>
+          <h2><time datetime="2026-11-19">11/19/2026</time></h2>
           <div class="cards">
         
 
-            <article
-              class="card reward-card"
-              data-campaign="coinmaster_reward_pe_EMAILeGNuKs_20261119"
-            >
-              <div class="claimed-badge" data-i18n="claimedBadge">已領取</div>
+            <article class="card reward-card" data-campaign="coinmaster_reward_pe_EMAILeGNuKs_20261119">
+              <header class="card-head">
+                <span class="reward">100 能量</span>
+                <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
+              </header>
 
-              <div class="reward">100 能量</div>
-
-              <div class="meta">
+              <p class="meta">
                 <span data-i18n="campaignDateLabel">活動日期</span>：20261119
-              </div>
+              </p>
 
-              <div class="campaign">coinmaster_reward_pe_EMAILeGNuKs_20261119</div>
+              <code class="campaign">coinmaster_reward_pe_EMAILeGNuKs_20261119</code>
 
-              <div class="section-title">Coin Master Free Spins Bonus</div>
+              <p class="section-title">Coin Master Free Spins Bonus</p>
 
-              <div class="actions">
+              <footer class="actions">
                 <a
                   href="https://coinmaster.onelink.me/2792196939?af_xp=social&amp;pid=Reward%20link&amp;deep_link_value=coinmaster%3A%2F%2F&amp;deep_link_sub1=promotions&amp;af_dp=coinmaster%3A%2F%2Fpromotions&amp;af_force_deeplink=true&amp;c=pe_EMAILeGNuKs_20261119&amp;af_web_dp=https%3A%2F%2Frewards.coinmaster.com%2Frewards%2Fplayonmobile.png&amp;af_adset=no_source&amp;af_ad=no_refferer"
                   target="_blank"
-                  rel="noopener"
-                  class="claim-link"
-                  data-campaign="coinmaster_reward_pe_EMAILeGNuKs_20261119"
-                >
-                  領取
-                </a>
+                  rel="noopener noreferrer"
+                  class="btn btn-primary claim-link"
+                >領取</a>
 
-                <button type="button" class="claim-toggle" data-campaign="coinmaster_reward_pe_EMAILeGNuKs_20261119">
-                  標記已領
-                </button>
-              </div>
+                <button type="button" class="btn btn-secondary claim-toggle">標記已領</button>
+              </footer>
             </article>
             
 
@@ -1506,41 +1502,34 @@
         
 
         <section class="date-section">
-          <h2>11/16/2026</h2>
+          <h2><time datetime="2026-11-16">11/16/2026</time></h2>
           <div class="cards">
         
 
-            <article
-              class="card reward-card"
-              data-campaign="coinmaster_reward_pe_EMAILsJkgWh_20261116"
-            >
-              <div class="claimed-badge" data-i18n="claimedBadge">已領取</div>
+            <article class="card reward-card" data-campaign="coinmaster_reward_pe_EMAILsJkgWh_20261116">
+              <header class="card-head">
+                <span class="reward">100 能量</span>
+                <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
+              </header>
 
-              <div class="reward">100 能量</div>
-
-              <div class="meta">
+              <p class="meta">
                 <span data-i18n="campaignDateLabel">活動日期</span>：20261116
-              </div>
+              </p>
 
-              <div class="campaign">coinmaster_reward_pe_EMAILsJkgWh_20261116</div>
+              <code class="campaign">coinmaster_reward_pe_EMAILsJkgWh_20261116</code>
 
-              <div class="section-title">Coin Master Free Spins Bonus</div>
+              <p class="section-title">Coin Master Free Spins Bonus</p>
 
-              <div class="actions">
+              <footer class="actions">
                 <a
                   href="https://coinmaster.onelink.me/2792196939?af_xp=social&amp;pid=Reward%20link&amp;deep_link_value=coinmaster%3A%2F%2F&amp;deep_link_sub1=promotions&amp;af_dp=coinmaster%3A%2F%2Fpromotions&amp;af_force_deeplink=true&amp;c=pe_EMAILsJkgWh_20261116&amp;af_web_dp=https%3A%2F%2Frewards.coinmaster.com%2Frewards%2Fplayonmobile.png&amp;af_adset=no_source&amp;af_ad=no_refferer"
                   target="_blank"
-                  rel="noopener"
-                  class="claim-link"
-                  data-campaign="coinmaster_reward_pe_EMAILsJkgWh_20261116"
-                >
-                  領取
-                </a>
+                  rel="noopener noreferrer"
+                  class="btn btn-primary claim-link"
+                >領取</a>
 
-                <button type="button" class="claim-toggle" data-campaign="coinmaster_reward_pe_EMAILsJkgWh_20261116">
-                  標記已領
-                </button>
-              </div>
+                <button type="button" class="btn btn-secondary claim-toggle">標記已領</button>
+              </footer>
             </article>
             
 
@@ -1549,41 +1538,34 @@
         
 
         <section class="date-section">
-          <h2>11/08/2026</h2>
+          <h2><time datetime="2026-11-08">11/08/2026</time></h2>
           <div class="cards">
         
 
-            <article
-              class="card reward-card"
-              data-campaign="coinmaster_reward_pe_RICHaWBgEf_20261108"
-            >
-              <div class="claimed-badge" data-i18n="claimedBadge">已領取</div>
+            <article class="card reward-card" data-campaign="coinmaster_reward_pe_RICHaWBgEf_20261108">
+              <header class="card-head">
+                <span class="reward">100 能量</span>
+                <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
+              </header>
 
-              <div class="reward">100 能量</div>
-
-              <div class="meta">
+              <p class="meta">
                 <span data-i18n="campaignDateLabel">活動日期</span>：20261108
-              </div>
+              </p>
 
-              <div class="campaign">coinmaster_reward_pe_RICHaWBgEf_20261108</div>
+              <code class="campaign">coinmaster_reward_pe_RICHaWBgEf_20261108</code>
 
-              <div class="section-title">Coin Master Free Spins Bonus</div>
+              <p class="section-title">Coin Master Free Spins Bonus</p>
 
-              <div class="actions">
+              <footer class="actions">
                 <a
                   href="https://coinmaster.onelink.me/2792196939?af_xp=social&amp;pid=Reward%20link&amp;deep_link_value=coinmaster%3A%2F%2F&amp;deep_link_sub1=promotions&amp;af_dp=coinmaster%3A%2F%2Fpromotions&amp;af_force_deeplink=true&amp;c=pe_RICHaWBgEf_20261108&amp;af_web_dp=https%3A%2F%2Frewards.coinmaster.com%2Frewards%2Fplayonmobile.png&amp;af_adset=no_source&amp;af_ad=no_refferer"
                   target="_blank"
-                  rel="noopener"
-                  class="claim-link"
-                  data-campaign="coinmaster_reward_pe_RICHaWBgEf_20261108"
-                >
-                  領取
-                </a>
+                  rel="noopener noreferrer"
+                  class="btn btn-primary claim-link"
+                >領取</a>
 
-                <button type="button" class="claim-toggle" data-campaign="coinmaster_reward_pe_RICHaWBgEf_20261108">
-                  標記已領
-                </button>
-              </div>
+                <button type="button" class="btn btn-secondary claim-toggle">標記已領</button>
+              </footer>
             </article>
             
 
@@ -1592,41 +1574,34 @@
         
 
         <section class="date-section">
-          <h2>11/02/2026</h2>
+          <h2><time datetime="2026-11-02">11/02/2026</time></h2>
           <div class="cards">
         
 
-            <article
-              class="card reward-card"
-              data-campaign="coinmaster_reward_pe_RICHnwGTWI_20261102"
-            >
-              <div class="claimed-badge" data-i18n="claimedBadge">已領取</div>
+            <article class="card reward-card" data-campaign="coinmaster_reward_pe_RICHnwGTWI_20261102">
+              <header class="card-head">
+                <span class="reward">150 能量</span>
+                <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
+              </header>
 
-              <div class="reward">150 能量</div>
-
-              <div class="meta">
+              <p class="meta">
                 <span data-i18n="campaignDateLabel">活動日期</span>：20261102
-              </div>
+              </p>
 
-              <div class="campaign">coinmaster_reward_pe_RICHnwGTWI_20261102</div>
+              <code class="campaign">coinmaster_reward_pe_RICHnwGTWI_20261102</code>
 
-              <div class="section-title">Coin Master Free Spins Bonus</div>
+              <p class="section-title">Coin Master Free Spins Bonus</p>
 
-              <div class="actions">
+              <footer class="actions">
                 <a
                   href="https://coinmaster.onelink.me/2792196939?af_xp=social&amp;pid=Reward%20link&amp;deep_link_value=coinmaster%3A%2F%2F&amp;deep_link_sub1=promotions&amp;af_dp=coinmaster%3A%2F%2Fpromotions&amp;af_force_deeplink=true&amp;c=pe_RICHnwGTWI_20261102&amp;af_web_dp=https%3A%2F%2Frewards.coinmaster.com%2Frewards%2Fplayonmobile.png&amp;af_adset=no_source&amp;af_ad=no_refferer"
                   target="_blank"
-                  rel="noopener"
-                  class="claim-link"
-                  data-campaign="coinmaster_reward_pe_RICHnwGTWI_20261102"
-                >
-                  領取
-                </a>
+                  rel="noopener noreferrer"
+                  class="btn btn-primary claim-link"
+                >領取</a>
 
-                <button type="button" class="claim-toggle" data-campaign="coinmaster_reward_pe_RICHnwGTWI_20261102">
-                  標記已領
-                </button>
-              </div>
+                <button type="button" class="btn btn-secondary claim-toggle">標記已領</button>
+              </footer>
             </article>
             
 
@@ -1635,41 +1610,34 @@
         
 
         <section class="date-section">
-          <h2>05/04/2025</h2>
+          <h2><time datetime="2025-05-04">05/04/2025</time></h2>
           <div class="cards">
         
 
-            <article
-              class="card reward-card"
-              data-campaign="coinmaster_reward_pe_CHATBsLrYmA_20250504"
-            >
-              <div class="claimed-badge" data-i18n="claimedBadge">已領取</div>
+            <article class="card reward-card" data-campaign="coinmaster_reward_pe_CHATBsLrYmA_20250504">
+              <header class="card-head">
+                <span class="reward">150 能量</span>
+                <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
+              </header>
 
-              <div class="reward">150 能量</div>
-
-              <div class="meta">
+              <p class="meta">
                 <span data-i18n="campaignDateLabel">活動日期</span>：20250504
-              </div>
+              </p>
 
-              <div class="campaign">coinmaster_reward_pe_CHATBsLrYmA_20250504</div>
+              <code class="campaign">coinmaster_reward_pe_CHATBsLrYmA_20250504</code>
 
-              <div class="section-title">Coin Master Free Spins Bonus</div>
+              <p class="section-title">Coin Master Free Spins Bonus</p>
 
-              <div class="actions">
+              <footer class="actions">
                 <a
                   href="https://coinmaster.onelink.me/2792196939?af_dp=coinmaster://promotions&amp;af_force_deeplink=false&amp;c=pe_CHATBsLrYmA_20250504"
                   target="_blank"
-                  rel="noopener"
-                  class="claim-link"
-                  data-campaign="coinmaster_reward_pe_CHATBsLrYmA_20250504"
-                >
-                  領取
-                </a>
+                  rel="noopener noreferrer"
+                  class="btn btn-primary claim-link"
+                >領取</a>
 
-                <button type="button" class="claim-toggle" data-campaign="coinmaster_reward_pe_CHATBsLrYmA_20250504">
-                  標記已領
-                </button>
-              </div>
+                <button type="button" class="btn btn-secondary claim-toggle">標記已領</button>
+              </footer>
             </article>
             
 
@@ -1678,384 +1646,300 @@
         
   </main>
 
-  <footer>
-    <span data-i18n="footerText">本頁僅整理公開獎勵連結，實際領取狀態以遊戲內顯示為準。</span>
-    <br>
-    © 2026 Coin999-長長久久隊伍. All rights reserved.
+  <footer class="site-footer">
+    <p data-i18n="footerText">本頁僅整理公開獎勵連結，實際領取狀態以遊戲內顯示為準。</p>
+    <p>© 2026 Coin999-長長久久隊伍. All rights reserved.</p>
   </footer>
+
+  <dialog id="clearDialog" aria-labelledby="clearDialogTitle" closedby="any">
+    <h1 id="clearDialogTitle" data-i18n="clearConfirm">確定要清除所有已領取紀錄嗎？</h1>
+    <form method="dialog" class="dialog-actions">
+      <button type="submit" value="cancel" class="btn btn-ghost" autofocus data-i18n="cancel">取消</button>
+      <button type="submit" value="confirm" class="btn btn-danger" data-i18n="confirmClear">清除</button>
+    </form>
+  </dialog>
 
   <script>
     const STORAGE_PREFIX = "coinmaster_claimed_";
     const HIDE_CLAIMED_KEY = "coinmaster_hide_claimed";
     const LANGUAGE_KEY = "coinmaster_language";
+    const IOS_HINT_DISMISSED_KEY = "coinmaster_ios_hint_dismissed";
+    const DEFAULT_LANGUAGE = "zh-Hant";
 
-    const I18N = {"zh-Hant": {"languageLabel": "語言", "siteTitle": "Coin Master 每日獎勵連結", "siteSubtitle": "每日自動更新免費能量 / 旋轉 / 金幣連結", "lastUpdated": "最後更新", "baseTimeNotice": "由Coin999-長長久久隊伍製作", "summaryPrefix": "目前共收錄", "summarySuffix": "筆獎勵連結。", "summaryNotice": "資料來源為公開網頁整理，點擊前請自行確認連結狀態。", "hideClaimed": "隱藏已領取", "clearClaimed": "清除已領取紀錄", "emptyMessage": "目前沒有可顯示的獎勵。可能全部都已標記為已領取。", "claimedBadge": "已領取", "campaignDateLabel": "活動日期", "claim": "領取", "claimed": "已領取", "markClaimed": "標記已領", "unmarkClaimed": "取消標記", "clearConfirm": "確定要清除所有已領取紀錄嗎？", "installButton": "安裝到手機桌面", "installUnavailable": "可透過瀏覽器選單加入主畫面", "iosHintTitle": "iPhone / iPad 安裝提示", "iosHintText": "請點選 Safari 分享按鈕，然後選擇「加入主畫面」。", "footerText": "本頁僅整理公開獎勵連結，實際領取狀態以遊戲內顯示為準。"}, "en": {"languageLabel": "Language", "siteTitle": "Coin Master Daily Reward Links", "siteSubtitle": "Automatically updated daily free spins, energy, and coin links", "lastUpdated": "Last updated", "baseTimeNotice": "Made by team Coin999-長長久久", "summaryPrefix": "Currently collected", "summarySuffix": "reward links.", "summaryNotice": "Data is collected from public webpages. Please verify each link before opening.", "hideClaimed": "Hide claimed", "clearClaimed": "Clear claimed records", "emptyMessage": "No rewards are currently visible. They may all be marked as claimed.", "claimedBadge": "Claimed", "campaignDateLabel": "Campaign Date", "claim": "Claim", "claimed": "Claimed", "markClaimed": "Mark claimed", "unmarkClaimed": "Unmark", "clearConfirm": "Are you sure you want to clear all claimed records?", "installButton": "Install to Home Screen", "installUnavailable": "Use your browser menu to add this page to Home Screen", "iosHintTitle": "iPhone / iPad install tip", "iosHintText": "Tap the Safari Share button, then choose “Add to Home Screen”.", "footerText": "This page only organizes public reward links. Actual claim status depends on the game."}, "vi": {"languageLabel": "Ngôn ngữ", "siteTitle": "Liên kết phần thưởng Coin Master hằng ngày", "siteSubtitle": "Tự động cập nhật liên kết vòng quay, năng lượng và xu miễn phí mỗi ngày", "lastUpdated": "Cập nhật lần cuối", "baseTimeNotice": "Được thực hiện bởi đội Coin999-長長久久", "summaryPrefix": "Hiện có", "summarySuffix": "liên kết phần thưởng.", "summaryNotice": "Dữ liệu được tổng hợp từ các trang công khai. Vui lòng kiểm tra liên kết trước khi mở.", "hideClaimed": "Ẩn đã nhận", "clearClaimed": "Xóa lịch sử đã nhận", "emptyMessage": "Hiện không có phần thưởng nào để hiển thị. Có thể tất cả đã được đánh dấu là đã nhận.", "claimedBadge": "Đã nhận", "campaignDateLabel": "Ngày chiến dịch", "claim": "Nhận", "claimed": "Đã nhận", "markClaimed": "Đánh dấu đã nhận", "unmarkClaimed": "Bỏ đánh dấu", "clearConfirm": "Bạn có chắc muốn xóa toàn bộ lịch sử đã nhận không?", "installButton": "Cài vào màn hình chính", "installUnavailable": "Dùng menu trình duyệt để thêm vào màn hình chính", "iosHintTitle": "Gợi ý cài đặt trên iPhone / iPad", "iosHintText": "Nhấn nút Chia sẻ trong Safari, rồi chọn “Thêm vào Màn hình chính”.", "footerText": "Trang này chỉ tổng hợp liên kết quà công khai. Trạng thái nhận thực tế phụ thuộc vào trò chơi."}, "ja": {"languageLabel": "言語", "siteTitle": "Coin Master デイリー報酬リンク", "siteSubtitle": "無料スピン、エネルギー、コインリンクを毎日自動更新", "lastUpdated": "最終更新", "baseTimeNotice": "Coin999-長長久久 チーム制作", "summaryPrefix": "現在", "summarySuffix": "件の報酬リンクがあります。", "summaryNotice": "データは公開ページから収集されています。リンクを開く前に状態をご確認ください。", "hideClaimed": "受取済みを非表示", "clearClaimed": "受取済み履歴を削除", "emptyMessage": "表示できる報酬がありません。すべて受取済みに設定されている可能性があります。", "claimedBadge": "受取済み", "campaignDateLabel": "キャンペーン日", "claim": "受け取る", "claimed": "受取済み", "markClaimed": "受取済みにする", "unmarkClaimed": "解除", "clearConfirm": "すべての受取済み履歴を削除しますか？", "installButton": "ホーム画面にインストール", "installUnavailable": "ブラウザメニューからホーム画面に追加できます", "iosHintTitle": "iPhone / iPad インストール方法", "iosHintText": "Safari の共有ボタンを押して、「ホーム画面に追加」を選択してください。", "footerText": "このページは公開報酬リンクを整理したものです。実際の受取状況はゲーム内表示に従ってください。"}, "ko": {"languageLabel": "언어", "siteTitle": "Coin Master 일일 보상 링크", "siteSubtitle": "무료 스핀, 에너지, 코인 링크를 매일 자동 업데이트합니다", "lastUpdated": "마지막 업데이트", "baseTimeNotice": "Coin999-長長久久 팀 제작", "summaryPrefix": "현재", "summarySuffix": "개의 보상 링크가 있습니다.", "summaryNotice": "데이터는 공개 웹페이지에서 수집되었습니다. 링크를 열기 전에 상태를 확인하세요.", "hideClaimed": "수령 완료 숨기기", "clearClaimed": "수령 기록 삭제", "emptyMessage": "현재 표시할 보상이 없습니다. 모두 수령 완료로 표시되었을 수 있습니다.", "claimedBadge": "수령 완료", "campaignDateLabel": "캠페인 날짜", "claim": "받기", "claimed": "수령 완료", "markClaimed": "수령 표시", "unmarkClaimed": "표시 해제", "clearConfirm": "모든 수령 기록을 삭제하시겠습니까?", "installButton": "홈 화면에 설치", "installUnavailable": "브라우저 메뉴에서 홈 화면에 추가할 수 있습니다", "iosHintTitle": "iPhone / iPad 설치 안내", "iosHintText": "Safari 공유 버튼을 누른 뒤 “홈 화면에 추가”를 선택하세요.", "footerText": "이 페이지는 공개 보상 링크를 정리한 것입니다. 실제 수령 상태는 게임 내 표시를 따릅니다."}, "th": {"languageLabel": "ภาษา", "siteTitle": "ลิงก์รางวัลรายวัน Coin Master", "siteSubtitle": "อัปเดตลิงก์ฟรีสปิน พลังงาน และเหรียญโดยอัตโนมัติทุกวัน", "lastUpdated": "อัปเดตล่าสุด", "baseTimeNotice": "จัดทำโดยทีม Coin999-長長久久", "summaryPrefix": "ขณะนี้มี", "summarySuffix": "ลิงก์รางวัล", "summaryNotice": "ข้อมูลรวบรวมจากหน้าเว็บสาธารณะ โปรดตรวจสอบลิงก์ก่อนเปิด", "hideClaimed": "ซ่อนที่รับแล้ว", "clearClaimed": "ล้างประวัติที่รับแล้ว", "emptyMessage": "ไม่มีรางวัลที่แสดงได้ในขณะนี้ อาจถูกทำเครื่องหมายว่ารับแล้วทั้งหมด", "claimedBadge": "รับแล้ว", "campaignDateLabel": "วันที่แคมเปญ", "claim": "รับ", "claimed": "รับแล้ว", "markClaimed": "ทำเครื่องหมายว่ารับแล้ว", "unmarkClaimed": "ยกเลิกเครื่องหมาย", "clearConfirm": "คุณแน่ใจหรือไม่ว่าต้องการล้างประวัติที่รับแล้วทั้งหมด?", "installButton": "ติดตั้งไปยังหน้าจอหลัก", "installUnavailable": "ใช้เมนูเบราว์เซอร์เพื่อเพิ่มไปยังหน้าจอหลัก", "iosHintTitle": "วิธีติดตั้งบน iPhone / iPad", "iosHintText": "แตะปุ่มแชร์ใน Safari แล้วเลือก “เพิ่มไปยังหน้าจอโฮม”", "footerText": "หน้านี้รวบรวมเฉพาะลิงก์รางวัลสาธารณะ สถานะการรับจริงขึ้นอยู่กับในเกม"}, "id": {"languageLabel": "Bahasa", "siteTitle": "Tautan Hadiah Harian Coin Master", "siteSubtitle": "Tautan spin gratis, energi, dan koin diperbarui otomatis setiap hari", "lastUpdated": "Terakhir diperbarui", "baseTimeNotice": "Dibuat oleh tim Coin999-長長久久", "summaryPrefix": "Saat ini ada", "summarySuffix": "tautan hadiah.", "summaryNotice": "Data dikumpulkan dari halaman publik. Harap periksa tautan sebelum membukanya.", "hideClaimed": "Sembunyikan yang diklaim", "clearClaimed": "Hapus riwayat klaim", "emptyMessage": "Tidak ada hadiah yang dapat ditampilkan. Mungkin semuanya telah ditandai sebagai diklaim.", "claimedBadge": "Diklaim", "campaignDateLabel": "Tanggal Kampanye", "claim": "Klaim", "claimed": "Diklaim", "markClaimed": "Tandai diklaim", "unmarkClaimed": "Batalkan tanda", "clearConfirm": "Yakin ingin menghapus semua riwayat klaim?", "installButton": "Instal ke Layar Utama", "installUnavailable": "Gunakan menu browser untuk menambahkan ke Layar Utama", "iosHintTitle": "Tips instal iPhone / iPad", "iosHintText": "Ketuk tombol Bagikan di Safari, lalu pilih “Tambahkan ke Layar Utama”.", "footerText": "Halaman ini hanya mengatur tautan hadiah publik. Status klaim sebenarnya bergantung pada game."}, "es": {"languageLabel": "Idioma", "siteTitle": "Enlaces diarios de recompensas de Coin Master", "siteSubtitle": "Actualización automática diaria de giros, energía y monedas gratis", "lastUpdated": "Última actualización", "baseTimeNotice": "Hecho por el equipo Coin999-長長久久", "summaryPrefix": "Hay", "summarySuffix": "enlaces de recompensa.", "summaryNotice": "Los datos se recopilan de páginas públicas. Verifica cada enlace antes de abrirlo.", "hideClaimed": "Ocultar reclamados", "clearClaimed": "Borrar registros reclamados", "emptyMessage": "No hay recompensas visibles. Puede que todas estén marcadas como reclamadas.", "claimedBadge": "Reclamado", "campaignDateLabel": "Fecha de campaña", "claim": "Reclamar", "claimed": "Reclamado", "markClaimed": "Marcar reclamado", "unmarkClaimed": "Desmarcar", "clearConfirm": "¿Seguro que quieres borrar todos los registros reclamados?", "installButton": "Instalar en la pantalla de inicio", "installUnavailable": "Usa el menú del navegador para añadirlo a la pantalla de inicio", "iosHintTitle": "Consejo de instalación en iPhone / iPad", "iosHintText": "Toca el botón Compartir en Safari y elige “Añadir a pantalla de inicio”.", "footerText": "Esta página solo organiza enlaces públicos de recompensa. El estado real depende del juego."}, "pt": {"languageLabel": "Idioma", "siteTitle": "Links diários de recompensas Coin Master", "siteSubtitle": "Links de giros, energia e moedas grátis atualizados automaticamente todos os dias", "lastUpdated": "Última atualização", "baseTimeNotice": "Feito pela equipe Coin999-長長久久", "summaryPrefix": "Há", "summarySuffix": "links de recompensa.", "summaryNotice": "Os dados são coletados de páginas públicas. Verifique cada link antes de abrir.", "hideClaimed": "Ocultar resgatados", "clearClaimed": "Limpar registros resgatados", "emptyMessage": "Nenhuma recompensa está visível. Talvez todas estejam marcadas como resgatadas.", "claimedBadge": "Resgatado", "campaignDateLabel": "Data da campanha", "claim": "Resgatar", "claimed": "Resgatado", "markClaimed": "Marcar como resgatado", "unmarkClaimed": "Desmarcar", "clearConfirm": "Tem certeza de que deseja limpar todos os registros resgatados?", "installButton": "Instalar na tela inicial", "installUnavailable": "Use o menu do navegador para adicionar à tela inicial", "iosHintTitle": "Dica de instalação no iPhone / iPad", "iosHintText": "Toque no botão Compartilhar no Safari e escolha “Adicionar à Tela de Início”.", "footerText": "Esta página apenas organiza links públicos de recompensa. O status real depende do jogo."}};
-    const LANGUAGE_CONFIG = {"zh-Hant": {"label": "中文", "timezone": "Asia/Taipei", "timezone_label": "台北時間", "locale": "zh-TW"}, "en": {"label": "English", "timezone": "UTC", "timezone_label": "UTC", "locale": "en-US"}, "vi": {"label": "Tiếng Việt", "timezone": "Asia/Ho_Chi_Minh", "timezone_label": "Giờ Việt Nam", "locale": "vi-VN"}, "ja": {"label": "日本語", "timezone": "Asia/Tokyo", "timezone_label": "日本時間", "locale": "ja-JP"}, "ko": {"label": "한국어", "timezone": "Asia/Seoul", "timezone_label": "한국 시간", "locale": "ko-KR"}, "th": {"label": "ไทย", "timezone": "Asia/Bangkok", "timezone_label": "เวลาไทย", "locale": "th-TH"}, "id": {"label": "Bahasa Indonesia", "timezone": "Asia/Jakarta", "timezone_label": "Waktu Indonesia Barat", "locale": "id-ID"}, "es": {"label": "Español", "timezone": "Europe/Madrid", "timezone_label": "Hora de España", "locale": "es-ES"}, "pt": {"label": "Português", "timezone": "Europe/Lisbon", "timezone_label": "Hora de Portugal", "locale": "pt-PT"}};
-    const UPDATE_TIMES = {"zh-Hant": {"time": "2026-11-24 22:33:49", "timezone": "Asia/Taipei", "timezone_label": "台北時間", "locale": "zh-TW"}, "en": {"time": "2026-11-24 14:33:49", "timezone": "UTC", "timezone_label": "UTC", "locale": "en-US"}, "vi": {"time": "2026-11-24 21:33:49", "timezone": "Asia/Ho_Chi_Minh", "timezone_label": "Giờ Việt Nam", "locale": "vi-VN"}, "ja": {"time": "2026-11-24 23:33:49", "timezone": "Asia/Tokyo", "timezone_label": "日本時間", "locale": "ja-JP"}, "ko": {"time": "2026-11-24 23:33:49", "timezone": "Asia/Seoul", "timezone_label": "한국 시간", "locale": "ko-KR"}, "th": {"time": "2026-11-24 21:33:49", "timezone": "Asia/Bangkok", "timezone_label": "เวลาไทย", "locale": "th-TH"}, "id": {"time": "2026-11-24 21:33:49", "timezone": "Asia/Jakarta", "timezone_label": "Waktu Indonesia Barat", "locale": "id-ID"}, "es": {"time": "2026-11-24 15:33:49", "timezone": "Europe/Madrid", "timezone_label": "Hora de España", "locale": "es-ES"}, "pt": {"time": "2026-11-24 14:33:49", "timezone": "Europe/Lisbon", "timezone_label": "Hora de Portugal", "locale": "pt-PT"}};
+    const I18N = {"zh-Hant": {"languageLabel": "語言", "siteTitle": "Coin Master 每日獎勵連結", "siteSubtitle": "每日自動更新免費能量 / 旋轉 / 金幣連結", "lastUpdated": "最後更新", "baseTimeNotice": "由Coin999-長長久久隊伍製作", "summaryPrefix": "目前共收錄", "summarySuffix": "筆獎勵連結。", "summaryNotice": "資料來源為公開網頁整理，點擊前請自行確認連結狀態。", "hideClaimed": "隱藏已領取", "clearClaimed": "清除已領取紀錄", "emptyMessage": "目前沒有可顯示的獎勵。可能全部都已標記為已領取。", "claimedBadge": "已領取", "campaignDateLabel": "活動日期", "claim": "領取", "claimed": "已領取", "markClaimed": "標記已領", "unmarkClaimed": "取消標記", "clearConfirm": "確定要清除所有已領取紀錄嗎？", "cancel": "取消", "confirmClear": "清除", "close": "關閉", "installButton": "安裝到手機桌面", "iosHintTitle": "iPhone / iPad 安裝提示", "iosHintText": "請點選 Safari 分享按鈕，然後選擇「加入主畫面」。", "footerText": "本頁僅整理公開獎勵連結，實際領取狀態以遊戲內顯示為準。"}, "en": {"languageLabel": "Language", "siteTitle": "Coin Master Daily Reward Links", "siteSubtitle": "Automatically updated daily free spins, energy, and coin links", "lastUpdated": "Last updated", "baseTimeNotice": "Made by team Coin999-長長久久", "summaryPrefix": "Currently collected", "summarySuffix": "reward links.", "summaryNotice": "Data is collected from public webpages. Please verify each link before opening.", "hideClaimed": "Hide claimed", "clearClaimed": "Clear claimed records", "emptyMessage": "No rewards are currently visible. They may all be marked as claimed.", "claimedBadge": "Claimed", "campaignDateLabel": "Campaign Date", "claim": "Claim", "claimed": "Claimed", "markClaimed": "Mark claimed", "unmarkClaimed": "Unmark", "clearConfirm": "Are you sure you want to clear all claimed records?", "cancel": "Cancel", "confirmClear": "Clear", "close": "Close", "installButton": "Install to Home Screen", "iosHintTitle": "iPhone / iPad install tip", "iosHintText": "Tap the Safari Share button, then choose “Add to Home Screen”.", "footerText": "This page only organizes public reward links. Actual claim status depends on the game."}, "vi": {"languageLabel": "Ngôn ngữ", "siteTitle": "Liên kết phần thưởng Coin Master hằng ngày", "siteSubtitle": "Tự động cập nhật liên kết vòng quay, năng lượng và xu miễn phí mỗi ngày", "lastUpdated": "Cập nhật lần cuối", "baseTimeNotice": "Được thực hiện bởi đội Coin999-長長久久", "summaryPrefix": "Hiện có", "summarySuffix": "liên kết phần thưởng.", "summaryNotice": "Dữ liệu được tổng hợp từ các trang công khai. Vui lòng kiểm tra liên kết trước khi mở.", "hideClaimed": "Ẩn đã nhận", "clearClaimed": "Xóa lịch sử đã nhận", "emptyMessage": "Hiện không có phần thưởng nào để hiển thị. Có thể tất cả đã được đánh dấu là đã nhận.", "claimedBadge": "Đã nhận", "campaignDateLabel": "Ngày chiến dịch", "claim": "Nhận", "claimed": "Đã nhận", "markClaimed": "Đánh dấu đã nhận", "unmarkClaimed": "Bỏ đánh dấu", "clearConfirm": "Bạn có chắc muốn xóa toàn bộ lịch sử đã nhận không?", "cancel": "Hủy", "confirmClear": "Xóa", "close": "Đóng", "installButton": "Cài vào màn hình chính", "iosHintTitle": "Gợi ý cài đặt trên iPhone / iPad", "iosHintText": "Nhấn nút Chia sẻ trong Safari, rồi chọn “Thêm vào Màn hình chính”.", "footerText": "Trang này chỉ tổng hợp liên kết quà công khai. Trạng thái nhận thực tế phụ thuộc vào trò chơi."}, "ja": {"languageLabel": "言語", "siteTitle": "Coin Master デイリー報酬リンク", "siteSubtitle": "無料スピン、エネルギー、コインリンクを毎日自動更新", "lastUpdated": "最終更新", "baseTimeNotice": "Coin999-長長久久 チーム制作", "summaryPrefix": "現在", "summarySuffix": "件の報酬リンクがあります。", "summaryNotice": "データは公開ページから収集されています。リンクを開く前に状態をご確認ください。", "hideClaimed": "受取済みを非表示", "clearClaimed": "受取済み履歴を削除", "emptyMessage": "表示できる報酬がありません。すべて受取済みに設定されている可能性があります。", "claimedBadge": "受取済み", "campaignDateLabel": "キャンペーン日", "claim": "受け取る", "claimed": "受取済み", "markClaimed": "受取済みにする", "unmarkClaimed": "解除", "clearConfirm": "すべての受取済み履歴を削除しますか？", "cancel": "キャンセル", "confirmClear": "削除する", "close": "閉じる", "installButton": "ホーム画面にインストール", "iosHintTitle": "iPhone / iPad インストール方法", "iosHintText": "Safari の共有ボタンを押して、「ホーム画面に追加」を選択してください。", "footerText": "このページは公開報酬リンクを整理したものです。実際の受取状況はゲーム内表示に従ってください。"}, "ko": {"languageLabel": "언어", "siteTitle": "Coin Master 일일 보상 링크", "siteSubtitle": "무료 스핀, 에너지, 코인 링크를 매일 자동 업데이트합니다", "lastUpdated": "마지막 업데이트", "baseTimeNotice": "Coin999-長長久久 팀 제작", "summaryPrefix": "현재", "summarySuffix": "개의 보상 링크가 있습니다.", "summaryNotice": "데이터는 공개 웹페이지에서 수집되었습니다. 링크를 열기 전에 상태를 확인하세요.", "hideClaimed": "수령 완료 숨기기", "clearClaimed": "수령 기록 삭제", "emptyMessage": "현재 표시할 보상이 없습니다. 모두 수령 완료로 표시되었을 수 있습니다.", "claimedBadge": "수령 완료", "campaignDateLabel": "캠페인 날짜", "claim": "받기", "claimed": "수령 완료", "markClaimed": "수령 표시", "unmarkClaimed": "표시 해제", "clearConfirm": "모든 수령 기록을 삭제하시겠습니까?", "cancel": "취소", "confirmClear": "삭제", "close": "닫기", "installButton": "홈 화면에 설치", "iosHintTitle": "iPhone / iPad 설치 안내", "iosHintText": "Safari 공유 버튼을 누른 뒤 “홈 화면에 추가”를 선택하세요.", "footerText": "이 페이지는 공개 보상 링크를 정리한 것입니다. 실제 수령 상태는 게임 내 표시를 따릅니다."}, "th": {"languageLabel": "ภาษา", "siteTitle": "ลิงก์รางวัลรายวัน Coin Master", "siteSubtitle": "อัปเดตลิงก์ฟรีสปิน พลังงาน และเหรียญโดยอัตโนมัติทุกวัน", "lastUpdated": "อัปเดตล่าสุด", "baseTimeNotice": "จัดทำโดยทีม Coin999-長長久久", "summaryPrefix": "ขณะนี้มี", "summarySuffix": "ลิงก์รางวัล", "summaryNotice": "ข้อมูลรวบรวมจากหน้าเว็บสาธารณะ โปรดตรวจสอบลิงก์ก่อนเปิด", "hideClaimed": "ซ่อนที่รับแล้ว", "clearClaimed": "ล้างประวัติที่รับแล้ว", "emptyMessage": "ไม่มีรางวัลที่แสดงได้ในขณะนี้ อาจถูกทำเครื่องหมายว่ารับแล้วทั้งหมด", "claimedBadge": "รับแล้ว", "campaignDateLabel": "วันที่แคมเปญ", "claim": "รับ", "claimed": "รับแล้ว", "markClaimed": "ทำเครื่องหมายว่ารับแล้ว", "unmarkClaimed": "ยกเลิกเครื่องหมาย", "clearConfirm": "คุณแน่ใจหรือไม่ว่าต้องการล้างประวัติที่รับแล้วทั้งหมด?", "cancel": "ยกเลิก", "confirmClear": "ล้าง", "close": "ปิด", "installButton": "ติดตั้งไปยังหน้าจอหลัก", "iosHintTitle": "วิธีติดตั้งบน iPhone / iPad", "iosHintText": "แตะปุ่มแชร์ใน Safari แล้วเลือก “เพิ่มไปยังหน้าจอโฮม”", "footerText": "หน้านี้รวบรวมเฉพาะลิงก์รางวัลสาธารณะ สถานะการรับจริงขึ้นอยู่กับในเกม"}, "id": {"languageLabel": "Bahasa", "siteTitle": "Tautan Hadiah Harian Coin Master", "siteSubtitle": "Tautan spin gratis, energi, dan koin diperbarui otomatis setiap hari", "lastUpdated": "Terakhir diperbarui", "baseTimeNotice": "Dibuat oleh tim Coin999-長長久久", "summaryPrefix": "Saat ini ada", "summarySuffix": "tautan hadiah.", "summaryNotice": "Data dikumpulkan dari halaman publik. Harap periksa tautan sebelum membukanya.", "hideClaimed": "Sembunyikan yang diklaim", "clearClaimed": "Hapus riwayat klaim", "emptyMessage": "Tidak ada hadiah yang dapat ditampilkan. Mungkin semuanya telah ditandai sebagai diklaim.", "claimedBadge": "Diklaim", "campaignDateLabel": "Tanggal Kampanye", "claim": "Klaim", "claimed": "Diklaim", "markClaimed": "Tandai diklaim", "unmarkClaimed": "Batalkan tanda", "clearConfirm": "Yakin ingin menghapus semua riwayat klaim?", "cancel": "Batal", "confirmClear": "Hapus", "close": "Tutup", "installButton": "Instal ke Layar Utama", "iosHintTitle": "Tips instal iPhone / iPad", "iosHintText": "Ketuk tombol Bagikan di Safari, lalu pilih “Tambahkan ke Layar Utama”.", "footerText": "Halaman ini hanya mengatur tautan hadiah publik. Status klaim sebenarnya bergantung pada game."}, "es": {"languageLabel": "Idioma", "siteTitle": "Enlaces diarios de recompensas de Coin Master", "siteSubtitle": "Actualización automática diaria de giros, energía y monedas gratis", "lastUpdated": "Última actualización", "baseTimeNotice": "Hecho por el equipo Coin999-長長久久", "summaryPrefix": "Hay", "summarySuffix": "enlaces de recompensa.", "summaryNotice": "Los datos se recopilan de páginas públicas. Verifica cada enlace antes de abrirlo.", "hideClaimed": "Ocultar reclamados", "clearClaimed": "Borrar registros reclamados", "emptyMessage": "No hay recompensas visibles. Puede que todas estén marcadas como reclamadas.", "claimedBadge": "Reclamado", "campaignDateLabel": "Fecha de campaña", "claim": "Reclamar", "claimed": "Reclamado", "markClaimed": "Marcar reclamado", "unmarkClaimed": "Desmarcar", "clearConfirm": "¿Seguro que quieres borrar todos los registros reclamados?", "cancel": "Cancelar", "confirmClear": "Borrar", "close": "Cerrar", "installButton": "Instalar en la pantalla de inicio", "iosHintTitle": "Consejo de instalación en iPhone / iPad", "iosHintText": "Toca el botón Compartir en Safari y elige “Añadir a pantalla de inicio”.", "footerText": "Esta página solo organiza enlaces públicos de recompensa. El estado real depende del juego."}, "pt": {"languageLabel": "Idioma", "siteTitle": "Links diários de recompensas Coin Master", "siteSubtitle": "Links de giros, energia e moedas grátis atualizados automaticamente todos os dias", "lastUpdated": "Última atualização", "baseTimeNotice": "Feito pela equipe Coin999-長長久久", "summaryPrefix": "Há", "summarySuffix": "links de recompensa.", "summaryNotice": "Os dados são coletados de páginas públicas. Verifique cada link antes de abrir.", "hideClaimed": "Ocultar resgatados", "clearClaimed": "Limpar registros resgatados", "emptyMessage": "Nenhuma recompensa está visível. Talvez todas estejam marcadas como resgatadas.", "claimedBadge": "Resgatado", "campaignDateLabel": "Data da campanha", "claim": "Resgatar", "claimed": "Resgatado", "markClaimed": "Marcar como resgatado", "unmarkClaimed": "Desmarcar", "clearConfirm": "Tem certeza de que deseja limpar todos os registros resgatados?", "cancel": "Cancelar", "confirmClear": "Limpar", "close": "Fechar", "installButton": "Instalar na tela inicial", "iosHintTitle": "Dica de instalação no iPhone / iPad", "iosHintText": "Toque no botão Compartilhar no Safari e escolha “Adicionar à Tela de Início”.", "footerText": "Esta página apenas organiza links públicos de recompensa. O status real depende do jogo."}};
+    const UPDATE_TIMES = {"zh-Hant": {"time": "2026-11-25 00:11:24", "timezone": "Asia/Taipei", "timezone_label": "台北時間", "locale": "zh-TW"}, "en": {"time": "2026-11-24 16:11:24", "timezone": "UTC", "timezone_label": "UTC", "locale": "en-US"}, "vi": {"time": "2026-11-24 23:11:24", "timezone": "Asia/Ho_Chi_Minh", "timezone_label": "Giờ Việt Nam", "locale": "vi-VN"}, "ja": {"time": "2026-11-25 01:11:24", "timezone": "Asia/Tokyo", "timezone_label": "日本時間", "locale": "ja-JP"}, "ko": {"time": "2026-11-25 01:11:24", "timezone": "Asia/Seoul", "timezone_label": "한국 시간", "locale": "ko-KR"}, "th": {"time": "2026-11-24 23:11:24", "timezone": "Asia/Bangkok", "timezone_label": "เวลาไทย", "locale": "th-TH"}, "id": {"time": "2026-11-24 23:11:24", "timezone": "Asia/Jakarta", "timezone_label": "Waktu Indonesia Barat", "locale": "id-ID"}, "es": {"time": "2026-11-24 17:11:24", "timezone": "Europe/Madrid", "timezone_label": "Hora de España", "locale": "es-ES"}, "pt": {"time": "2026-11-24 16:11:24", "timezone": "Europe/Lisbon", "timezone_label": "Hora de Portugal", "locale": "pt-PT"}};
 
-    let deferredInstallPrompt = null;
+    const cards = Array.from(document.querySelectorAll(".reward-card"));
+    const sections = Array.from(document.querySelectorAll(".date-section"));
+    const hideClaimedInput = document.querySelector("#hideClaimed");
+    const emptyMessage = document.querySelector("#emptyMessage");
+    const progress = document.querySelector("#claimProgress");
+    const progressText = document.querySelector("#claimProgressText");
+    const languageSelect = document.querySelector("#languageSelect");
+    const clearDialog = document.querySelector("#clearDialog");
 
-    function getCurrentLanguage() {
-      const savedLanguage = localStorage.getItem(LANGUAGE_KEY);
+    let currentLanguage = detectLanguage();
 
-      if (savedLanguage && I18N[savedLanguage]) {
-        return savedLanguage;
+    function detectLanguage() {
+      const saved = localStorage.getItem(LANGUAGE_KEY);
+
+      if (saved && I18N[saved]) return saved;
+
+      const preferred = navigator.languages?.length ? navigator.languages : [navigator.language];
+
+      for (const tag of preferred) {
+        const base = String(tag || "").toLowerCase().split("-")[0];
+
+        if (base === "zh") return "zh-Hant";
+        if (I18N[base]) return base;
       }
 
-      const browserLang = navigator.language || navigator.userLanguage || "";
-
-      if (browserLang.startsWith("zh")) return "zh-Hant";
-      if (browserLang.startsWith("en")) return "en";
-      if (browserLang.startsWith("vi")) return "vi";
-      if (browserLang.startsWith("ja")) return "ja";
-      if (browserLang.startsWith("ko")) return "ko";
-      if (browserLang.startsWith("th")) return "th";
-      if (browserLang.startsWith("id")) return "id";
-      if (browserLang.startsWith("es")) return "es";
-      if (browserLang.startsWith("pt")) return "pt";
-
-      return "zh-Hant";
+      return DEFAULT_LANGUAGE;
     }
 
     function t(key) {
-      const language = getCurrentLanguage();
-
-      return (
-        I18N[language]?.[key] ||
-        I18N["zh-Hant"]?.[key] ||
-        key
-      );
+      return I18N[currentLanguage]?.[key] ?? I18N[DEFAULT_LANGUAGE][key] ?? key;
     }
 
-    function getStorageKey(campaign) {
-      return STORAGE_PREFIX + campaign;
+    const storageKey = campaign => STORAGE_PREFIX + campaign;
+    const isClaimed = campaign => localStorage.getItem(storageKey(campaign)) === "1";
+
+    function setClaimed(campaign, claimed) {
+      if (!campaign) return;
+
+      if (claimed) {
+        localStorage.setItem(storageKey(campaign), "1");
+      } else {
+        localStorage.removeItem(storageKey(campaign));
+      }
     }
 
-    function updateLocalizedTime(language) {
-      const timeElement = document.querySelector("#localizedUpdateTime");
-      const timezoneElement = document.querySelector("#localizedTimezoneLabel");
+    function renderCard(card) {
+      const claimed = isClaimed(card.dataset.campaign);
 
-      if (!timeElement || !timezoneElement) return;
+      card.classList.toggle("claimed", claimed);
+      card.querySelector(".claim-link").textContent = t(claimed ? "claimed" : "claim");
+      card.querySelector(".claim-toggle").textContent = t(claimed ? "unmarkClaimed" : "markClaimed");
+    }
 
-      const updateInfo = UPDATE_TIMES[language] || UPDATE_TIMES["zh-Hant"];
+    function applyFilter() {
+      const hideClaimed = hideClaimedInput.checked;
 
-      timeElement.textContent = updateInfo.time;
-      timezoneElement.textContent = updateInfo.timezone_label
-        ? " " + updateInfo.timezone_label
-        : " " + updateInfo.timezone;
+      for (const card of cards) {
+        card.hidden = hideClaimed && card.classList.contains("claimed");
+      }
+
+      for (const section of sections) {
+        section.hidden = !section.querySelector(".reward-card:not([hidden])");
+      }
+
+      emptyMessage.hidden = !(cards.length > 0 && cards.every(card => card.hidden));
+    }
+
+    function renderProgress() {
+      const claimedCount = cards.filter(card => card.classList.contains("claimed")).length;
+
+      progress.max = Math.max(cards.length, 1);
+      progress.value = claimedCount;
+      progressText.textContent = `${t("claimed")} ${claimedCount} / ${cards.length}`;
+    }
+
+    function render() {
+      cards.forEach(renderCard);
+      applyFilter();
+      renderProgress();
+    }
+
+    function updateCard(card, claimed) {
+      setClaimed(card.dataset.campaign, claimed);
+      renderCard(card);
+      applyFilter();
+      renderProgress();
     }
 
     function applyLanguage(language) {
-      if (!I18N[language]) {
-        language = "zh-Hant";
+      currentLanguage = I18N[language] ? language : DEFAULT_LANGUAGE;
+
+      localStorage.setItem(LANGUAGE_KEY, currentLanguage);
+      document.documentElement.lang = currentLanguage;
+      document.title = t("siteTitle");
+      languageSelect.value = currentLanguage;
+
+      for (const element of document.querySelectorAll("[data-i18n]")) {
+        element.textContent = t(element.dataset.i18n);
       }
 
-      localStorage.setItem(LANGUAGE_KEY, language);
-      document.documentElement.lang = language;
-
-      document.title = I18N[language].siteTitle || I18N["zh-Hant"].siteTitle;
-
-      document.querySelectorAll("[data-i18n]").forEach(element => {
-        const key = element.dataset.i18n;
-
-        if (I18N[language][key]) {
-          element.textContent = I18N[language][key];
-        }
-      });
-
-      const selector = document.querySelector("#languageSelect");
-
-      if (selector) {
-        selector.value = language;
+      for (const element of document.querySelectorAll("[data-i18n-aria]")) {
+        element.setAttribute("aria-label", t(element.dataset.i18nAria));
       }
 
-      updateLocalizedTime(language);
-      refreshClaimTexts();
+      const updateInfo = UPDATE_TIMES[currentLanguage] || UPDATE_TIMES[DEFAULT_LANGUAGE];
+      document.querySelector("#localizedUpdateTime").textContent = updateInfo.time;
+      document.querySelector("#localizedTimezoneLabel").textContent = updateInfo.timezone_label || updateInfo.timezone;
+
+      render();
     }
 
-    function refreshClaimTexts() {
-      document.querySelectorAll(".reward-card").forEach(card => {
-        const campaign = card.dataset.campaign;
+    function bindCardActions() {
+      const main = document.querySelector("main");
 
-        if (!campaign) return;
+      // 事件委派：一個監聽器處理所有卡片。
+      const onLinkActivate = event => {
+        const link = event.target.closest(".claim-link");
 
-        const claimed = localStorage.getItem(getStorageKey(campaign)) === "1";
-        applyClaimedState(card, claimed, false);
-      });
-    }
+        if (link) updateCard(link.closest(".reward-card"), true);
+      };
 
-    function applyEmptyMessage() {
-      const cards = Array.from(document.querySelectorAll(".reward-card"));
-      const emptyMessage = document.querySelector("#emptyMessage");
+      main.addEventListener("click", event => {
+        onLinkActivate(event);
 
-      if (!emptyMessage) return;
+        const toggle = event.target.closest(".claim-toggle");
 
-      const visibleCards = cards.filter(card => card.style.display !== "none");
-
-      if (cards.length > 0 && visibleCards.length === 0) {
-        emptyMessage.style.display = "block";
-      } else {
-        emptyMessage.style.display = "none";
-      }
-    }
-
-    function applyDateSectionVisibility() {
-      const sections = document.querySelectorAll(".date-section");
-
-      sections.forEach(section => {
-        const cards = Array.from(section.querySelectorAll(".reward-card"));
-        const visibleCards = cards.filter(card => card.style.display !== "none");
-
-        if (cards.length > 0 && visibleCards.length === 0) {
-          section.style.display = "none";
-        } else {
-          section.style.display = "";
-        }
-      });
-    }
-
-    function applyHideClaimedFilter() {
-      const checkbox = document.querySelector("#hideClaimed");
-      const hideClaimed = checkbox && checkbox.checked;
-
-      document.querySelectorAll(".reward-card").forEach(card => {
-        if (hideClaimed && card.classList.contains("claimed")) {
-          card.style.display = "none";
-        } else {
-          card.style.display = "";
+        if (toggle) {
+          const card = toggle.closest(".reward-card");
+          updateCard(card, !isClaimed(card.dataset.campaign));
         }
       });
 
-      applyDateSectionVisibility();
-      applyEmptyMessage();
-    }
-
-    function applyClaimedState(card, claimed, applyFilter = true) {
-      const button = card.querySelector(".claim-toggle");
-      const link = card.querySelector(".claim-link");
-
-      if (claimed) {
-        card.classList.add("claimed");
-
-        if (button) {
-          button.textContent = t("unmarkClaimed");
-        }
-
-        if (link) {
-          link.textContent = t("claimed");
-        }
-      } else {
-        card.classList.remove("claimed");
-
-        if (button) {
-          button.textContent = t("markClaimed");
-        }
-
-        if (link) {
-          link.textContent = t("claim");
-        }
-      }
-
-      if (applyFilter) {
-        applyHideClaimedFilter();
-      }
-    }
-
-    function markCardAsClaimed(card, campaign) {
-      if (!campaign || !card) return;
-
-      const key = getStorageKey(campaign);
-
-      localStorage.setItem(key, "1");
-      applyClaimedState(card, true);
-    }
-
-    function initClaimedRewards() {
-      const cards = document.querySelectorAll(".reward-card");
-
-      cards.forEach(card => {
-        const campaign = card.dataset.campaign;
-
-        if (!campaign) return;
-
-        const claimed = localStorage.getItem(getStorageKey(campaign)) === "1";
-        applyClaimedState(card, claimed);
+      // 滑鼠中鍵開新分頁也算領取。
+      main.addEventListener("auxclick", event => {
+        if (event.button === 1) onLinkActivate(event);
       });
     }
 
-    function bindClaimLinks() {
-      const links = document.querySelectorAll(".claim-link");
+    function bindHideClaimed() {
+      hideClaimedInput.checked = localStorage.getItem(HIDE_CLAIMED_KEY) === "1";
 
-      links.forEach(link => {
-        link.addEventListener("click", () => {
-          const campaign = link.dataset.campaign;
-          const card = link.closest(".reward-card");
-
-          markCardAsClaimed(card, campaign);
-        });
-      });
-    }
-
-    function bindClaimButtons() {
-      const buttons = document.querySelectorAll(".claim-toggle");
-
-      buttons.forEach(button => {
-        button.addEventListener("click", () => {
-          const campaign = button.dataset.campaign;
-          const card = button.closest(".reward-card");
-
-          if (!campaign || !card) return;
-
-          const key = getStorageKey(campaign);
-          const claimed = localStorage.getItem(key) === "1";
-
-          if (claimed) {
-            localStorage.removeItem(key);
-            applyClaimedState(card, false);
-          } else {
-            localStorage.setItem(key, "1");
-            applyClaimedState(card, true);
-          }
-        });
-      });
-    }
-
-    function bindHideClaimedFilter() {
-      const checkbox = document.querySelector("#hideClaimed");
-
-      if (!checkbox) return;
-
-      const saved = localStorage.getItem(HIDE_CLAIMED_KEY) === "1";
-      checkbox.checked = saved;
-
-      checkbox.addEventListener("change", () => {
-        if (checkbox.checked) {
+      hideClaimedInput.addEventListener("change", () => {
+        if (hideClaimedInput.checked) {
           localStorage.setItem(HIDE_CLAIMED_KEY, "1");
         } else {
           localStorage.removeItem(HIDE_CLAIMED_KEY);
         }
 
-        applyHideClaimedFilter();
+        applyFilter();
       });
-
-      applyHideClaimedFilter();
     }
 
     function bindClearClaimed() {
-      const button = document.querySelector("#clearClaimed");
+      document.querySelector("#clearClaimed").addEventListener("click", () => {
+        clearDialog.showModal();
+      });
 
-      if (!button) return;
+      clearDialog.addEventListener("close", () => {
+        const choice = clearDialog.returnValue;
+        clearDialog.returnValue = "";
 
-      button.addEventListener("click", () => {
-        const confirmed = window.confirm(t("clearConfirm"));
+        if (choice !== "confirm") return;
 
-        if (!confirmed) return;
+        Object.keys(localStorage)
+          .filter(key => key.startsWith(STORAGE_PREFIX))
+          .forEach(key => localStorage.removeItem(key));
 
-        const keysToRemove = [];
+        render();
+      });
 
-        for (let i = 0; i < localStorage.length; i++) {
-          const key = localStorage.key(i);
+      // closedby="any" 尚未支援的瀏覽器（Safari）補上點背景關閉。
+      if (!("closedBy" in HTMLDialogElement.prototype)) {
+        const isOutside = event => {
+          const rect = clearDialog.getBoundingClientRect();
 
-          if (key && key.startsWith(STORAGE_PREFIX)) {
-            keysToRemove.push(key);
-          }
-        }
+          return event.clientX < rect.left || event.clientX > rect.right ||
+            event.clientY < rect.top || event.clientY > rect.bottom;
+        };
 
-        keysToRemove.forEach(key => localStorage.removeItem(key));
+        let pressedOutside = false;
 
-        document.querySelectorAll(".reward-card").forEach(card => {
-          applyClaimedState(card, false);
+        clearDialog.addEventListener("pointerdown", event => {
+          pressedOutside = isOutside(event);
         });
 
-        applyHideClaimedFilter();
-      });
-    }
-
-    function bindLanguageSwitcher() {
-      const selector = document.querySelector("#languageSelect");
-
-      if (!selector) return;
-
-      selector.value = getCurrentLanguage();
-
-      selector.addEventListener("change", () => {
-        applyLanguage(selector.value);
-      });
-    }
-
-    function isIosDevice() {
-      return /iphone|ipad|ipod/i.test(window.navigator.userAgent);
+        clearDialog.addEventListener("pointerup", event => {
+          if (pressedOutside && isOutside(event)) clearDialog.close();
+        });
+      }
     }
 
     function isStandaloneMode() {
-      return window.matchMedia("(display-mode: standalone)").matches ||
-        window.navigator.standalone === true;
+      return window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
     }
 
     function setupPwaInstall() {
       const installButton = document.querySelector("#installButton");
       const iosHint = document.querySelector("#iosHint");
+      const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent) ||
+        (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 
-      if (iosHint && isIosDevice() && !isStandaloneMode()) {
-        iosHint.style.display = "block";
+      if (isIos && !isStandaloneMode() && localStorage.getItem(IOS_HINT_DISMISSED_KEY) !== "1") {
+        iosHint.hidden = false;
+      }
+
+      document.querySelector("#iosHintClose").addEventListener("click", () => {
+        iosHint.hidden = true;
+        localStorage.setItem(IOS_HINT_DISMISSED_KEY, "1");
+      });
+
+      const supportsWebInstall = typeof Navigator.prototype.install === "function";
+      let deferredInstallPrompt;
+
+      if (supportsWebInstall && !isStandaloneMode()) {
+        installButton.hidden = false;
       }
 
       window.addEventListener("beforeinstallprompt", event => {
         event.preventDefault();
         deferredInstallPrompt = event;
 
-        if (installButton) {
-          installButton.style.display = "inline-flex";
+        if (!supportsWebInstall) installButton.hidden = false;
+      });
+
+      installButton.addEventListener("click", async () => {
+        if (installButton.getAttribute("aria-disabled") === "true") return;
+
+        installButton.setAttribute("aria-disabled", "true");
+
+        try {
+          if (supportsWebInstall) {
+            await navigator.install();
+            installButton.hidden = true;
+          } else if (deferredInstallPrompt) {
+            const promptEvent = deferredInstallPrompt;
+            deferredInstallPrompt = undefined;
+            await promptEvent.prompt();
+            await promptEvent.userChoice;
+
+            if (!deferredInstallPrompt) installButton.hidden = true;
+          }
+        } catch (error) {
+          if (error.name !== "AbortError") console.error(error);
+        } finally {
+          installButton.removeAttribute("aria-disabled");
         }
       });
 
-      if (installButton) {
-        installButton.addEventListener("click", async () => {
-          if (!deferredInstallPrompt) {
-            alert(t("installUnavailable"));
-            return;
-          }
-
-          deferredInstallPrompt.prompt();
-          await deferredInstallPrompt.userChoice;
-
-          deferredInstallPrompt = null;
-          installButton.style.display = "none";
-        });
-      }
-
       window.addEventListener("appinstalled", () => {
-        deferredInstallPrompt = null;
-
-        if (installButton) {
-          installButton.style.display = "none";
-        }
+        deferredInstallPrompt = undefined;
+        installButton.hidden = true;
       });
     }
 
     function registerServiceWorker() {
-      if ("serviceWorker" in navigator) {
-        window.addEventListener("load", () => {
-          navigator.serviceWorker.register("./sw.js").catch(error => {
-            console.warn("Service Worker registration failed:", error);
-          });
+      if (!("serviceWorker" in navigator)) return;
+
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js").catch(error => {
+          console.warn("Service Worker registration failed:", error);
         });
-      }
+      });
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      bindLanguageSwitcher();
-      applyLanguage(getCurrentLanguage());
-
-      initClaimedRewards();
-      bindClaimLinks();
-      bindClaimButtons();
-      bindHideClaimedFilter();
-      bindClearClaimed();
-
-      setupPwaInstall();
-      registerServiceWorker();
-    });
+    languageSelect.addEventListener("change", () => applyLanguage(languageSelect.value));
+    bindHideClaimed();
+    bindCardActions();
+    bindClearClaimed();
+    applyLanguage(currentLanguage);
+    setupPwaInstall();
+    registerServiceWorker();
   </script>
 </body>
 </html>

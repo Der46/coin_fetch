@@ -92,8 +92,10 @@ I18N = {
         "markClaimed": "標記已領",
         "unmarkClaimed": "取消標記",
         "clearConfirm": "確定要清除所有已領取紀錄嗎？",
+        "cancel": "取消",
+        "confirmClear": "清除",
+        "close": "關閉",
         "installButton": "安裝到手機桌面",
-        "installUnavailable": "可透過瀏覽器選單加入主畫面",
         "iosHintTitle": "iPhone / iPad 安裝提示",
         "iosHintText": "請點選 Safari 分享按鈕，然後選擇「加入主畫面」。",
         "footerText": "本頁僅整理公開獎勵連結，實際領取狀態以遊戲內顯示為準。",
@@ -117,8 +119,10 @@ I18N = {
         "markClaimed": "Mark claimed",
         "unmarkClaimed": "Unmark",
         "clearConfirm": "Are you sure you want to clear all claimed records?",
+        "cancel": "Cancel",
+        "confirmClear": "Clear",
+        "close": "Close",
         "installButton": "Install to Home Screen",
-        "installUnavailable": "Use your browser menu to add this page to Home Screen",
         "iosHintTitle": "iPhone / iPad install tip",
         "iosHintText": "Tap the Safari Share button, then choose “Add to Home Screen”.",
         "footerText": "This page only organizes public reward links. Actual claim status depends on the game.",
@@ -142,8 +146,10 @@ I18N = {
         "markClaimed": "Đánh dấu đã nhận",
         "unmarkClaimed": "Bỏ đánh dấu",
         "clearConfirm": "Bạn có chắc muốn xóa toàn bộ lịch sử đã nhận không?",
+        "cancel": "Hủy",
+        "confirmClear": "Xóa",
+        "close": "Đóng",
         "installButton": "Cài vào màn hình chính",
-        "installUnavailable": "Dùng menu trình duyệt để thêm vào màn hình chính",
         "iosHintTitle": "Gợi ý cài đặt trên iPhone / iPad",
         "iosHintText": "Nhấn nút Chia sẻ trong Safari, rồi chọn “Thêm vào Màn hình chính”.",
         "footerText": "Trang này chỉ tổng hợp liên kết quà công khai. Trạng thái nhận thực tế phụ thuộc vào trò chơi.",
@@ -167,8 +173,10 @@ I18N = {
         "markClaimed": "受取済みにする",
         "unmarkClaimed": "解除",
         "clearConfirm": "すべての受取済み履歴を削除しますか？",
+        "cancel": "キャンセル",
+        "confirmClear": "削除する",
+        "close": "閉じる",
         "installButton": "ホーム画面にインストール",
-        "installUnavailable": "ブラウザメニューからホーム画面に追加できます",
         "iosHintTitle": "iPhone / iPad インストール方法",
         "iosHintText": "Safari の共有ボタンを押して、「ホーム画面に追加」を選択してください。",
         "footerText": "このページは公開報酬リンクを整理したものです。実際の受取状況はゲーム内表示に従ってください。",
@@ -192,8 +200,10 @@ I18N = {
         "markClaimed": "수령 표시",
         "unmarkClaimed": "표시 해제",
         "clearConfirm": "모든 수령 기록을 삭제하시겠습니까?",
+        "cancel": "취소",
+        "confirmClear": "삭제",
+        "close": "닫기",
         "installButton": "홈 화면에 설치",
-        "installUnavailable": "브라우저 메뉴에서 홈 화면에 추가할 수 있습니다",
         "iosHintTitle": "iPhone / iPad 설치 안내",
         "iosHintText": "Safari 공유 버튼을 누른 뒤 “홈 화면에 추가”를 선택하세요.",
         "footerText": "이 페이지는 공개 보상 링크를 정리한 것입니다. 실제 수령 상태는 게임 내 표시를 따릅니다.",
@@ -217,8 +227,10 @@ I18N = {
         "markClaimed": "ทำเครื่องหมายว่ารับแล้ว",
         "unmarkClaimed": "ยกเลิกเครื่องหมาย",
         "clearConfirm": "คุณแน่ใจหรือไม่ว่าต้องการล้างประวัติที่รับแล้วทั้งหมด?",
+        "cancel": "ยกเลิก",
+        "confirmClear": "ล้าง",
+        "close": "ปิด",
         "installButton": "ติดตั้งไปยังหน้าจอหลัก",
-        "installUnavailable": "ใช้เมนูเบราว์เซอร์เพื่อเพิ่มไปยังหน้าจอหลัก",
         "iosHintTitle": "วิธีติดตั้งบน iPhone / iPad",
         "iosHintText": "แตะปุ่มแชร์ใน Safari แล้วเลือก “เพิ่มไปยังหน้าจอโฮม”",
         "footerText": "หน้านี้รวบรวมเฉพาะลิงก์รางวัลสาธารณะ สถานะการรับจริงขึ้นอยู่กับในเกม",
@@ -242,8 +254,10 @@ I18N = {
         "markClaimed": "Tandai diklaim",
         "unmarkClaimed": "Batalkan tanda",
         "clearConfirm": "Yakin ingin menghapus semua riwayat klaim?",
+        "cancel": "Batal",
+        "confirmClear": "Hapus",
+        "close": "Tutup",
         "installButton": "Instal ke Layar Utama",
-        "installUnavailable": "Gunakan menu browser untuk menambahkan ke Layar Utama",
         "iosHintTitle": "Tips instal iPhone / iPad",
         "iosHintText": "Ketuk tombol Bagikan di Safari, lalu pilih “Tambahkan ke Layar Utama”.",
         "footerText": "Halaman ini hanya mengatur tautan hadiah publik. Status klaim sebenarnya bergantung pada game.",
@@ -267,8 +281,10 @@ I18N = {
         "markClaimed": "Marcar reclamado",
         "unmarkClaimed": "Desmarcar",
         "clearConfirm": "¿Seguro que quieres borrar todos los registros reclamados?",
+        "cancel": "Cancelar",
+        "confirmClear": "Borrar",
+        "close": "Cerrar",
         "installButton": "Instalar en la pantalla de inicio",
-        "installUnavailable": "Usa el menú del navegador para añadirlo a la pantalla de inicio",
         "iosHintTitle": "Consejo de instalación en iPhone / iPad",
         "iosHintText": "Toca el botón Compartir en Safari y elige “Añadir a pantalla de inicio”.",
         "footerText": "Esta página solo organiza enlaces públicos de recompensa. El estado real depende del juego.",
@@ -292,8 +308,10 @@ I18N = {
         "markClaimed": "Marcar como resgatado",
         "unmarkClaimed": "Desmarcar",
         "clearConfirm": "Tem certeza de que deseja limpar todos os registros resgatados?",
+        "cancel": "Cancelar",
+        "confirmClear": "Limpar",
+        "close": "Fechar",
         "installButton": "Instalar na tela inicial",
-        "installUnavailable": "Use o menu do navegador para adicionar à tela inicial",
         "iosHintTitle": "Dica de instalação no iPhone / iPad",
         "iosHintText": "Toque no botão Compartilhar no Safari e escolha “Adicionar à Tela de Início”.",
         "footerText": "Esta página apenas organiza links públicos de recompensa. O status real depende do jogo.",
@@ -361,6 +379,13 @@ def build_local_update_times(base_time):
     return result
 
 
+def parse_display_date(date_text):
+    try:
+        return datetime.strptime(date_text, "%m/%d/%Y")
+    except (TypeError, ValueError):
+        return None
+
+
 def build_rows_html(records):
     grouped = group_by_display_date(records)
     sorted_dates = sorted(grouped.keys(), key=date_sort_key, reverse=True)
@@ -369,10 +394,12 @@ def build_rows_html(records):
 
     for display_date in sorted_dates:
         items = grouped[display_date]
+        parsed = parse_display_date(display_date)
+        datetime_attr = f' datetime="{parsed.strftime("%Y-%m-%d")}"' if parsed else ""
 
         rows_html.append(f"""
         <section class="date-section">
-          <h2>{html.escape(display_date)}</h2>
+          <h2><time{datetime_attr}>{html.escape(display_date)}</time></h2>
           <div class="cards">
         """)
 
@@ -384,37 +411,30 @@ def build_rows_html(records):
             section_title = html.escape(item.get("section_title", ""))
 
             rows_html.append(f"""
-            <article
-              class="card reward-card"
-              data-campaign="{campaign}"
-            >
-              <div class="claimed-badge" data-i18n="claimedBadge">已領取</div>
+            <article class="card reward-card" data-campaign="{campaign}">
+              <header class="card-head">
+                <span class="reward">{reward}</span>
+                <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
+              </header>
 
-              <div class="reward">{reward}</div>
-
-              <div class="meta">
+              <p class="meta">
                 <span data-i18n="campaignDateLabel">活動日期</span>：{campaign_date}
-              </div>
+              </p>
 
-              <div class="campaign">{campaign}</div>
+              <code class="campaign">{campaign}</code>
 
-              <div class="section-title">{section_title}</div>
+              <p class="section-title">{section_title}</p>
 
-              <div class="actions">
+              <footer class="actions">
                 <a
                   href="{url}"
                   target="_blank"
-                  rel="noopener"
-                  class="claim-link"
-                  data-campaign="{campaign}"
-                >
-                  領取
-                </a>
+                  rel="noopener noreferrer"
+                  class="btn btn-primary claim-link"
+                >領取</a>
 
-                <button type="button" class="claim-toggle" data-campaign="{campaign}">
-                  標記已領
-                </button>
-              </div>
+                <button type="button" class="btn btn-secondary claim-toggle">標記已領</button>
+              </footer>
             </article>
             """)
 
@@ -425,29 +445,28 @@ def build_rows_html(records):
 
     return "\n".join(rows_html)
 
-def generate_html(records):
-    current_time_taipei = datetime.now(ZoneInfo(DEFAULT_TIMEZONE))
-    year = current_time_taipei.year
-    total = len(records)
 
-    body = build_rows_html(records)
+def build_language_options():
+    return "\n".join(
+        f'          <option value="{html.escape(code)}" lang="{html.escape(code)}">'
+        f'{html.escape(config["label"])}</option>'
+        for code, config in LANGUAGE_CONFIG.items()
+    )
 
-    local_update_times = build_local_update_times(current_time_taipei)
 
-    i18n_json = escape_json_for_script(I18N)
-    language_config_json = escape_json_for_script(LANGUAGE_CONFIG)
-    update_times_json = escape_json_for_script(local_update_times)
-
-    return f"""<!doctype html>
+# 使用 __TOKEN__ 佔位符而非 f-string，CSS / JS 的大括號不必再成對跳脫。
+PAGE_TEMPLATE = r"""<!doctype html>
 <html lang="zh-Hant">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
 
-  <meta name="theme-color" content="#ff4848">
+  <meta name="theme-color" content="__THEME_COLOR__">
   <meta name="description" content="Coin Master daily reward links with multilingual and PWA support.">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Coin Rewards">
 
   <title>Coin Master 每日獎勵連結</title>
@@ -458,31 +477,83 @@ def generate_html(records):
   <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
 
   <style>
-    :root {{
+    :root {
+      color-scheme: light dark;
+
       --bg: #f6f7fb;
-      --card: #ffffff;
+      --surface: #ffffff;
+      --surface-muted: #f3f4f6;
       --text: #1f2937;
-      --muted: #6b7280;
-      --primary: #ff4848;
-      --primary-dark: #dc2626;
+      --muted: #5b6472;
       --border: #e5e7eb;
-      --success: #16a34a;
-      --success-dark: #15803d;
-      --dark: #374151;
-      --warning-bg: #fff7ed;
-      --warning-border: #fed7aa;
-      --warning-text: #9a3412;
-    }}
+      --shadow: 0 8px 24px rgb(15 23 42 / 0.06);
+      --shadow-hover: 0 14px 32px rgb(15 23 42 / 0.12);
 
-    * {{
+      /* 白字需 >= 4.5:1：#c62828 = 5.62、#15803d = 5.02 */
+      --brand: #c62828;
+      --brand-hover: #a51d1d;
+      --brand-soft: #fdecec;
+      --brand-soft-text: #a51d1d;
+      --success: #15803d;
+      --success-hover: #166534;
+      --success-soft: #dcfce7;
+      --success-soft-text: #166534;
+      --neutral: #374151;
+      --neutral-hover: #111827;
+      --claimed-surface: #f1f3f5;
+      --hint-bg: #fff7ed;
+      --hint-border: #fed7aa;
+      --hint-text: #9a3412;
+      --focus: #1d4ed8;
+
+      --radius-lg: 16px;
+      --radius-md: 10px;
+      --tap: 44px;
+
+      accent-color: var(--brand);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f1115;
+        --surface: #191c22;
+        --surface-muted: #22262e;
+        --text: #e5e7eb;
+        --muted: #a1a8b3;
+        --border: #2c313a;
+        --shadow: 0 8px 24px rgb(0 0 0 / 0.35);
+        --shadow-hover: 0 14px 32px rgb(0 0 0 / 0.5);
+
+        --brand-soft: #3a1d1d;
+        --brand-soft-text: #fca5a5;
+        --success-soft: #14301f;
+        --success-soft-text: #86efac;
+        --neutral: #3b4250;
+        --neutral-hover: #4b5363;
+        --claimed-surface: #15171c;
+        --hint-bg: #2b1d12;
+        --hint-border: #7c2d12;
+        --hint-text: #fdba74;
+        --focus: #93c5fd;
+
+        accent-color: #f87171;
+      }
+    }
+
+    *, *::before, *::after {
       box-sizing: border-box;
-    }}
+    }
 
-    body {{
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    body {
       margin: 0;
       font-family:
+        system-ui,
         -apple-system,
-        BlinkMacSystemFont,
         "Segoe UI",
         "Noto Sans TC",
         "Noto Sans JP",
@@ -490,442 +561,559 @@ def generate_html(records):
         "Noto Sans Thai",
         "Microsoft JhengHei",
         sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
       background: var(--bg);
       color: var(--text);
-    }}
+    }
 
-    header {{
-      background: linear-gradient(135deg, #ff4848, #ff8a65);
-      color: white;
-      padding: 24px 20px 42px;
+    h1, h2 {
+      text-wrap: balance;
+    }
+
+    p {
+      text-wrap: pretty;
+    }
+
+    :where(a, button, input, select, summary):focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    /* ---------- Header ---------- */
+
+    .site-header {
+      --focus: #ffffff;
+      background: linear-gradient(135deg, #c62828, #bf360c);
+      color: #ffffff;
+      padding:
+        max(24px, env(safe-area-inset-top))
+        max(20px, env(safe-area-inset-right))
+        44px
+        max(20px, env(safe-area-inset-left));
       text-align: center;
-      position: relative;
-      overflow: hidden;
-    }}
+    }
 
-    header h1 {{
-      margin: 0 0 10px;
-      font-size: clamp(26px, 5vw, 36px);
+    .site-header h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.625rem, 5vw, 2.25rem);
       line-height: 1.2;
-    }}
+    }
 
-    header p {{
-      margin: 6px 0;
-      opacity: 0.95;
-    }}
+    .site-header p {
+      margin: 4px auto;
+      max-width: 760px;
+    }
 
-    .top-controls {{
+    .update-notice {
+      font-size: 0.875rem;
+      opacity: 0.92;
+    }
+
+    .top-controls {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
       flex-wrap: wrap;
-      margin-bottom: 22px;
-      position: relative;
-      z-index: 2;
-    }}
+      margin-bottom: 20px;
+    }
 
-    .language-switcher {{
+    .language-switcher {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: rgba(255, 255, 255, 0.18);
-      border: 1px solid rgba(255, 255, 255, 0.35);
+      background: rgb(255 255 255 / 0.16);
+      border: 1px solid rgb(255 255 255 / 0.35);
       border-radius: 999px;
-      padding: 8px 12px;
-      backdrop-filter: blur(8px);
+      padding: 6px 6px 6px 14px;
       max-width: 100%;
-    }}
+    }
 
-    .language-switcher label {{
-      font-size: 14px;
+    .language-switcher label {
+      font-size: 0.875rem;
       font-weight: 700;
-      color: white;
       white-space: nowrap;
-    }}
+    }
 
-    .language-switcher select {{
-      border: none;
-      border-radius: 999px;
-      padding: 7px 12px;
-      font-weight: 700;
-      color: var(--text);
-      background: white;
-      cursor: pointer;
-      outline: none;
+    .language-switcher select {
+      color-scheme: light;
+      min-height: 36px;
       min-width: 160px;
       max-width: 100%;
-    }}
-
-    .install-button {{
-      display: none;
-      border: 1px solid rgba(255, 255, 255, 0.55);
-      background: rgba(255, 255, 255, 0.18);
-      color: white;
+      border: none;
       border-radius: 999px;
-      padding: 9px 14px;
+      padding: 6px 12px;
+      font: inherit;
+      font-weight: 700;
+      color: #1f2937;
+      background-color: #ffffff;
+      cursor: pointer;
+    }
+
+    .install-button {
+      min-height: var(--tap);
+      border: 1px solid rgb(255 255 255 / 0.6);
+      background: rgb(255 255 255 / 0.16);
+      color: #ffffff;
+      border-radius: 999px;
+      padding: 8px 16px;
+      font: inherit;
       font-weight: 800;
       cursor: pointer;
-      backdrop-filter: blur(8px);
-    }}
+      transition: background-color 150ms ease-out;
+    }
 
-    .install-button:hover {{
-      background: rgba(255, 255, 255, 0.28);
-    }}
+    .install-button:hover {
+      background: rgb(255 255 255 / 0.28);
+    }
 
-    .update-notice {{
-      max-width: 760px;
-      margin: 8px auto 0;
-      font-size: 14px;
-      opacity: 0.9;
-    }}
+    .install-button[hidden] {
+      display: none;
+    }
 
-    main {{
+    @media (display-mode: standalone) {
+      .install-button {
+        display: none;
+      }
+    }
+
+    /* ---------- Main ---------- */
+
+    main {
       max-width: 1100px;
       margin: 0 auto;
-      padding: 24px 16px 60px;
-    }}
+      padding:
+        0
+        max(16px, env(safe-area-inset-right))
+        48px
+        max(16px, env(safe-area-inset-left));
+    }
 
-    .summary {{
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 18px 20px;
-      margin-top: -24px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
-      display: flex;
-      justify-content: space-between;
-      gap: 14px;
-      align-items: center;
-      flex-wrap: wrap;
+    .summary {
       position: relative;
-      z-index: 1;
-    }}
+      margin-top: -24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+      box-shadow: var(--shadow);
+      display: grid;
+      gap: 14px;
+    }
 
-    .summary strong {{
-      color: var(--primary);
-    }}
+    .summary p {
+      margin: 0;
+    }
 
-    .summary-controls {{
+    .summary strong {
+      color: var(--brand-soft-text);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .summary-notice {
+      color: var(--muted);
+      font-size: 0.875rem;
+    }
+
+    .progress-row {
       display: flex;
       align-items: center;
       gap: 12px;
-      flex-wrap: wrap;
-    }}
+    }
 
-    .filter-control {{
+    .progress-row progress {
+      flex: 1;
+      min-width: 0;
+      height: 10px;
+    }
+
+    .progress-text {
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .summary-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .filter-control {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      color: var(--muted);
+      gap: 10px;
+      min-height: var(--tap);
       font-weight: 600;
       cursor: pointer;
       user-select: none;
-    }}
+    }
 
-    .filter-control input {{
-      width: 18px;
-      height: 18px;
+    .filter-control input {
+      width: 20px;
+      height: 20px;
+      margin: 0;
       cursor: pointer;
-    }}
+    }
 
-    .clear-claimed {{
-      border: 1px solid var(--border);
-      background: white;
-      color: var(--muted);
-      padding: 8px 12px;
-      border-radius: 10px;
-      font-weight: 600;
-      cursor: pointer;
-    }}
-
-    .clear-claimed:hover {{
-      color: var(--primary-dark);
-      border-color: var(--primary);
-    }}
-
-    .ios-hint {{
-      display: none;
+    .ios-hint {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
       margin-top: 16px;
-      padding: 14px 16px;
-      border-radius: 16px;
-      background: var(--warning-bg);
-      border: 1px solid var(--warning-border);
-      color: var(--warning-text);
-      font-weight: 650;
-    }}
+      padding: 14px 8px 14px 16px;
+      border-radius: var(--radius-lg);
+      background: var(--hint-bg);
+      border: 1px solid var(--hint-border);
+      color: var(--hint-text);
+      font-weight: 600;
+    }
 
-    .ios-hint strong {{
+    .ios-hint[hidden] {
+      display: none;
+    }
+
+    .ios-hint > div {
+      flex: 1;
+    }
+
+    .ios-hint strong {
       display: block;
       margin-bottom: 4px;
-    }}
+    }
 
-    .date-section {{
-      margin-top: 30px;
-    }}
+    .icon-button {
+      flex: none;
+      display: inline-grid;
+      place-items: center;
+      width: var(--tap);
+      height: var(--tap);
+      margin: -8px 0;
+      border: none;
+      border-radius: 999px;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+    }
 
-    .date-section h2 {{
-      font-size: 24px;
-      border-left: 6px solid var(--primary);
+    .icon-button:hover {
+      background: rgb(127 127 127 / 0.15);
+    }
+
+    .date-section {
+      margin-top: 32px;
+    }
+
+    .date-section[hidden] {
+      display: none;
+    }
+
+    .date-section h2 {
+      font-size: 1.375rem;
+      border-left: 6px solid var(--brand);
       padding-left: 12px;
-      margin-bottom: 16px;
-    }}
+      margin: 0 0 16px;
+    }
 
-    .cards {{
+    .cards {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
       gap: 16px;
-    }}
+    }
 
-    .card {{
-      background: var(--card);
+    /* ---------- Card ---------- */
+
+    .card {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 16px;
+      border-radius: var(--radius-lg);
       padding: 18px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
-    }}
-
-    .reward-card {{
-      position: relative;
+      box-shadow: var(--shadow);
       transition:
-        opacity 0.2s ease,
-        transform 0.2s ease,
-        background-color 0.2s ease,
-        border-color 0.2s ease;
-    }}
+        translate 200ms ease-out,
+        box-shadow 200ms ease-out,
+        background-color 200ms ease-out,
+        border-color 200ms ease-out;
+    }
 
-    .reward-card:hover {{
-      transform: translateY(-2px);
-    }}
+    .card[hidden] {
+      display: none;
+    }
 
-    .reward-card.claimed {{
-      background: #f3f4f6;
-      opacity: 0.72;
-      border-color: #d1d5db;
-    }}
+    .card p {
+      margin: 0;
+    }
 
-    .reward-card.claimed:hover {{
-      transform: none;
-    }}
+    @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+      .reward-card:not(.claimed):hover {
+        translate: 0 -2px;
+        box-shadow: var(--shadow-hover);
+      }
+    }
 
-    .reward {{
-      display: inline-block;
-      background: #fff1f1;
-      color: var(--primary-dark);
+    .card-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .reward {
+      background: var(--brand-soft);
+      color: var(--brand-soft-text);
       font-weight: 700;
       padding: 6px 12px;
       border-radius: 999px;
-      margin-bottom: 12px;
-    }}
+    }
 
-    .reward-card.claimed .reward {{
-      background: #dcfce7;
-      color: var(--success-dark);
-    }}
-
-    .meta {{
-      color: var(--muted);
-      font-size: 14px;
-      margin-bottom: 8px;
-    }}
-
-    .campaign {{
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 13px;
-      background: #f3f4f6;
-      padding: 8px;
-      border-radius: 8px;
-      word-break: break-all;
-      margin-bottom: 10px;
-    }}
-
-    .section-title {{
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.45;
-      margin-bottom: 14px;
-      min-height: 18px;
-    }}
-
-    .reward-card.claimed .campaign {{
-      color: #6b7280;
-      text-decoration: line-through;
-    }}
-
-    .claimed-badge {{
+    .claimed-badge {
       display: none;
-      position: absolute;
-      top: 14px;
-      right: 14px;
+      flex: none;
       background: var(--success);
-      color: white;
-      font-size: 13px;
+      color: #ffffff;
+      font-size: 0.8125rem;
       font-weight: 700;
-      padding: 5px 10px;
+      padding: 4px 10px;
       border-radius: 999px;
-    }}
+    }
 
-    .reward-card.claimed .claimed-badge {{
-      display: inline-block;
-    }}
+    .meta {
+      color: var(--muted);
+      font-size: 0.875rem;
+    }
 
-    .actions {{
+    .campaign {
+      display: block;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.8125rem;
+      background: var(--surface-muted);
+      padding: 8px 10px;
+      border-radius: 8px;
+      overflow-wrap: anywhere;
+    }
+
+    .section-title {
+      color: var(--muted);
+      font-size: 0.8125rem;
+      line-height: 1.45;
+    }
+
+    .section-title:empty {
+      display: none;
+    }
+
+    .actions {
       display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }}
+      gap: 8px;
+      margin-top: auto;
+      padding-top: 4px;
+    }
 
-    .actions a {{
-      text-decoration: none;
-      background: var(--primary);
-      color: white;
-      padding: 9px 12px;
-      border-radius: 10px;
-      font-weight: 600;
-      font-size: 14px;
+    .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      transition:
-        background-color 0.2s ease,
-        transform 0.15s ease,
-        opacity 0.2s ease;
-    }}
-
-    .actions a:hover {{
-      background: var(--primary-dark);
-    }}
-
-    .reward-card.claimed .claim-link {{
-      background: var(--success);
-    }}
-
-    .reward-card.claimed .claim-link:hover {{
-      background: var(--success-dark);
-    }}
-
-    .claim-toggle {{
+      min-height: var(--tap);
+      padding: 8px 14px;
       border: none;
+      border-radius: var(--radius-md);
+      font: inherit;
+      font-size: 0.9375rem;
+      font-weight: 700;
+      text-decoration: none;
+      color: #ffffff;
       cursor: pointer;
-      background: var(--dark);
-      color: white;
-      padding: 9px 12px;
-      border-radius: 10px;
-      font-weight: 600;
-      font-size: 14px;
-    }}
+      transition:
+        background-color 150ms ease-out,
+        color 150ms ease-out,
+        border-color 150ms ease-out,
+        scale 150ms ease-out;
+    }
 
-    .claim-toggle:hover {{
-      background: #111827;
-    }}
+    @media (prefers-reduced-motion: no-preference) {
+      .btn:active {
+        scale: 0.97;
+      }
+    }
 
-    .reward-card.claimed .claim-toggle {{
-      background: #9ca3af;
-    }}
+    .btn-primary {
+      flex: 1;
+      background: var(--brand);
+    }
 
-    .reward-card.claimed .claim-toggle:hover {{
-      background: #6b7280;
-    }}
+    .btn-primary:hover,
+    .btn-danger:hover {
+      background: var(--brand-hover);
+    }
 
-    .empty-message {{
-      display: none;
+    .btn-danger {
+      background: var(--brand);
+    }
+
+    .btn-secondary {
+      background: var(--neutral);
+    }
+
+    .btn-secondary:hover {
+      background: var(--neutral-hover);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    .btn-ghost:hover {
+      color: var(--brand-soft-text);
+      border-color: currentColor;
+    }
+
+    /* Claimed state */
+
+    .reward-card.claimed {
+      background: var(--claimed-surface);
+      box-shadow: none;
+    }
+
+    .reward-card.claimed .reward {
+      background: var(--success-soft);
+      color: var(--success-soft-text);
+    }
+
+    .reward-card.claimed .claimed-badge {
+      display: inline-block;
+    }
+
+    .reward-card.claimed .campaign {
+      color: var(--muted);
+      text-decoration: line-through;
+    }
+
+    .reward-card.claimed .claim-link {
+      background: var(--success);
+    }
+
+    .reward-card.claimed .claim-link:hover {
+      background: var(--success-hover);
+    }
+
+    .empty-message {
       margin-top: 24px;
       padding: 18px 20px;
-      background: white;
+      background: var(--surface);
       border: 1px dashed var(--border);
-      border-radius: 16px;
+      border-radius: var(--radius-lg);
       color: var(--muted);
       text-align: center;
       font-weight: 600;
-    }}
+    }
 
-    footer {{
+    .empty-message[hidden] {
+      display: none;
+    }
+
+    /* ---------- Confirm dialog ---------- */
+
+    dialog {
+      width: min(100% - 32px, 420px);
+      padding: 24px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      color: var(--text);
+      box-shadow: 0 24px 60px rgb(0 0 0 / 0.3);
+    }
+
+    dialog:modal {
+      overscroll-behavior: contain;
+    }
+
+    dialog::backdrop {
+      background: rgb(15 23 42 / 0.55);
+      overflow: hidden;
+      overscroll-behavior: contain;
+    }
+
+    dialog h1 {
+      margin: 0 0 20px;
+      font-size: 1.125rem;
+      line-height: 1.4;
+    }
+
+    .dialog-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      dialog[open] {
+        animation: dialog-in 200ms ease-out;
+      }
+    }
+
+    @keyframes dialog-in {
+      from {
+        opacity: 0;
+        scale: 0.96;
+      }
+    }
+
+    /* ---------- Footer ---------- */
+
+    .site-footer {
       text-align: center;
       color: var(--muted);
-      padding: 24px 12px;
-      font-size: 14px;
-    }}
+      padding: 24px 16px max(24px, env(safe-area-inset-bottom));
+      font-size: 0.875rem;
+    }
 
-    @media (display-mode: standalone) {{
-      .install-button {{
-        display: none !important;
-      }}
-    }}
+    .site-footer p {
+      margin: 0 0 4px;
+    }
 
-    @media (max-width: 720px) {{
-      header {{
-        padding: 20px 16px 38px;
-      }}
-
-      .top-controls {{
-        width: 100%;
-        justify-content: center;
-        margin-bottom: 20px;
-      }}
-
-      .language-switcher {{
+    @media (max-width: 720px) {
+      .language-switcher {
         width: 100%;
         justify-content: center;
         border-radius: 18px;
-      }}
+      }
 
-      .language-switcher select {{
+      .language-switcher select {
         flex: 1;
-        max-width: 320px;
         min-width: 0;
-      }}
+        max-width: 320px;
+      }
 
-      .install-button {{
+      .install-button {
         width: 100%;
-        justify-content: center;
-      }}
+      }
 
-      .summary {{
-        align-items: flex-start;
-      }}
-
-      .summary-controls {{
+      .summary-controls .btn {
         width: 100%;
-      }}
-
-      .clear-claimed {{
-        width: 100%;
-      }}
-
-      .cards {{
-        grid-template-columns: 1fr;
-      }}
-    }}
-
-    @media (max-width: 600px) {{
-      header h1 {{
-        font-size: 26px;
-      }}
-    }}
+      }
+    }
   </style>
 </head>
 
 <body>
-  <header>
+  <header class="site-header">
     <div class="top-controls">
       <div class="language-switcher">
         <label for="languageSelect" data-i18n="languageLabel">語言</label>
-        <select id="languageSelect" aria-label="Language">
-          <option value="zh-Hant">中文</option>
-          <option value="en">English</option>
-          <option value="vi">Tiếng Việt</option>
-          <option value="ja">日本語</option>
-          <option value="ko">한국어</option>
-          <option value="th">ไทย</option>
-          <option value="id">Bahasa Indonesia</option>
-          <option value="es">Español</option>
-          <option value="pt">Português</option>
+        <select id="languageSelect">
+__LANGUAGE_OPTIONS__
         </select>
       </div>
 
-      <button id="installButton" class="install-button" type="button" data-i18n="installButton">
-        安裝到手機桌面
-      </button>
+      <button id="installButton" class="install-button" type="button" hidden data-i18n="installButton">安裝到手機桌面</button>
     </div>
 
     <h1 data-i18n="siteTitle">Coin Master 每日獎勵連結</h1>
@@ -933,433 +1121,383 @@ def generate_html(records):
 
     <p>
       <span data-i18n="lastUpdated">最後更新</span>：
-      <strong id="localizedUpdateTime"></strong>
+      <strong><time id="localizedUpdateTime" datetime="__UPDATED_ISO__"></time></strong>
       <span id="localizedTimezoneLabel"></span>
     </p>
 
-    <p class="update-notice" data-i18n="baseTimeNotice">
-      由Coin999-長長久久隊伍製作
-    </p>
+    <p class="update-notice" data-i18n="baseTimeNotice">由Coin999-長長久久隊伍製作</p>
   </header>
 
   <main>
-    <div class="summary">
+    <section class="summary">
       <div>
-        <span data-i18n="summaryPrefix">目前共收錄</span>
-        <strong>{total}</strong>
-        <span data-i18n="summarySuffix">筆獎勵連結。</span>
-        <span data-i18n="summaryNotice">資料來源為公開網頁整理，點擊前請自行確認連結狀態。</span>
+        <p>
+          <span data-i18n="summaryPrefix">目前共收錄</span>
+          <strong>__TOTAL__</strong>
+          <span data-i18n="summarySuffix">筆獎勵連結。</span>
+        </p>
+        <p class="summary-notice" data-i18n="summaryNotice">資料來源為公開網頁整理，點擊前請自行確認連結狀態。</p>
+      </div>
+
+      <div class="progress-row">
+        <progress id="claimProgress" max="__TOTAL__" value="0" aria-labelledby="claimProgressText"></progress>
+        <span id="claimProgressText" class="progress-text" aria-live="polite"></span>
       </div>
 
       <div class="summary-controls">
         <label class="filter-control">
-          <input type="checkbox" id="hideClaimed">
+          <input type="checkbox" switch id="hideClaimed">
           <span data-i18n="hideClaimed">隱藏已領取</span>
         </label>
 
-        <button type="button" id="clearClaimed" class="clear-claimed" data-i18n="clearClaimed">
-          清除已領取紀錄
-        </button>
+        <button type="button" id="clearClaimed" class="btn btn-ghost" data-i18n="clearClaimed">清除已領取紀錄</button>
       </div>
-    </div>
-
-    <section class="ios-hint" id="iosHint">
-      <strong data-i18n="iosHintTitle">iPhone / iPad 安裝提示</strong>
-      <span data-i18n="iosHintText">請點選 Safari 分享按鈕，然後選擇「加入主畫面」。</span>
     </section>
 
-    <div id="emptyMessage" class="empty-message" data-i18n="emptyMessage">
-      目前沒有可顯示的獎勵。可能全部都已標記為已領取。
-    </div>
+    <aside class="ios-hint" id="iosHint" hidden>
+      <div>
+        <strong data-i18n="iosHintTitle">iPhone / iPad 安裝提示</strong>
+        <span data-i18n="iosHintText">請點選 Safari 分享按鈕，然後選擇「加入主畫面」。</span>
+      </div>
+      <button type="button" class="icon-button" id="iosHintClose" aria-label="關閉" data-i18n-aria="close">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </aside>
 
-    {body}
+    <p id="emptyMessage" class="empty-message" data-i18n="emptyMessage" hidden>目前沒有可顯示的獎勵。可能全部都已標記為已領取。</p>
+
+__BODY__
   </main>
 
-  <footer>
-    <span data-i18n="footerText">本頁僅整理公開獎勵連結，實際領取狀態以遊戲內顯示為準。</span>
-    <br>
-    © {year} Coin999-長長久久隊伍. All rights reserved.
+  <footer class="site-footer">
+    <p data-i18n="footerText">本頁僅整理公開獎勵連結，實際領取狀態以遊戲內顯示為準。</p>
+    <p>© __YEAR__ Coin999-長長久久隊伍. All rights reserved.</p>
   </footer>
+
+  <dialog id="clearDialog" aria-labelledby="clearDialogTitle" closedby="any">
+    <h1 id="clearDialogTitle" data-i18n="clearConfirm">確定要清除所有已領取紀錄嗎？</h1>
+    <form method="dialog" class="dialog-actions">
+      <button type="submit" value="cancel" class="btn btn-ghost" autofocus data-i18n="cancel">取消</button>
+      <button type="submit" value="confirm" class="btn btn-danger" data-i18n="confirmClear">清除</button>
+    </form>
+  </dialog>
 
   <script>
     const STORAGE_PREFIX = "coinmaster_claimed_";
     const HIDE_CLAIMED_KEY = "coinmaster_hide_claimed";
     const LANGUAGE_KEY = "coinmaster_language";
+    const IOS_HINT_DISMISSED_KEY = "coinmaster_ios_hint_dismissed";
+    const DEFAULT_LANGUAGE = "zh-Hant";
 
-    const I18N = {i18n_json};
-    const LANGUAGE_CONFIG = {language_config_json};
-    const UPDATE_TIMES = {update_times_json};
+    const I18N = __I18N_JSON__;
+    const UPDATE_TIMES = __UPDATE_TIMES_JSON__;
 
-    let deferredInstallPrompt = null;
+    const cards = Array.from(document.querySelectorAll(".reward-card"));
+    const sections = Array.from(document.querySelectorAll(".date-section"));
+    const hideClaimedInput = document.querySelector("#hideClaimed");
+    const emptyMessage = document.querySelector("#emptyMessage");
+    const progress = document.querySelector("#claimProgress");
+    const progressText = document.querySelector("#claimProgressText");
+    const languageSelect = document.querySelector("#languageSelect");
+    const clearDialog = document.querySelector("#clearDialog");
 
-    function getCurrentLanguage() {{
-      const savedLanguage = localStorage.getItem(LANGUAGE_KEY);
+    let currentLanguage = detectLanguage();
 
-      if (savedLanguage && I18N[savedLanguage]) {{
-        return savedLanguage;
-      }}
+    function detectLanguage() {
+      const saved = localStorage.getItem(LANGUAGE_KEY);
 
-      const browserLang = navigator.language || navigator.userLanguage || "";
+      if (saved && I18N[saved]) return saved;
 
-      if (browserLang.startsWith("zh")) return "zh-Hant";
-      if (browserLang.startsWith("en")) return "en";
-      if (browserLang.startsWith("vi")) return "vi";
-      if (browserLang.startsWith("ja")) return "ja";
-      if (browserLang.startsWith("ko")) return "ko";
-      if (browserLang.startsWith("th")) return "th";
-      if (browserLang.startsWith("id")) return "id";
-      if (browserLang.startsWith("es")) return "es";
-      if (browserLang.startsWith("pt")) return "pt";
+      const preferred = navigator.languages?.length ? navigator.languages : [navigator.language];
 
-      return "zh-Hant";
-    }}
+      for (const tag of preferred) {
+        const base = String(tag || "").toLowerCase().split("-")[0];
 
-    function t(key) {{
-      const language = getCurrentLanguage();
+        if (base === "zh") return "zh-Hant";
+        if (I18N[base]) return base;
+      }
 
-      return (
-        I18N[language]?.[key] ||
-        I18N["zh-Hant"]?.[key] ||
-        key
-      );
-    }}
+      return DEFAULT_LANGUAGE;
+    }
 
-    function getStorageKey(campaign) {{
-      return STORAGE_PREFIX + campaign;
-    }}
+    function t(key) {
+      return I18N[currentLanguage]?.[key] ?? I18N[DEFAULT_LANGUAGE][key] ?? key;
+    }
 
-    function updateLocalizedTime(language) {{
-      const timeElement = document.querySelector("#localizedUpdateTime");
-      const timezoneElement = document.querySelector("#localizedTimezoneLabel");
+    const storageKey = campaign => STORAGE_PREFIX + campaign;
+    const isClaimed = campaign => localStorage.getItem(storageKey(campaign)) === "1";
 
-      if (!timeElement || !timezoneElement) return;
+    function setClaimed(campaign, claimed) {
+      if (!campaign) return;
 
-      const updateInfo = UPDATE_TIMES[language] || UPDATE_TIMES["zh-Hant"];
+      if (claimed) {
+        localStorage.setItem(storageKey(campaign), "1");
+      } else {
+        localStorage.removeItem(storageKey(campaign));
+      }
+    }
 
-      timeElement.textContent = updateInfo.time;
-      timezoneElement.textContent = updateInfo.timezone_label
-        ? " " + updateInfo.timezone_label
-        : " " + updateInfo.timezone;
-    }}
+    function renderCard(card) {
+      const claimed = isClaimed(card.dataset.campaign);
 
-    function applyLanguage(language) {{
-      if (!I18N[language]) {{
-        language = "zh-Hant";
-      }}
+      card.classList.toggle("claimed", claimed);
+      card.querySelector(".claim-link").textContent = t(claimed ? "claimed" : "claim");
+      card.querySelector(".claim-toggle").textContent = t(claimed ? "unmarkClaimed" : "markClaimed");
+    }
 
-      localStorage.setItem(LANGUAGE_KEY, language);
-      document.documentElement.lang = language;
+    function applyFilter() {
+      const hideClaimed = hideClaimedInput.checked;
 
-      document.title = I18N[language].siteTitle || I18N["zh-Hant"].siteTitle;
+      for (const card of cards) {
+        card.hidden = hideClaimed && card.classList.contains("claimed");
+      }
 
-      document.querySelectorAll("[data-i18n]").forEach(element => {{
-        const key = element.dataset.i18n;
+      for (const section of sections) {
+        section.hidden = !section.querySelector(".reward-card:not([hidden])");
+      }
 
-        if (I18N[language][key]) {{
-          element.textContent = I18N[language][key];
-        }}
-      }});
+      emptyMessage.hidden = !(cards.length > 0 && cards.every(card => card.hidden));
+    }
 
-      const selector = document.querySelector("#languageSelect");
+    function renderProgress() {
+      const claimedCount = cards.filter(card => card.classList.contains("claimed")).length;
 
-      if (selector) {{
-        selector.value = language;
-      }}
+      progress.max = Math.max(cards.length, 1);
+      progress.value = claimedCount;
+      progressText.textContent = `${t("claimed")} ${claimedCount} / ${cards.length}`;
+    }
 
-      updateLocalizedTime(language);
-      refreshClaimTexts();
-    }}
+    function render() {
+      cards.forEach(renderCard);
+      applyFilter();
+      renderProgress();
+    }
 
-    function refreshClaimTexts() {{
-      document.querySelectorAll(".reward-card").forEach(card => {{
-        const campaign = card.dataset.campaign;
+    function updateCard(card, claimed) {
+      setClaimed(card.dataset.campaign, claimed);
+      renderCard(card);
+      applyFilter();
+      renderProgress();
+    }
 
-        if (!campaign) return;
+    function applyLanguage(language) {
+      currentLanguage = I18N[language] ? language : DEFAULT_LANGUAGE;
 
-        const claimed = localStorage.getItem(getStorageKey(campaign)) === "1";
-        applyClaimedState(card, claimed, false);
-      }});
-    }}
+      localStorage.setItem(LANGUAGE_KEY, currentLanguage);
+      document.documentElement.lang = currentLanguage;
+      document.title = t("siteTitle");
+      languageSelect.value = currentLanguage;
 
-    function applyEmptyMessage() {{
-      const cards = Array.from(document.querySelectorAll(".reward-card"));
-      const emptyMessage = document.querySelector("#emptyMessage");
+      for (const element of document.querySelectorAll("[data-i18n]")) {
+        element.textContent = t(element.dataset.i18n);
+      }
 
-      if (!emptyMessage) return;
+      for (const element of document.querySelectorAll("[data-i18n-aria]")) {
+        element.setAttribute("aria-label", t(element.dataset.i18nAria));
+      }
 
-      const visibleCards = cards.filter(card => card.style.display !== "none");
+      const updateInfo = UPDATE_TIMES[currentLanguage] || UPDATE_TIMES[DEFAULT_LANGUAGE];
+      document.querySelector("#localizedUpdateTime").textContent = updateInfo.time;
+      document.querySelector("#localizedTimezoneLabel").textContent = updateInfo.timezone_label || updateInfo.timezone;
 
-      if (cards.length > 0 && visibleCards.length === 0) {{
-        emptyMessage.style.display = "block";
-      }} else {{
-        emptyMessage.style.display = "none";
-      }}
-    }}
+      render();
+    }
 
-    function applyDateSectionVisibility() {{
-      const sections = document.querySelectorAll(".date-section");
+    function bindCardActions() {
+      const main = document.querySelector("main");
 
-      sections.forEach(section => {{
-        const cards = Array.from(section.querySelectorAll(".reward-card"));
-        const visibleCards = cards.filter(card => card.style.display !== "none");
+      // 事件委派：一個監聽器處理所有卡片。
+      const onLinkActivate = event => {
+        const link = event.target.closest(".claim-link");
 
-        if (cards.length > 0 && visibleCards.length === 0) {{
-          section.style.display = "none";
-        }} else {{
-          section.style.display = "";
-        }}
-      }});
-    }}
+        if (link) updateCard(link.closest(".reward-card"), true);
+      };
 
-    function applyHideClaimedFilter() {{
-      const checkbox = document.querySelector("#hideClaimed");
-      const hideClaimed = checkbox && checkbox.checked;
+      main.addEventListener("click", event => {
+        onLinkActivate(event);
 
-      document.querySelectorAll(".reward-card").forEach(card => {{
-        if (hideClaimed && card.classList.contains("claimed")) {{
-          card.style.display = "none";
-        }} else {{
-          card.style.display = "";
-        }}
-      }});
+        const toggle = event.target.closest(".claim-toggle");
 
-      applyDateSectionVisibility();
-      applyEmptyMessage();
-    }}
+        if (toggle) {
+          const card = toggle.closest(".reward-card");
+          updateCard(card, !isClaimed(card.dataset.campaign));
+        }
+      });
 
-    function applyClaimedState(card, claimed, applyFilter = true) {{
-      const button = card.querySelector(".claim-toggle");
-      const link = card.querySelector(".claim-link");
+      // 滑鼠中鍵開新分頁也算領取。
+      main.addEventListener("auxclick", event => {
+        if (event.button === 1) onLinkActivate(event);
+      });
+    }
 
-      if (claimed) {{
-        card.classList.add("claimed");
+    function bindHideClaimed() {
+      hideClaimedInput.checked = localStorage.getItem(HIDE_CLAIMED_KEY) === "1";
 
-        if (button) {{
-          button.textContent = t("unmarkClaimed");
-        }}
-
-        if (link) {{
-          link.textContent = t("claimed");
-        }}
-      }} else {{
-        card.classList.remove("claimed");
-
-        if (button) {{
-          button.textContent = t("markClaimed");
-        }}
-
-        if (link) {{
-          link.textContent = t("claim");
-        }}
-      }}
-
-      if (applyFilter) {{
-        applyHideClaimedFilter();
-      }}
-    }}
-
-    function markCardAsClaimed(card, campaign) {{
-      if (!campaign || !card) return;
-
-      const key = getStorageKey(campaign);
-
-      localStorage.setItem(key, "1");
-      applyClaimedState(card, true);
-    }}
-
-    function initClaimedRewards() {{
-      const cards = document.querySelectorAll(".reward-card");
-
-      cards.forEach(card => {{
-        const campaign = card.dataset.campaign;
-
-        if (!campaign) return;
-
-        const claimed = localStorage.getItem(getStorageKey(campaign)) === "1";
-        applyClaimedState(card, claimed);
-      }});
-    }}
-
-    function bindClaimLinks() {{
-      const links = document.querySelectorAll(".claim-link");
-
-      links.forEach(link => {{
-        link.addEventListener("click", () => {{
-          const campaign = link.dataset.campaign;
-          const card = link.closest(".reward-card");
-
-          markCardAsClaimed(card, campaign);
-        }});
-      }});
-    }}
-
-    function bindClaimButtons() {{
-      const buttons = document.querySelectorAll(".claim-toggle");
-
-      buttons.forEach(button => {{
-        button.addEventListener("click", () => {{
-          const campaign = button.dataset.campaign;
-          const card = button.closest(".reward-card");
-
-          if (!campaign || !card) return;
-
-          const key = getStorageKey(campaign);
-          const claimed = localStorage.getItem(key) === "1";
-
-          if (claimed) {{
-            localStorage.removeItem(key);
-            applyClaimedState(card, false);
-          }} else {{
-            localStorage.setItem(key, "1");
-            applyClaimedState(card, true);
-          }}
-        }});
-      }});
-    }}
-
-    function bindHideClaimedFilter() {{
-      const checkbox = document.querySelector("#hideClaimed");
-
-      if (!checkbox) return;
-
-      const saved = localStorage.getItem(HIDE_CLAIMED_KEY) === "1";
-      checkbox.checked = saved;
-
-      checkbox.addEventListener("change", () => {{
-        if (checkbox.checked) {{
+      hideClaimedInput.addEventListener("change", () => {
+        if (hideClaimedInput.checked) {
           localStorage.setItem(HIDE_CLAIMED_KEY, "1");
-        }} else {{
+        } else {
           localStorage.removeItem(HIDE_CLAIMED_KEY);
-        }}
+        }
 
-        applyHideClaimedFilter();
-      }});
+        applyFilter();
+      });
+    }
 
-      applyHideClaimedFilter();
-    }}
+    function bindClearClaimed() {
+      document.querySelector("#clearClaimed").addEventListener("click", () => {
+        clearDialog.showModal();
+      });
 
-    function bindClearClaimed() {{
-      const button = document.querySelector("#clearClaimed");
+      clearDialog.addEventListener("close", () => {
+        const choice = clearDialog.returnValue;
+        clearDialog.returnValue = "";
 
-      if (!button) return;
+        if (choice !== "confirm") return;
 
-      button.addEventListener("click", () => {{
-        const confirmed = window.confirm(t("clearConfirm"));
+        Object.keys(localStorage)
+          .filter(key => key.startsWith(STORAGE_PREFIX))
+          .forEach(key => localStorage.removeItem(key));
 
-        if (!confirmed) return;
+        render();
+      });
 
-        const keysToRemove = [];
+      // closedby="any" 尚未支援的瀏覽器（Safari）補上點背景關閉。
+      if (!("closedBy" in HTMLDialogElement.prototype)) {
+        const isOutside = event => {
+          const rect = clearDialog.getBoundingClientRect();
 
-        for (let i = 0; i < localStorage.length; i++) {{
-          const key = localStorage.key(i);
+          return event.clientX < rect.left || event.clientX > rect.right ||
+            event.clientY < rect.top || event.clientY > rect.bottom;
+        };
 
-          if (key && key.startsWith(STORAGE_PREFIX)) {{
-            keysToRemove.push(key);
-          }}
-        }}
+        let pressedOutside = false;
 
-        keysToRemove.forEach(key => localStorage.removeItem(key));
+        clearDialog.addEventListener("pointerdown", event => {
+          pressedOutside = isOutside(event);
+        });
 
-        document.querySelectorAll(".reward-card").forEach(card => {{
-          applyClaimedState(card, false);
-        }});
+        clearDialog.addEventListener("pointerup", event => {
+          if (pressedOutside && isOutside(event)) clearDialog.close();
+        });
+      }
+    }
 
-        applyHideClaimedFilter();
-      }});
-    }}
+    function isStandaloneMode() {
+      return window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+    }
 
-    function bindLanguageSwitcher() {{
-      const selector = document.querySelector("#languageSelect");
-
-      if (!selector) return;
-
-      selector.value = getCurrentLanguage();
-
-      selector.addEventListener("change", () => {{
-        applyLanguage(selector.value);
-      }});
-    }}
-
-    function isIosDevice() {{
-      return /iphone|ipad|ipod/i.test(window.navigator.userAgent);
-    }}
-
-    function isStandaloneMode() {{
-      return window.matchMedia("(display-mode: standalone)").matches ||
-        window.navigator.standalone === true;
-    }}
-
-    function setupPwaInstall() {{
+    function setupPwaInstall() {
       const installButton = document.querySelector("#installButton");
       const iosHint = document.querySelector("#iosHint");
+      const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent) ||
+        (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 
-      if (iosHint && isIosDevice() && !isStandaloneMode()) {{
-        iosHint.style.display = "block";
-      }}
+      if (isIos && !isStandaloneMode() && localStorage.getItem(IOS_HINT_DISMISSED_KEY) !== "1") {
+        iosHint.hidden = false;
+      }
 
-      window.addEventListener("beforeinstallprompt", event => {{
+      document.querySelector("#iosHintClose").addEventListener("click", () => {
+        iosHint.hidden = true;
+        localStorage.setItem(IOS_HINT_DISMISSED_KEY, "1");
+      });
+
+      const supportsWebInstall = typeof Navigator.prototype.install === "function";
+      let deferredInstallPrompt;
+
+      if (supportsWebInstall && !isStandaloneMode()) {
+        installButton.hidden = false;
+      }
+
+      window.addEventListener("beforeinstallprompt", event => {
         event.preventDefault();
         deferredInstallPrompt = event;
 
-        if (installButton) {{
-          installButton.style.display = "inline-flex";
-        }}
-      }});
+        if (!supportsWebInstall) installButton.hidden = false;
+      });
 
-      if (installButton) {{
-        installButton.addEventListener("click", async () => {{
-          if (!deferredInstallPrompt) {{
-            alert(t("installUnavailable"));
-            return;
-          }}
+      installButton.addEventListener("click", async () => {
+        if (installButton.getAttribute("aria-disabled") === "true") return;
 
-          deferredInstallPrompt.prompt();
-          await deferredInstallPrompt.userChoice;
+        installButton.setAttribute("aria-disabled", "true");
 
-          deferredInstallPrompt = null;
-          installButton.style.display = "none";
-        }});
-      }}
+        try {
+          if (supportsWebInstall) {
+            await navigator.install();
+            installButton.hidden = true;
+          } else if (deferredInstallPrompt) {
+            const promptEvent = deferredInstallPrompt;
+            deferredInstallPrompt = undefined;
+            await promptEvent.prompt();
+            await promptEvent.userChoice;
 
-      window.addEventListener("appinstalled", () => {{
-        deferredInstallPrompt = null;
+            if (!deferredInstallPrompt) installButton.hidden = true;
+          }
+        } catch (error) {
+          if (error.name !== "AbortError") console.error(error);
+        } finally {
+          installButton.removeAttribute("aria-disabled");
+        }
+      });
 
-        if (installButton) {{
-          installButton.style.display = "none";
-        }}
-      }});
-    }}
+      window.addEventListener("appinstalled", () => {
+        deferredInstallPrompt = undefined;
+        installButton.hidden = true;
+      });
+    }
 
-    function registerServiceWorker() {{
-      if ("serviceWorker" in navigator) {{
-        window.addEventListener("load", () => {{
-          navigator.serviceWorker.register("./sw.js").catch(error => {{
-            console.warn("Service Worker registration failed:", error);
-          }});
-        }});
-      }}
-    }}
+    function registerServiceWorker() {
+      if (!("serviceWorker" in navigator)) return;
 
-    document.addEventListener("DOMContentLoaded", () => {{
-      bindLanguageSwitcher();
-      applyLanguage(getCurrentLanguage());
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js").catch(error => {
+          console.warn("Service Worker registration failed:", error);
+        });
+      });
+    }
 
-      initClaimedRewards();
-      bindClaimLinks();
-      bindClaimButtons();
-      bindHideClaimedFilter();
-      bindClearClaimed();
-
-      setupPwaInstall();
-      registerServiceWorker();
-    }});
+    languageSelect.addEventListener("change", () => applyLanguage(languageSelect.value));
+    bindHideClaimed();
+    bindCardActions();
+    bindClearClaimed();
+    applyLanguage(currentLanguage);
+    setupPwaInstall();
+    registerServiceWorker();
   </script>
 </body>
 </html>
 """
 
+
+THEME_COLOR = "#c62828"
+
+
+def generate_html(records):
+    current_time_taipei = datetime.now(ZoneInfo(DEFAULT_TIMEZONE))
+    local_update_times = build_local_update_times(current_time_taipei)
+
+    replacements = {
+        "__THEME_COLOR__": THEME_COLOR,
+        "__LANGUAGE_OPTIONS__": build_language_options(),
+        "__UPDATED_ISO__": current_time_taipei.isoformat(timespec="seconds"),
+        "__TOTAL__": str(len(records)),
+        "__BODY__": build_rows_html(records),
+        "__YEAR__": str(current_time_taipei.year),
+        "__I18N_JSON__": escape_json_for_script(I18N),
+        "__UPDATE_TIMES_JSON__": escape_json_for_script(local_update_times),
+    }
+
+    page = PAGE_TEMPLATE
+
+    for token, value in replacements.items():
+        page = page.replace(token, value)
+
+    return page
+
+
 def generate_manifest():
     manifest = {
+        "id": "./",
         "name": "Coin Master Daily Rewards",
         "short_name": "Coin Rewards",
         "description": "Daily Coin Master reward links with multilingual and offline support.",
@@ -1367,7 +1505,7 @@ def generate_manifest():
         "scope": "./",
         "display": "standalone",
         "background_color": "#f6f7fb",
-        "theme_color": "#ff4848",
+        "theme_color": THEME_COLOR,
         "orientation": "portrait-primary",
         "lang": "zh-Hant",
         "icons": [
@@ -1450,17 +1588,23 @@ self.addEventListener("fetch", event => {{
   event.respondWith(
     fetch(event.request)
       .then(response => {{
-        const responseClone = response.clone();
-
-        caches.open(CACHE_NAME).then(cache => {{
-          cache.put(event.request, responseClone);
-        }});
+        if (response.ok) {{
+          const responseClone = response.clone();
+          event.waitUntil(
+            caches.open(CACHE_NAME).then(cache => cache.put(event.request, responseClone))
+          );
+        }}
 
         return response;
       }})
-      .catch(() => caches.match(event.request).then(cachedResponse => {{
-        return cachedResponse || caches.match("./index.html");
-      }}))
+      .catch(async () => {{
+        const cachedResponse = await caches.match(event.request);
+
+        if (cachedResponse) return cachedResponse;
+        if (event.request.mode === "navigate") return caches.match("./index.html");
+
+        return Response.error();
+      }})
   );
 }});
 """
