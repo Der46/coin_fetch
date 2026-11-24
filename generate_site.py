@@ -525,18 +525,21 @@ PAGE_TEMPLATE = r"""<!doctype html>
       --shadow: 0 8px 24px rgb(15 23 42 / 0.06);
       --shadow-hover: 0 14px 32px rgb(15 23 42 / 0.12);
 
-      /* 白字需 >= 4.5:1：#c62828 = 5.62、#15803d = 5.02 */
-      --brand: #c62828;
-      --brand-hover: #a51d1d;
-      --brand-soft: #fdecec;
-      --brand-soft-text: #a51d1d;
-      --success: #15803d;
-      --success-hover: #166534;
-      --success-soft: #dcfce7;
-      --success-soft-text: #166534;
+      /* 翡翠金配色。對比：白字/#15803d = 5.02、#3b2a05/#e2b04a = 6.94、白字/#4b5563 = 7.56 */
+      --brand: #15803d;
+      --brand-soft: #dcfce7;
+      --brand-soft-text: #166534;
+      --cta: #e2b04a;
+      --cta-hover: #d49d2f;
+      --cta-border: #b8892a;
+      --on-cta: #3b2a05;
+      --claimed: #4b5563;
+      --claimed-hover: #374151;
+      --danger: #b91c1c;
+      --danger-hover: #991b1b;
       --neutral: #374151;
       --neutral-hover: #111827;
-      --claimed-surface: #f1f3f5;
+      --claimed-surface: #f1f3f2;
       --hint-bg: #fff7ed;
       --hint-border: #fed7aa;
       --hint-text: #9a3412;
@@ -560,10 +563,12 @@ PAGE_TEMPLATE = r"""<!doctype html>
         --shadow: 0 8px 24px rgb(0 0 0 / 0.35);
         --shadow-hover: 0 14px 32px rgb(0 0 0 / 0.5);
 
-        --brand-soft: #3a1d1d;
-        --brand-soft-text: #fca5a5;
-        --success-soft: #14301f;
-        --success-soft-text: #86efac;
+        --brand: #22c55e;
+        --brand-soft: #14301f;
+        --brand-soft-text: #86efac;
+        --cta-border: #e2b04a;
+        --claimed: #3b4250;
+        --claimed-hover: #4b5363;
         --neutral: #3b4250;
         --neutral-hover: #4b5363;
         --claimed-surface: #15171c;
@@ -572,7 +577,7 @@ PAGE_TEMPLATE = r"""<!doctype html>
         --hint-text: #fdba74;
         --focus: #93c5fd;
 
-        accent-color: #f87171;
+        accent-color: #4ade80;
       }
     }
 
@@ -620,7 +625,7 @@ PAGE_TEMPLATE = r"""<!doctype html>
 
     .site-header {
       --focus: #ffffff;
-      background: linear-gradient(135deg, #c62828, #bf360c);
+      background: linear-gradient(135deg, #166534, #0f3d2e);
       color: #ffffff;
       padding:
         max(24px, env(safe-area-inset-top))
@@ -650,7 +655,7 @@ PAGE_TEMPLATE = r"""<!doctype html>
       padding: 6px 16px 6px 12px;
       border: 2px solid #c9a24a;
       border-radius: 8px;
-      background: linear-gradient(180deg, #1e4a3b, #12322a);
+      background: linear-gradient(180deg, #0f3a2c, #0a261d);
       box-shadow:
         inset 0 0 0 1px rgb(0 0 0 / 0.45),
         inset 0 1px 0 rgb(255 255 255 / 0.12),
@@ -958,7 +963,7 @@ PAGE_TEMPLATE = r"""<!doctype html>
     .claimed-badge {
       display: none;
       flex: none;
-      background: var(--success);
+      background: var(--claimed);
       color: #ffffff;
       font-size: 0.8125rem;
       font-weight: 700;
@@ -1002,16 +1007,21 @@ PAGE_TEMPLATE = r"""<!doctype html>
 
     .btn-primary {
       flex: 1;
-      background: var(--brand);
+      background: var(--cta);
+      color: var(--on-cta);
+      box-shadow: inset 0 0 0 1px var(--cta-border);
     }
 
-    .btn-primary:hover,
-    .btn-danger:hover {
-      background: var(--brand-hover);
+    .btn-primary:hover {
+      background: var(--cta-hover);
     }
 
     .btn-danger {
-      background: var(--brand);
+      background: var(--danger);
+    }
+
+    .btn-danger:hover {
+      background: var(--danger-hover);
     }
 
     .btn-secondary {
@@ -1041,11 +1051,11 @@ PAGE_TEMPLATE = r"""<!doctype html>
     }
 
     .reward-card.claimed .reward {
-      color: var(--success-soft-text);
+      color: var(--muted);
     }
 
     .reward-card.claimed .reward-icon {
-      background: var(--success-soft);
+      background: var(--surface-muted);
     }
 
     .reward-card.claimed .reward-unit {
@@ -1057,11 +1067,13 @@ PAGE_TEMPLATE = r"""<!doctype html>
     }
 
     .reward-card.claimed .claim-link {
-      background: var(--success);
+      background: var(--claimed);
+      color: #ffffff;
+      box-shadow: none;
     }
 
     .reward-card.claimed .claim-link:hover {
-      background: var(--success-hover);
+      background: var(--claimed-hover);
     }
 
     .empty-message {
@@ -1532,7 +1544,7 @@ __BODY__
 """
 
 
-THEME_COLOR = "#c62828"
+THEME_COLOR = "#166534"
 
 
 def generate_html(records):
