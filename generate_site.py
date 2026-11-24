@@ -77,7 +77,6 @@ I18N = {
     "zh-Hant": {
         "languageLabel": "語言",
         "siteTitle": "Coin Master 每日獎勵連結",
-        "siteSubtitle": "每日自動更新免費能量 / 旋轉 / 金幣連結",
         "lastUpdated": "最後更新",
         "baseTimeNotice": "由大佬群CSL製作",
         "unitSpin": "能量",
@@ -105,7 +104,6 @@ I18N = {
     "en": {
         "languageLabel": "Language",
         "siteTitle": "Coin Master Daily Reward Links",
-        "siteSubtitle": "Automatically updated daily free spins, energy, and coin links",
         "lastUpdated": "Last updated",
         "baseTimeNotice": "Made by 大佬群CSL",
         "unitSpin": "Spins",
@@ -133,7 +131,6 @@ I18N = {
     "vi": {
         "languageLabel": "Ngôn ngữ",
         "siteTitle": "Liên kết phần thưởng Coin Master hằng ngày",
-        "siteSubtitle": "Tự động cập nhật liên kết vòng quay, năng lượng và xu miễn phí mỗi ngày",
         "lastUpdated": "Cập nhật lần cuối",
         "baseTimeNotice": "Thực hiện bởi 大佬群CSL",
         "unitSpin": "Lượt quay",
@@ -161,7 +158,6 @@ I18N = {
     "ja": {
         "languageLabel": "言語",
         "siteTitle": "Coin Master デイリー報酬リンク",
-        "siteSubtitle": "無料スピン、エネルギー、コインリンクを毎日自動更新",
         "lastUpdated": "最終更新",
         "baseTimeNotice": "大佬群CSL 制作",
         "unitSpin": "スピン",
@@ -189,7 +185,6 @@ I18N = {
     "ko": {
         "languageLabel": "언어",
         "siteTitle": "Coin Master 일일 보상 링크",
-        "siteSubtitle": "무료 스핀, 에너지, 코인 링크를 매일 자동 업데이트합니다",
         "lastUpdated": "마지막 업데이트",
         "baseTimeNotice": "大佬群CSL 제작",
         "unitSpin": "스핀",
@@ -217,7 +212,6 @@ I18N = {
     "th": {
         "languageLabel": "ภาษา",
         "siteTitle": "ลิงก์รางวัลรายวัน Coin Master",
-        "siteSubtitle": "อัปเดตลิงก์ฟรีสปิน พลังงาน และเหรียญโดยอัตโนมัติทุกวัน",
         "lastUpdated": "อัปเดตล่าสุด",
         "baseTimeNotice": "จัดทำโดย 大佬群CSL",
         "unitSpin": "สปิน",
@@ -245,7 +239,6 @@ I18N = {
     "id": {
         "languageLabel": "Bahasa",
         "siteTitle": "Tautan Hadiah Harian Coin Master",
-        "siteSubtitle": "Tautan spin gratis, energi, dan koin diperbarui otomatis setiap hari",
         "lastUpdated": "Terakhir diperbarui",
         "baseTimeNotice": "Dibuat oleh 大佬群CSL",
         "unitSpin": "Spin",
@@ -273,7 +266,6 @@ I18N = {
     "es": {
         "languageLabel": "Idioma",
         "siteTitle": "Enlaces diarios de recompensas de Coin Master",
-        "siteSubtitle": "Actualización automática diaria de giros, energía y monedas gratis",
         "lastUpdated": "Última actualización",
         "baseTimeNotice": "Hecho por 大佬群CSL",
         "unitSpin": "Tiradas",
@@ -301,7 +293,6 @@ I18N = {
     "pt": {
         "languageLabel": "Idioma",
         "siteTitle": "Links diários de recompensas Coin Master",
-        "siteSubtitle": "Links de giros, energia e moedas grátis atualizados automaticamente todos os dias",
         "lastUpdated": "Última atualização",
         "baseTimeNotice": "Feito por 大佬群CSL",
         "unitSpin": "Giros",
@@ -1232,7 +1223,6 @@ __LANGUAGE_OPTIONS__
     </div>
 
     <h1 data-i18n="siteTitle">Coin Master 每日獎勵連結</h1>
-    <p data-i18n="siteSubtitle">每日自動更新免費能量 / 旋轉 / 金幣連結</p>
 
     <p>
       <span data-i18n="lastUpdated">最後更新</span>：
