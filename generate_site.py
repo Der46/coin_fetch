@@ -4,6 +4,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 from collections import defaultdict
 import html
+import re
 
 INPUT_JSON = "output/coinmaster_rewards.json"
 
@@ -78,7 +79,9 @@ I18N = {
         "siteTitle": "Coin Master 每日獎勵連結",
         "siteSubtitle": "每日自動更新免費能量 / 旋轉 / 金幣連結",
         "lastUpdated": "最後更新",
-        "baseTimeNotice": "由Coin999-長長久久隊伍製作",
+        "baseTimeNotice": "由大佬群CSL製作",
+        "unitSpin": "能量",
+        "unitCoin": "金幣",
         "summaryPrefix": "目前共收錄",
         "summarySuffix": "筆獎勵連結。",
         "summaryNotice": "資料來源為公開網頁整理，點擊前請自行確認連結狀態。",
@@ -86,7 +89,6 @@ I18N = {
         "clearClaimed": "清除已領取紀錄",
         "emptyMessage": "目前沒有可顯示的獎勵。可能全部都已標記為已領取。",
         "claimedBadge": "已領取",
-        "campaignDateLabel": "活動日期",
         "claim": "領取",
         "claimed": "已領取",
         "markClaimed": "標記已領",
@@ -105,7 +107,9 @@ I18N = {
         "siteTitle": "Coin Master Daily Reward Links",
         "siteSubtitle": "Automatically updated daily free spins, energy, and coin links",
         "lastUpdated": "Last updated",
-        "baseTimeNotice": "Made by team Coin999-長長久久",
+        "baseTimeNotice": "Made by 大佬群CSL",
+        "unitSpin": "Spins",
+        "unitCoin": "Coins",
         "summaryPrefix": "Currently collected",
         "summarySuffix": "reward links.",
         "summaryNotice": "Data is collected from public webpages. Please verify each link before opening.",
@@ -113,7 +117,6 @@ I18N = {
         "clearClaimed": "Clear claimed records",
         "emptyMessage": "No rewards are currently visible. They may all be marked as claimed.",
         "claimedBadge": "Claimed",
-        "campaignDateLabel": "Campaign Date",
         "claim": "Claim",
         "claimed": "Claimed",
         "markClaimed": "Mark claimed",
@@ -132,7 +135,9 @@ I18N = {
         "siteTitle": "Liên kết phần thưởng Coin Master hằng ngày",
         "siteSubtitle": "Tự động cập nhật liên kết vòng quay, năng lượng và xu miễn phí mỗi ngày",
         "lastUpdated": "Cập nhật lần cuối",
-        "baseTimeNotice": "Được thực hiện bởi đội Coin999-長長久久",
+        "baseTimeNotice": "Được thực hiện bởi 大佬群CSL",
+        "unitSpin": "Lượt quay",
+        "unitCoin": "Xu",
         "summaryPrefix": "Hiện có",
         "summarySuffix": "liên kết phần thưởng.",
         "summaryNotice": "Dữ liệu được tổng hợp từ các trang công khai. Vui lòng kiểm tra liên kết trước khi mở.",
@@ -140,7 +145,6 @@ I18N = {
         "clearClaimed": "Xóa lịch sử đã nhận",
         "emptyMessage": "Hiện không có phần thưởng nào để hiển thị. Có thể tất cả đã được đánh dấu là đã nhận.",
         "claimedBadge": "Đã nhận",
-        "campaignDateLabel": "Ngày chiến dịch",
         "claim": "Nhận",
         "claimed": "Đã nhận",
         "markClaimed": "Đánh dấu đã nhận",
@@ -159,7 +163,9 @@ I18N = {
         "siteTitle": "Coin Master デイリー報酬リンク",
         "siteSubtitle": "無料スピン、エネルギー、コインリンクを毎日自動更新",
         "lastUpdated": "最終更新",
-        "baseTimeNotice": "Coin999-長長久久 チーム制作",
+        "baseTimeNotice": "大佬群CSL 制作",
+        "unitSpin": "スピン",
+        "unitCoin": "コイン",
         "summaryPrefix": "現在",
         "summarySuffix": "件の報酬リンクがあります。",
         "summaryNotice": "データは公開ページから収集されています。リンクを開く前に状態をご確認ください。",
@@ -167,7 +173,6 @@ I18N = {
         "clearClaimed": "受取済み履歴を削除",
         "emptyMessage": "表示できる報酬がありません。すべて受取済みに設定されている可能性があります。",
         "claimedBadge": "受取済み",
-        "campaignDateLabel": "キャンペーン日",
         "claim": "受け取る",
         "claimed": "受取済み",
         "markClaimed": "受取済みにする",
@@ -186,7 +191,9 @@ I18N = {
         "siteTitle": "Coin Master 일일 보상 링크",
         "siteSubtitle": "무료 스핀, 에너지, 코인 링크를 매일 자동 업데이트합니다",
         "lastUpdated": "마지막 업데이트",
-        "baseTimeNotice": "Coin999-長長久久 팀 제작",
+        "baseTimeNotice": "大佬群CSL 제작",
+        "unitSpin": "스핀",
+        "unitCoin": "코인",
         "summaryPrefix": "현재",
         "summarySuffix": "개의 보상 링크가 있습니다.",
         "summaryNotice": "데이터는 공개 웹페이지에서 수집되었습니다. 링크를 열기 전에 상태를 확인하세요.",
@@ -194,7 +201,6 @@ I18N = {
         "clearClaimed": "수령 기록 삭제",
         "emptyMessage": "현재 표시할 보상이 없습니다. 모두 수령 완료로 표시되었을 수 있습니다.",
         "claimedBadge": "수령 완료",
-        "campaignDateLabel": "캠페인 날짜",
         "claim": "받기",
         "claimed": "수령 완료",
         "markClaimed": "수령 표시",
@@ -213,7 +219,9 @@ I18N = {
         "siteTitle": "ลิงก์รางวัลรายวัน Coin Master",
         "siteSubtitle": "อัปเดตลิงก์ฟรีสปิน พลังงาน และเหรียญโดยอัตโนมัติทุกวัน",
         "lastUpdated": "อัปเดตล่าสุด",
-        "baseTimeNotice": "จัดทำโดยทีม Coin999-長長久久",
+        "baseTimeNotice": "จัดทำโดย 大佬群CSL",
+        "unitSpin": "สปิน",
+        "unitCoin": "เหรียญ",
         "summaryPrefix": "ขณะนี้มี",
         "summarySuffix": "ลิงก์รางวัล",
         "summaryNotice": "ข้อมูลรวบรวมจากหน้าเว็บสาธารณะ โปรดตรวจสอบลิงก์ก่อนเปิด",
@@ -221,7 +229,6 @@ I18N = {
         "clearClaimed": "ล้างประวัติที่รับแล้ว",
         "emptyMessage": "ไม่มีรางวัลที่แสดงได้ในขณะนี้ อาจถูกทำเครื่องหมายว่ารับแล้วทั้งหมด",
         "claimedBadge": "รับแล้ว",
-        "campaignDateLabel": "วันที่แคมเปญ",
         "claim": "รับ",
         "claimed": "รับแล้ว",
         "markClaimed": "ทำเครื่องหมายว่ารับแล้ว",
@@ -240,7 +247,9 @@ I18N = {
         "siteTitle": "Tautan Hadiah Harian Coin Master",
         "siteSubtitle": "Tautan spin gratis, energi, dan koin diperbarui otomatis setiap hari",
         "lastUpdated": "Terakhir diperbarui",
-        "baseTimeNotice": "Dibuat oleh tim Coin999-長長久久",
+        "baseTimeNotice": "Dibuat oleh 大佬群CSL",
+        "unitSpin": "Spin",
+        "unitCoin": "Koin",
         "summaryPrefix": "Saat ini ada",
         "summarySuffix": "tautan hadiah.",
         "summaryNotice": "Data dikumpulkan dari halaman publik. Harap periksa tautan sebelum membukanya.",
@@ -248,7 +257,6 @@ I18N = {
         "clearClaimed": "Hapus riwayat klaim",
         "emptyMessage": "Tidak ada hadiah yang dapat ditampilkan. Mungkin semuanya telah ditandai sebagai diklaim.",
         "claimedBadge": "Diklaim",
-        "campaignDateLabel": "Tanggal Kampanye",
         "claim": "Klaim",
         "claimed": "Diklaim",
         "markClaimed": "Tandai diklaim",
@@ -267,7 +275,9 @@ I18N = {
         "siteTitle": "Enlaces diarios de recompensas de Coin Master",
         "siteSubtitle": "Actualización automática diaria de giros, energía y monedas gratis",
         "lastUpdated": "Última actualización",
-        "baseTimeNotice": "Hecho por el equipo Coin999-長長久久",
+        "baseTimeNotice": "Hecho por 大佬群CSL",
+        "unitSpin": "Tiradas",
+        "unitCoin": "Monedas",
         "summaryPrefix": "Hay",
         "summarySuffix": "enlaces de recompensa.",
         "summaryNotice": "Los datos se recopilan de páginas públicas. Verifica cada enlace antes de abrirlo.",
@@ -275,7 +285,6 @@ I18N = {
         "clearClaimed": "Borrar registros reclamados",
         "emptyMessage": "No hay recompensas visibles. Puede que todas estén marcadas como reclamadas.",
         "claimedBadge": "Reclamado",
-        "campaignDateLabel": "Fecha de campaña",
         "claim": "Reclamar",
         "claimed": "Reclamado",
         "markClaimed": "Marcar reclamado",
@@ -294,7 +303,9 @@ I18N = {
         "siteTitle": "Links diários de recompensas Coin Master",
         "siteSubtitle": "Links de giros, energia e moedas grátis atualizados automaticamente todos os dias",
         "lastUpdated": "Última atualização",
-        "baseTimeNotice": "Feito pela equipe Coin999-長長久久",
+        "baseTimeNotice": "Feito por 大佬群CSL",
+        "unitSpin": "Giros",
+        "unitCoin": "Moedas",
         "summaryPrefix": "Há",
         "summarySuffix": "links de recompensa.",
         "summaryNotice": "Os dados são coletados de páginas públicas. Verifique cada link antes de abrir.",
@@ -302,7 +313,6 @@ I18N = {
         "clearClaimed": "Limpar registros resgatados",
         "emptyMessage": "Nenhuma recompensa está visível. Talvez todas estejam marcadas como resgatadas.",
         "claimedBadge": "Resgatado",
-        "campaignDateLabel": "Data da campanha",
         "claim": "Resgatar",
         "claimed": "Resgatado",
         "markClaimed": "Marcar como resgatado",
@@ -386,6 +396,41 @@ def parse_display_date(date_text):
         return None
 
 
+# fetch_rewards.py 會把獎勵正規化成「<數量> 能量」或「<數量> 金幣」。
+REWARD_UNITS = {
+    "能量": ("unitSpin", "spin"),
+    "金幣": ("unitCoin", "coin"),
+}
+
+BOLT_ICON = (
+    '<svg class="reward-icon" viewBox="0 0 24 24" aria-hidden="true">'
+    '<path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>'
+)
+
+COIN_ICON = (
+    '<svg class="reward-icon" viewBox="0 0 24 24" aria-hidden="true">'
+    '<circle cx="12" cy="12" r="9"/></svg>'
+)
+
+
+def build_reward_html(reward_text):
+    """把「50 能量」拆成數字 + 可翻譯的單位；無法辨識時原樣顯示。"""
+    match = re.fullmatch(r"\s*(\d+)\s*(\S+)\s*", reward_text or "")
+
+    if match and match.group(2) in REWARD_UNITS:
+        amount, unit = match.group(1), match.group(2)
+        i18n_key, kind = REWARD_UNITS[unit]
+        icon = BOLT_ICON if kind == "spin" else COIN_ICON
+
+        return (
+            f'<p class="reward reward-{kind}">{icon}'
+            f'<span class="reward-amount">{amount}</span> '
+            f'<span class="reward-unit" data-i18n="{i18n_key}">{unit}</span></p>'
+        )
+
+    return f'<p class="reward">{html.escape(reward_text or "")}</p>'
+
+
 def build_rows_html(records):
     grouped = group_by_display_date(records)
     sorted_dates = sorted(grouped.keys(), key=date_sort_key, reverse=True)
@@ -404,26 +449,17 @@ def build_rows_html(records):
         """)
 
         for item in items:
-            reward = html.escape(item.get("reward", ""))
+            reward_html = build_reward_html(item.get("reward", ""))
+            # campaign 只當作 localStorage 的領取紀錄 key，不顯示給使用者。
             campaign = html.escape(item.get("campaign", ""))
-            campaign_date = html.escape(item.get("campaign_date", ""))
             url = html.escape(item.get("url", ""))
-            section_title = html.escape(item.get("section_title", ""))
 
             rows_html.append(f"""
             <article class="card reward-card" data-campaign="{campaign}">
               <header class="card-head">
-                <span class="reward">{reward}</span>
+                {reward_html}
                 <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
               </header>
-
-              <p class="meta">
-                <span data-i18n="campaignDateLabel">活動日期</span>：{campaign_date}
-              </p>
-
-              <code class="campaign">{campaign}</code>
-
-              <p class="section-title">{section_title}</p>
 
               <footer class="actions">
                 <a
@@ -605,9 +641,33 @@ PAGE_TEMPLATE = r"""<!doctype html>
       max-width: 760px;
     }
 
-    .update-notice {
-      font-size: 0.875rem;
-      opacity: 0.92;
+    /* 作者徽章：深綠底、金框、金字＋皇冠 */
+    .site-header .credit-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      padding: 6px 16px 6px 12px;
+      border: 2px solid #c9a24a;
+      border-radius: 8px;
+      background: linear-gradient(180deg, #1e4a3b, #12322a);
+      box-shadow:
+        inset 0 0 0 1px rgb(0 0 0 / 0.45),
+        inset 0 1px 0 rgb(255 255 255 / 0.12),
+        0 3px 10px rgb(0 0 0 / 0.3);
+      color: #f3cf6b;
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-shadow: 0 1px 0 rgb(0 0 0 / 0.5);
+    }
+
+    .credit-badge svg {
+      flex: none;
+      width: 22px;
+      height: 22px;
+      fill: #f3c24c;
+      filter: drop-shadow(0 1px 0 rgb(0 0 0 / 0.5));
     }
 
     .top-controls {
@@ -820,7 +880,7 @@ PAGE_TEMPLATE = r"""<!doctype html>
 
     .cards {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
       gap: 16px;
     }
 
@@ -865,11 +925,34 @@ PAGE_TEMPLATE = r"""<!doctype html>
     }
 
     .reward {
-      background: var(--brand-soft);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 0;
       color: var(--brand-soft-text);
-      font-weight: 700;
-      padding: 6px 12px;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+
+    .reward-icon {
+      flex: none;
+      width: 36px;
+      height: 36px;
+      padding: 7px;
       border-radius: 999px;
+      background: var(--brand-soft);
+      fill: currentColor;
+    }
+
+    .reward-amount {
+      font-size: 2rem;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.01em;
+    }
+
+    .reward-unit {
+      font-size: 1rem;
+      color: var(--text);
     }
 
     .claimed-badge {
@@ -881,31 +964,6 @@ PAGE_TEMPLATE = r"""<!doctype html>
       font-weight: 700;
       padding: 4px 10px;
       border-radius: 999px;
-    }
-
-    .meta {
-      color: var(--muted);
-      font-size: 0.875rem;
-    }
-
-    .campaign {
-      display: block;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 0.8125rem;
-      background: var(--surface-muted);
-      padding: 8px 10px;
-      border-radius: 8px;
-      overflow-wrap: anywhere;
-    }
-
-    .section-title {
-      color: var(--muted);
-      font-size: 0.8125rem;
-      line-height: 1.45;
-    }
-
-    .section-title:empty {
-      display: none;
     }
 
     .actions {
@@ -983,17 +1041,19 @@ PAGE_TEMPLATE = r"""<!doctype html>
     }
 
     .reward-card.claimed .reward {
-      background: var(--success-soft);
       color: var(--success-soft-text);
+    }
+
+    .reward-card.claimed .reward-icon {
+      background: var(--success-soft);
+    }
+
+    .reward-card.claimed .reward-unit {
+      color: var(--muted);
     }
 
     .reward-card.claimed .claimed-badge {
       display: inline-block;
-    }
-
-    .reward-card.claimed .campaign {
-      color: var(--muted);
-      text-decoration: line-through;
     }
 
     .reward-card.claimed .claim-link {
@@ -1125,7 +1185,10 @@ __LANGUAGE_OPTIONS__
       <span id="localizedTimezoneLabel"></span>
     </p>
 
-    <p class="update-notice" data-i18n="baseTimeNotice">由Coin999-長長久久隊伍製作</p>
+    <p class="credit-badge">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5 7.5 11 12 4.5 16.5 11 21 7.5 19 18H5z"/><rect x="5" y="19.25" width="14" height="2" rx="1"/></svg>
+      <span data-i18n="baseTimeNotice">由大佬群CSL製作</span>
+    </p>
   </header>
 
   <main>
@@ -1171,7 +1234,7 @@ __BODY__
 
   <footer class="site-footer">
     <p data-i18n="footerText">本頁僅整理公開獎勵連結，實際領取狀態以遊戲內顯示為準。</p>
-    <p>© __YEAR__ Coin999-長長久久隊伍. All rights reserved.</p>
+    <p>© __YEAR__ 大佬群CSL. All rights reserved.</p>
   </footer>
 
   <dialog id="clearDialog" aria-labelledby="clearDialogTitle" closedby="any">

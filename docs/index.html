@@ -148,9 +148,33 @@
       max-width: 760px;
     }
 
-    .update-notice {
-      font-size: 0.875rem;
-      opacity: 0.92;
+    /* 作者徽章：深綠底、金框、金字＋皇冠 */
+    .site-header .credit-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      padding: 6px 16px 6px 12px;
+      border: 2px solid #c9a24a;
+      border-radius: 8px;
+      background: linear-gradient(180deg, #1e4a3b, #12322a);
+      box-shadow:
+        inset 0 0 0 1px rgb(0 0 0 / 0.45),
+        inset 0 1px 0 rgb(255 255 255 / 0.12),
+        0 3px 10px rgb(0 0 0 / 0.3);
+      color: #f3cf6b;
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-shadow: 0 1px 0 rgb(0 0 0 / 0.5);
+    }
+
+    .credit-badge svg {
+      flex: none;
+      width: 22px;
+      height: 22px;
+      fill: #f3c24c;
+      filter: drop-shadow(0 1px 0 rgb(0 0 0 / 0.5));
     }
 
     .top-controls {
@@ -363,7 +387,7 @@
 
     .cards {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
       gap: 16px;
     }
 
@@ -408,11 +432,34 @@
     }
 
     .reward {
-      background: var(--brand-soft);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 0;
       color: var(--brand-soft-text);
-      font-weight: 700;
-      padding: 6px 12px;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+
+    .reward-icon {
+      flex: none;
+      width: 36px;
+      height: 36px;
+      padding: 7px;
       border-radius: 999px;
+      background: var(--brand-soft);
+      fill: currentColor;
+    }
+
+    .reward-amount {
+      font-size: 2rem;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.01em;
+    }
+
+    .reward-unit {
+      font-size: 1rem;
+      color: var(--text);
     }
 
     .claimed-badge {
@@ -424,31 +471,6 @@
       font-weight: 700;
       padding: 4px 10px;
       border-radius: 999px;
-    }
-
-    .meta {
-      color: var(--muted);
-      font-size: 0.875rem;
-    }
-
-    .campaign {
-      display: block;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 0.8125rem;
-      background: var(--surface-muted);
-      padding: 8px 10px;
-      border-radius: 8px;
-      overflow-wrap: anywhere;
-    }
-
-    .section-title {
-      color: var(--muted);
-      font-size: 0.8125rem;
-      line-height: 1.45;
-    }
-
-    .section-title:empty {
-      display: none;
     }
 
     .actions {
@@ -526,17 +548,19 @@
     }
 
     .reward-card.claimed .reward {
-      background: var(--success-soft);
       color: var(--success-soft-text);
+    }
+
+    .reward-card.claimed .reward-icon {
+      background: var(--success-soft);
+    }
+
+    .reward-card.claimed .reward-unit {
+      color: var(--muted);
     }
 
     .reward-card.claimed .claimed-badge {
       display: inline-block;
-    }
-
-    .reward-card.claimed .campaign {
-      color: var(--muted);
-      text-decoration: line-through;
     }
 
     .reward-card.claimed .claim-link {
@@ -672,11 +696,14 @@
 
     <p>
       <span data-i18n="lastUpdated">最後更新</span>：
-      <strong><time id="localizedUpdateTime" datetime="2026-11-25T00:13:13+08:00"></time></strong>
+      <strong><time id="localizedUpdateTime" datetime="2026-11-25T00:17:41+08:00"></time></strong>
       <span id="localizedTimezoneLabel"></span>
     </p>
 
-    <p class="update-notice" data-i18n="baseTimeNotice">由Coin999-長長久久隊伍製作</p>
+    <p class="credit-badge">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5 7.5 11 12 4.5 16.5 11 21 7.5 19 18H5z"/><rect x="5" y="19.25" width="14" height="2" rx="1"/></svg>
+      <span data-i18n="baseTimeNotice">由大佬群CSL製作</span>
+    </p>
   </header>
 
   <main>
@@ -725,17 +752,9 @@
 
             <article class="card reward-card" data-campaign="coinmaster_reward_pe_LINECmHgkg_20261124">
               <header class="card-head">
-                <span class="reward">50 能量</span>
+                <p class="reward reward-spin"><svg class="reward-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span class="reward-amount">50</span> <span class="reward-unit" data-i18n="unitSpin">能量</span></p>
                 <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
               </header>
-
-              <p class="meta">
-                <span data-i18n="campaignDateLabel">活動日期</span>：20261124
-              </p>
-
-              <code class="campaign">coinmaster_reward_pe_LINECmHgkg_20261124</code>
-
-              <p class="section-title">Coin Master Free Spins Today</p>
 
               <footer class="actions">
                 <a
@@ -752,17 +771,9 @@
 
             <article class="card reward-card" data-campaign="coinmaster_reward_pe_CHATBObCQxj_20261124">
               <header class="card-head">
-                <span class="reward">200 能量</span>
+                <p class="reward reward-spin"><svg class="reward-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span class="reward-amount">200</span> <span class="reward-unit" data-i18n="unitSpin">能量</span></p>
                 <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
               </header>
-
-              <p class="meta">
-                <span data-i18n="campaignDateLabel">活動日期</span>：20261124
-              </p>
-
-              <code class="campaign">coinmaster_reward_pe_CHATBObCQxj_20261124</code>
-
-              <p class="section-title">Coin Master Free Spins Today</p>
 
               <footer class="actions">
                 <a
@@ -779,17 +790,9 @@
 
             <article class="card reward-card" data-campaign="coinmaster_reward_pe_TWIIcxcmX_20261124">
               <header class="card-head">
-                <span class="reward">50 能量</span>
+                <p class="reward reward-spin"><svg class="reward-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span class="reward-amount">50</span> <span class="reward-unit" data-i18n="unitSpin">能量</span></p>
                 <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
               </header>
-
-              <p class="meta">
-                <span data-i18n="campaignDateLabel">活動日期</span>：20261124
-              </p>
-
-              <code class="campaign">coinmaster_reward_pe_TWIIcxcmX_20261124</code>
-
-              <p class="section-title">Coin Master Free Spins Today</p>
 
               <footer class="actions">
                 <a
@@ -806,17 +809,9 @@
 
             <article class="card reward-card" data-campaign="coinmaster_reward_pe_INScDwGIj_20261124">
               <header class="card-head">
-                <span class="reward">50 能量</span>
+                <p class="reward reward-spin"><svg class="reward-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span class="reward-amount">50</span> <span class="reward-unit" data-i18n="unitSpin">能量</span></p>
                 <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
               </header>
-
-              <p class="meta">
-                <span data-i18n="campaignDateLabel">活動日期</span>：20261124
-              </p>
-
-              <code class="campaign">coinmaster_reward_pe_INScDwGIj_20261124</code>
-
-              <p class="section-title">Coin Master Free Spins Today</p>
 
               <footer class="actions">
                 <a
@@ -833,17 +828,9 @@
 
             <article class="card reward-card" data-campaign="coinmaster_reward_pe_FCBgyxHPU_20261124">
               <header class="card-head">
-                <span class="reward">50 能量</span>
+                <p class="reward reward-spin"><svg class="reward-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span class="reward-amount">50</span> <span class="reward-unit" data-i18n="unitSpin">能量</span></p>
                 <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
               </header>
-
-              <p class="meta">
-                <span data-i18n="campaignDateLabel">活動日期</span>：20261124
-              </p>
-
-              <code class="campaign">coinmaster_reward_pe_FCBgyxHPU_20261124</code>
-
-              <p class="section-title">Coin Master Free Spins Today</p>
 
               <footer class="actions">
                 <a
@@ -860,17 +847,9 @@
 
             <article class="card reward-card" data-campaign="coinmaster_reward_pe_FCBrZYRFe_20261124">
               <header class="card-head">
-                <span class="reward">50 能量</span>
+                <p class="reward reward-spin"><svg class="reward-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span class="reward-amount">50</span> <span class="reward-unit" data-i18n="unitSpin">能量</span></p>
                 <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
               </header>
-
-              <p class="meta">
-                <span data-i18n="campaignDateLabel">活動日期</span>：20261124
-              </p>
-
-              <code class="campaign">coinmaster_reward_pe_FCBrZYRFe_20261124</code>
-
-              <p class="section-title">Coin Master Free Spins Today</p>
 
               <footer class="actions">
                 <a
@@ -887,17 +866,9 @@
 
             <article class="card reward-card" data-campaign="coinmaster_reward_pe_HELPqiNpyY_20261124">
               <header class="card-head">
-                <span class="reward">100 能量</span>
+                <p class="reward reward-spin"><svg class="reward-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span class="reward-amount">100</span> <span class="reward-unit" data-i18n="unitSpin">能量</span></p>
                 <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
               </header>
-
-              <p class="meta">
-                <span data-i18n="campaignDateLabel">活動日期</span>：20261124
-              </p>
-
-              <code class="campaign">coinmaster_reward_pe_HELPqiNpyY_20261124</code>
-
-              <p class="section-title">Coin Master Free Spins Today</p>
 
               <footer class="actions">
                 <a
@@ -923,17 +894,9 @@
 
             <article class="card reward-card" data-campaign="coinmaster_reward_pe_EMAILMkIMSC_20261123">
               <header class="card-head">
-                <span class="reward">18 能量</span>
+                <p class="reward reward-spin"><svg class="reward-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span class="reward-amount">18</span> <span class="reward-unit" data-i18n="unitSpin">能量</span></p>
                 <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
               </header>
-
-              <p class="meta">
-                <span data-i18n="campaignDateLabel">活動日期</span>：20261123
-              </p>
-
-              <code class="campaign">coinmaster_reward_pe_EMAILMkIMSC_20261123</code>
-
-              <p class="section-title">Coin Master Free Spins Today</p>
 
               <footer class="actions">
                 <a
@@ -950,17 +913,9 @@
 
             <article class="card reward-card" data-campaign="coinmaster_reward_pe_CHATBjUWflb_20261123">
               <header class="card-head">
-                <span class="reward">100 能量</span>
+                <p class="reward reward-spin"><svg class="reward-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span class="reward-amount">100</span> <span class="reward-unit" data-i18n="unitSpin">能量</span></p>
                 <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
               </header>
-
-              <p class="meta">
-                <span data-i18n="campaignDateLabel">活動日期</span>：20261123
-              </p>
-
-              <code class="campaign">coinmaster_reward_pe_CHATBjUWflb_20261123</code>
-
-              <p class="section-title">Coin Master Free Spins 23 - November</p>
 
               <footer class="actions">
                 <a
@@ -977,17 +932,9 @@
 
             <article class="card reward-card" data-campaign="coinmaster_reward_pe_TWItIZikB_20261123">
               <header class="card-head">
-                <span class="reward">50 能量</span>
+                <p class="reward reward-spin"><svg class="reward-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span class="reward-amount">50</span> <span class="reward-unit" data-i18n="unitSpin">能量</span></p>
                 <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
               </header>
-
-              <p class="meta">
-                <span data-i18n="campaignDateLabel">活動日期</span>：20261123
-              </p>
-
-              <code class="campaign">coinmaster_reward_pe_TWItIZikB_20261123</code>
-
-              <p class="section-title">Coin Master Free Spins 23 - November</p>
 
               <footer class="actions">
                 <a
@@ -1004,17 +951,9 @@
 
             <article class="card reward-card" data-campaign="coinmaster_reward_pe_LINEVCDQWJ_20261123">
               <header class="card-head">
-                <span class="reward">50 能量</span>
+                <p class="reward reward-spin"><svg class="reward-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span class="reward-amount">50</span> <span class="reward-unit" data-i18n="unitSpin">能量</span></p>
                 <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
               </header>
-
-              <p class="meta">
-                <span data-i18n="campaignDateLabel">活動日期</span>：20261123
-              </p>
-
-              <code class="campaign">coinmaster_reward_pe_LINEVCDQWJ_20261123</code>
-
-              <p class="section-title">Coin Master Free Spins 23 - November</p>
 
               <footer class="actions">
                 <a
@@ -1031,17 +970,9 @@
 
             <article class="card reward-card" data-campaign="coinmaster_reward_pe_INSoTpZSi_20261123">
               <header class="card-head">
-                <span class="reward">50 能量</span>
+                <p class="reward reward-spin"><svg class="reward-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span class="reward-amount">50</span> <span class="reward-unit" data-i18n="unitSpin">能量</span></p>
                 <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
               </header>
-
-              <p class="meta">
-                <span data-i18n="campaignDateLabel">活動日期</span>：20261123
-              </p>
-
-              <code class="campaign">coinmaster_reward_pe_INSoTpZSi_20261123</code>
-
-              <p class="section-title">Coin Master Free Spins 23 - November</p>
 
               <footer class="actions">
                 <a
@@ -1058,17 +989,9 @@
 
             <article class="card reward-card" data-campaign="coinmaster_reward_pe_FCBSkBYPE_20261123">
               <header class="card-head">
-                <span class="reward">50 能量</span>
+                <p class="reward reward-spin"><svg class="reward-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span class="reward-amount">50</span> <span class="reward-unit" data-i18n="unitSpin">能量</span></p>
                 <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
               </header>
-
-              <p class="meta">
-                <span data-i18n="campaignDateLabel">活動日期</span>：20261123
-              </p>
-
-              <code class="campaign">coinmaster_reward_pe_FCBSkBYPE_20261123</code>
-
-              <p class="section-title">Coin Master Free Spins 23 - November</p>
 
               <footer class="actions">
                 <a
@@ -1085,17 +1008,9 @@
 
             <article class="card reward-card" data-campaign="coinmaster_reward_pe_FCBmapLjK_20261123">
               <header class="card-head">
-                <span class="reward">50 能量</span>
+                <p class="reward reward-spin"><svg class="reward-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span class="reward-amount">50</span> <span class="reward-unit" data-i18n="unitSpin">能量</span></p>
                 <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
               </header>
-
-              <p class="meta">
-                <span data-i18n="campaignDateLabel">活動日期</span>：20261123
-              </p>
-
-              <code class="campaign">coinmaster_reward_pe_FCBmapLjK_20261123</code>
-
-              <p class="section-title">Coin Master Free Spins 23 - November</p>
 
               <footer class="actions">
                 <a
@@ -1112,17 +1027,9 @@
 
             <article class="card reward-card" data-campaign="coinmaster_reward_pe_HELPzyTbHr_20261123">
               <header class="card-head">
-                <span class="reward">100 能量</span>
+                <p class="reward reward-spin"><svg class="reward-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span class="reward-amount">100</span> <span class="reward-unit" data-i18n="unitSpin">能量</span></p>
                 <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
               </header>
-
-              <p class="meta">
-                <span data-i18n="campaignDateLabel">活動日期</span>：20261123
-              </p>
-
-              <code class="campaign">coinmaster_reward_pe_HELPzyTbHr_20261123</code>
-
-              <p class="section-title">Coin Master Free Spins 23 - November</p>
 
               <footer class="actions">
                 <a
@@ -1148,17 +1055,9 @@
 
             <article class="card reward-card" data-campaign="coinmaster_reward_pe_EMAILDWvgmZ_20261122">
               <header class="card-head">
-                <span class="reward">100 能量</span>
+                <p class="reward reward-spin"><svg class="reward-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span class="reward-amount">100</span> <span class="reward-unit" data-i18n="unitSpin">能量</span></p>
                 <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
               </header>
-
-              <p class="meta">
-                <span data-i18n="campaignDateLabel">活動日期</span>：20261122
-              </p>
-
-              <code class="campaign">coinmaster_reward_pe_EMAILDWvgmZ_20261122</code>
-
-              <p class="section-title">Coin Master Free Spins 23 - November</p>
 
               <footer class="actions">
                 <a
@@ -1175,17 +1074,9 @@
 
             <article class="card reward-card" data-campaign="coinmaster_reward_pe_LINEIBFZnf_20261122">
               <header class="card-head">
-                <span class="reward">50 能量</span>
+                <p class="reward reward-spin"><svg class="reward-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span class="reward-amount">50</span> <span class="reward-unit" data-i18n="unitSpin">能量</span></p>
                 <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
               </header>
-
-              <p class="meta">
-                <span data-i18n="campaignDateLabel">活動日期</span>：20261122
-              </p>
-
-              <code class="campaign">coinmaster_reward_pe_LINEIBFZnf_20261122</code>
-
-              <p class="section-title">Coin Master Free Spins 22 - November</p>
 
               <footer class="actions">
                 <a
@@ -1202,17 +1093,9 @@
 
             <article class="card reward-card" data-campaign="coinmaster_reward_pe_CHATBFSWlvy_20261122">
               <header class="card-head">
-                <span class="reward">50 能量</span>
+                <p class="reward reward-spin"><svg class="reward-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span class="reward-amount">50</span> <span class="reward-unit" data-i18n="unitSpin">能量</span></p>
                 <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
               </header>
-
-              <p class="meta">
-                <span data-i18n="campaignDateLabel">活動日期</span>：20261122
-              </p>
-
-              <code class="campaign">coinmaster_reward_pe_CHATBFSWlvy_20261122</code>
-
-              <p class="section-title">Coin Master Free Spins 22 - November</p>
 
               <footer class="actions">
                 <a
@@ -1229,17 +1112,9 @@
 
             <article class="card reward-card" data-campaign="coinmaster_reward_pe_TWIgZZWZe_20261122">
               <header class="card-head">
-                <span class="reward">50 能量</span>
+                <p class="reward reward-spin"><svg class="reward-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span class="reward-amount">50</span> <span class="reward-unit" data-i18n="unitSpin">能量</span></p>
                 <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
               </header>
-
-              <p class="meta">
-                <span data-i18n="campaignDateLabel">活動日期</span>：20261122
-              </p>
-
-              <code class="campaign">coinmaster_reward_pe_TWIgZZWZe_20261122</code>
-
-              <p class="section-title">Coin Master Free Spins 22 - November</p>
 
               <footer class="actions">
                 <a
@@ -1256,17 +1131,9 @@
 
             <article class="card reward-card" data-campaign="coinmaster_reward_pe_INStIjVAL_20261122">
               <header class="card-head">
-                <span class="reward">50 能量</span>
+                <p class="reward reward-spin"><svg class="reward-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span class="reward-amount">50</span> <span class="reward-unit" data-i18n="unitSpin">能量</span></p>
                 <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
               </header>
-
-              <p class="meta">
-                <span data-i18n="campaignDateLabel">活動日期</span>：20261122
-              </p>
-
-              <code class="campaign">coinmaster_reward_pe_INStIjVAL_20261122</code>
-
-              <p class="section-title">Coin Master Free Spins 22 - November</p>
 
               <footer class="actions">
                 <a
@@ -1283,17 +1150,9 @@
 
             <article class="card reward-card" data-campaign="coinmaster_reward_pe_FCBuVaCLI_20261122">
               <header class="card-head">
-                <span class="reward">50 能量</span>
+                <p class="reward reward-spin"><svg class="reward-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span class="reward-amount">50</span> <span class="reward-unit" data-i18n="unitSpin">能量</span></p>
                 <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
               </header>
-
-              <p class="meta">
-                <span data-i18n="campaignDateLabel">活動日期</span>：20261122
-              </p>
-
-              <code class="campaign">coinmaster_reward_pe_FCBuVaCLI_20261122</code>
-
-              <p class="section-title">Coin Master Free Spins 22 - November</p>
 
               <footer class="actions">
                 <a
@@ -1310,17 +1169,9 @@
 
             <article class="card reward-card" data-campaign="coinmaster_reward_pe_FCBaiATNp_20261122">
               <header class="card-head">
-                <span class="reward">50 能量</span>
+                <p class="reward reward-spin"><svg class="reward-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span class="reward-amount">50</span> <span class="reward-unit" data-i18n="unitSpin">能量</span></p>
                 <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
               </header>
-
-              <p class="meta">
-                <span data-i18n="campaignDateLabel">活動日期</span>：20261122
-              </p>
-
-              <code class="campaign">coinmaster_reward_pe_FCBaiATNp_20261122</code>
-
-              <p class="section-title">Coin Master Free Spins 22 - November</p>
 
               <footer class="actions">
                 <a
@@ -1337,17 +1188,9 @@
 
             <article class="card reward-card" data-campaign="coinmaster_reward_pe_HELPsRpAmM_20261122">
               <header class="card-head">
-                <span class="reward">100 能量</span>
+                <p class="reward reward-spin"><svg class="reward-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span class="reward-amount">100</span> <span class="reward-unit" data-i18n="unitSpin">能量</span></p>
                 <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
               </header>
-
-              <p class="meta">
-                <span data-i18n="campaignDateLabel">活動日期</span>：20261122
-              </p>
-
-              <code class="campaign">coinmaster_reward_pe_HELPsRpAmM_20261122</code>
-
-              <p class="section-title">Coin Master Free Spins 22 - November</p>
 
               <footer class="actions">
                 <a
@@ -1373,17 +1216,9 @@
 
             <article class="card reward-card" data-campaign="coinmaster_reward_pe_EMAILkjJsBJ_20261121">
               <header class="card-head">
-                <span class="reward">100 能量</span>
+                <p class="reward reward-spin"><svg class="reward-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span class="reward-amount">100</span> <span class="reward-unit" data-i18n="unitSpin">能量</span></p>
                 <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
               </header>
-
-              <p class="meta">
-                <span data-i18n="campaignDateLabel">活動日期</span>：20261121
-              </p>
-
-              <code class="campaign">coinmaster_reward_pe_EMAILkjJsBJ_20261121</code>
-
-              <p class="section-title">Coin Master Free Spins 22 - November</p>
 
               <footer class="actions">
                 <a
@@ -1409,17 +1244,9 @@
 
             <article class="card reward-card" data-campaign="coinmaster_reward_pe_EMAILpCiKeU_20261120">
               <header class="card-head">
-                <span class="reward">100 能量</span>
+                <p class="reward reward-spin"><svg class="reward-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span class="reward-amount">100</span> <span class="reward-unit" data-i18n="unitSpin">能量</span></p>
                 <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
               </header>
-
-              <p class="meta">
-                <span data-i18n="campaignDateLabel">活動日期</span>：20261120
-              </p>
-
-              <code class="campaign">coinmaster_reward_pe_EMAILpCiKeU_20261120</code>
-
-              <p class="section-title">Coin Master Free Spins 22 - November</p>
 
               <footer class="actions">
                 <a
@@ -1436,17 +1263,9 @@
 
             <article class="card reward-card" data-campaign="coinmaster_reward_pe_EMAILhURxpX_20261120">
               <header class="card-head">
-                <span class="reward">100 能量</span>
+                <p class="reward reward-spin"><svg class="reward-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span class="reward-amount">100</span> <span class="reward-unit" data-i18n="unitSpin">能量</span></p>
                 <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
               </header>
-
-              <p class="meta">
-                <span data-i18n="campaignDateLabel">活動日期</span>：20261120
-              </p>
-
-              <code class="campaign">coinmaster_reward_pe_EMAILhURxpX_20261120</code>
-
-              <p class="section-title">Coin Master Free Spins Bonus</p>
 
               <footer class="actions">
                 <a
@@ -1472,17 +1291,9 @@
 
             <article class="card reward-card" data-campaign="coinmaster_reward_pe_EMAILeGNuKs_20261119">
               <header class="card-head">
-                <span class="reward">100 能量</span>
+                <p class="reward reward-spin"><svg class="reward-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span class="reward-amount">100</span> <span class="reward-unit" data-i18n="unitSpin">能量</span></p>
                 <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
               </header>
-
-              <p class="meta">
-                <span data-i18n="campaignDateLabel">活動日期</span>：20261119
-              </p>
-
-              <code class="campaign">coinmaster_reward_pe_EMAILeGNuKs_20261119</code>
-
-              <p class="section-title">Coin Master Free Spins Bonus</p>
 
               <footer class="actions">
                 <a
@@ -1508,17 +1319,9 @@
 
             <article class="card reward-card" data-campaign="coinmaster_reward_pe_EMAILsJkgWh_20261116">
               <header class="card-head">
-                <span class="reward">100 能量</span>
+                <p class="reward reward-spin"><svg class="reward-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span class="reward-amount">100</span> <span class="reward-unit" data-i18n="unitSpin">能量</span></p>
                 <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
               </header>
-
-              <p class="meta">
-                <span data-i18n="campaignDateLabel">活動日期</span>：20261116
-              </p>
-
-              <code class="campaign">coinmaster_reward_pe_EMAILsJkgWh_20261116</code>
-
-              <p class="section-title">Coin Master Free Spins Bonus</p>
 
               <footer class="actions">
                 <a
@@ -1544,17 +1347,9 @@
 
             <article class="card reward-card" data-campaign="coinmaster_reward_pe_RICHaWBgEf_20261108">
               <header class="card-head">
-                <span class="reward">100 能量</span>
+                <p class="reward reward-spin"><svg class="reward-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span class="reward-amount">100</span> <span class="reward-unit" data-i18n="unitSpin">能量</span></p>
                 <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
               </header>
-
-              <p class="meta">
-                <span data-i18n="campaignDateLabel">活動日期</span>：20261108
-              </p>
-
-              <code class="campaign">coinmaster_reward_pe_RICHaWBgEf_20261108</code>
-
-              <p class="section-title">Coin Master Free Spins Bonus</p>
 
               <footer class="actions">
                 <a
@@ -1580,17 +1375,9 @@
 
             <article class="card reward-card" data-campaign="coinmaster_reward_pe_RICHnwGTWI_20261102">
               <header class="card-head">
-                <span class="reward">150 能量</span>
+                <p class="reward reward-spin"><svg class="reward-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span class="reward-amount">150</span> <span class="reward-unit" data-i18n="unitSpin">能量</span></p>
                 <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
               </header>
-
-              <p class="meta">
-                <span data-i18n="campaignDateLabel">活動日期</span>：20261102
-              </p>
-
-              <code class="campaign">coinmaster_reward_pe_RICHnwGTWI_20261102</code>
-
-              <p class="section-title">Coin Master Free Spins Bonus</p>
 
               <footer class="actions">
                 <a
@@ -1616,17 +1403,9 @@
 
             <article class="card reward-card" data-campaign="coinmaster_reward_pe_CHATBsLrYmA_20250504">
               <header class="card-head">
-                <span class="reward">150 能量</span>
+                <p class="reward reward-spin"><svg class="reward-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span class="reward-amount">150</span> <span class="reward-unit" data-i18n="unitSpin">能量</span></p>
                 <span class="claimed-badge" data-i18n="claimedBadge">已領取</span>
               </header>
-
-              <p class="meta">
-                <span data-i18n="campaignDateLabel">活動日期</span>：20250504
-              </p>
-
-              <code class="campaign">coinmaster_reward_pe_CHATBsLrYmA_20250504</code>
-
-              <p class="section-title">Coin Master Free Spins Bonus</p>
 
               <footer class="actions">
                 <a
@@ -1648,7 +1427,7 @@
 
   <footer class="site-footer">
     <p data-i18n="footerText">本頁僅整理公開獎勵連結，實際領取狀態以遊戲內顯示為準。</p>
-    <p>© 2026 Coin999-長長久久隊伍. All rights reserved.</p>
+    <p>© 2026 大佬群CSL. All rights reserved.</p>
   </footer>
 
   <dialog id="clearDialog" aria-labelledby="clearDialogTitle" closedby="any">
@@ -1666,8 +1445,8 @@
     const IOS_HINT_DISMISSED_KEY = "coinmaster_ios_hint_dismissed";
     const DEFAULT_LANGUAGE = "zh-Hant";
 
-    const I18N = {"zh-Hant": {"languageLabel": "語言", "siteTitle": "Coin Master 每日獎勵連結", "siteSubtitle": "每日自動更新免費能量 / 旋轉 / 金幣連結", "lastUpdated": "最後更新", "baseTimeNotice": "由Coin999-長長久久隊伍製作", "summaryPrefix": "目前共收錄", "summarySuffix": "筆獎勵連結。", "summaryNotice": "資料來源為公開網頁整理，點擊前請自行確認連結狀態。", "hideClaimed": "隱藏已領取", "clearClaimed": "清除已領取紀錄", "emptyMessage": "目前沒有可顯示的獎勵。可能全部都已標記為已領取。", "claimedBadge": "已領取", "campaignDateLabel": "活動日期", "claim": "領取", "claimed": "已領取", "markClaimed": "標記已領", "unmarkClaimed": "取消標記", "clearConfirm": "確定要清除所有已領取紀錄嗎？", "cancel": "取消", "confirmClear": "清除", "close": "關閉", "installButton": "安裝到手機桌面", "iosHintTitle": "iPhone / iPad 安裝提示", "iosHintText": "請點選 Safari 分享按鈕，然後選擇「加入主畫面」。", "footerText": "本頁僅整理公開獎勵連結，實際領取狀態以遊戲內顯示為準。"}, "en": {"languageLabel": "Language", "siteTitle": "Coin Master Daily Reward Links", "siteSubtitle": "Automatically updated daily free spins, energy, and coin links", "lastUpdated": "Last updated", "baseTimeNotice": "Made by team Coin999-長長久久", "summaryPrefix": "Currently collected", "summarySuffix": "reward links.", "summaryNotice": "Data is collected from public webpages. Please verify each link before opening.", "hideClaimed": "Hide claimed", "clearClaimed": "Clear claimed records", "emptyMessage": "No rewards are currently visible. They may all be marked as claimed.", "claimedBadge": "Claimed", "campaignDateLabel": "Campaign Date", "claim": "Claim", "claimed": "Claimed", "markClaimed": "Mark claimed", "unmarkClaimed": "Unmark", "clearConfirm": "Are you sure you want to clear all claimed records?", "cancel": "Cancel", "confirmClear": "Clear", "close": "Close", "installButton": "Install to Home Screen", "iosHintTitle": "iPhone / iPad install tip", "iosHintText": "Tap the Safari Share button, then choose “Add to Home Screen”.", "footerText": "This page only organizes public reward links. Actual claim status depends on the game."}, "vi": {"languageLabel": "Ngôn ngữ", "siteTitle": "Liên kết phần thưởng Coin Master hằng ngày", "siteSubtitle": "Tự động cập nhật liên kết vòng quay, năng lượng và xu miễn phí mỗi ngày", "lastUpdated": "Cập nhật lần cuối", "baseTimeNotice": "Được thực hiện bởi đội Coin999-長長久久", "summaryPrefix": "Hiện có", "summarySuffix": "liên kết phần thưởng.", "summaryNotice": "Dữ liệu được tổng hợp từ các trang công khai. Vui lòng kiểm tra liên kết trước khi mở.", "hideClaimed": "Ẩn đã nhận", "clearClaimed": "Xóa lịch sử đã nhận", "emptyMessage": "Hiện không có phần thưởng nào để hiển thị. Có thể tất cả đã được đánh dấu là đã nhận.", "claimedBadge": "Đã nhận", "campaignDateLabel": "Ngày chiến dịch", "claim": "Nhận", "claimed": "Đã nhận", "markClaimed": "Đánh dấu đã nhận", "unmarkClaimed": "Bỏ đánh dấu", "clearConfirm": "Bạn có chắc muốn xóa toàn bộ lịch sử đã nhận không?", "cancel": "Hủy", "confirmClear": "Xóa", "close": "Đóng", "installButton": "Cài vào màn hình chính", "iosHintTitle": "Gợi ý cài đặt trên iPhone / iPad", "iosHintText": "Nhấn nút Chia sẻ trong Safari, rồi chọn “Thêm vào Màn hình chính”.", "footerText": "Trang này chỉ tổng hợp liên kết quà công khai. Trạng thái nhận thực tế phụ thuộc vào trò chơi."}, "ja": {"languageLabel": "言語", "siteTitle": "Coin Master デイリー報酬リンク", "siteSubtitle": "無料スピン、エネルギー、コインリンクを毎日自動更新", "lastUpdated": "最終更新", "baseTimeNotice": "Coin999-長長久久 チーム制作", "summaryPrefix": "現在", "summarySuffix": "件の報酬リンクがあります。", "summaryNotice": "データは公開ページから収集されています。リンクを開く前に状態をご確認ください。", "hideClaimed": "受取済みを非表示", "clearClaimed": "受取済み履歴を削除", "emptyMessage": "表示できる報酬がありません。すべて受取済みに設定されている可能性があります。", "claimedBadge": "受取済み", "campaignDateLabel": "キャンペーン日", "claim": "受け取る", "claimed": "受取済み", "markClaimed": "受取済みにする", "unmarkClaimed": "解除", "clearConfirm": "すべての受取済み履歴を削除しますか？", "cancel": "キャンセル", "confirmClear": "削除する", "close": "閉じる", "installButton": "ホーム画面にインストール", "iosHintTitle": "iPhone / iPad インストール方法", "iosHintText": "Safari の共有ボタンを押して、「ホーム画面に追加」を選択してください。", "footerText": "このページは公開報酬リンクを整理したものです。実際の受取状況はゲーム内表示に従ってください。"}, "ko": {"languageLabel": "언어", "siteTitle": "Coin Master 일일 보상 링크", "siteSubtitle": "무료 스핀, 에너지, 코인 링크를 매일 자동 업데이트합니다", "lastUpdated": "마지막 업데이트", "baseTimeNotice": "Coin999-長長久久 팀 제작", "summaryPrefix": "현재", "summarySuffix": "개의 보상 링크가 있습니다.", "summaryNotice": "데이터는 공개 웹페이지에서 수집되었습니다. 링크를 열기 전에 상태를 확인하세요.", "hideClaimed": "수령 완료 숨기기", "clearClaimed": "수령 기록 삭제", "emptyMessage": "현재 표시할 보상이 없습니다. 모두 수령 완료로 표시되었을 수 있습니다.", "claimedBadge": "수령 완료", "campaignDateLabel": "캠페인 날짜", "claim": "받기", "claimed": "수령 완료", "markClaimed": "수령 표시", "unmarkClaimed": "표시 해제", "clearConfirm": "모든 수령 기록을 삭제하시겠습니까?", "cancel": "취소", "confirmClear": "삭제", "close": "닫기", "installButton": "홈 화면에 설치", "iosHintTitle": "iPhone / iPad 설치 안내", "iosHintText": "Safari 공유 버튼을 누른 뒤 “홈 화면에 추가”를 선택하세요.", "footerText": "이 페이지는 공개 보상 링크를 정리한 것입니다. 실제 수령 상태는 게임 내 표시를 따릅니다."}, "th": {"languageLabel": "ภาษา", "siteTitle": "ลิงก์รางวัลรายวัน Coin Master", "siteSubtitle": "อัปเดตลิงก์ฟรีสปิน พลังงาน และเหรียญโดยอัตโนมัติทุกวัน", "lastUpdated": "อัปเดตล่าสุด", "baseTimeNotice": "จัดทำโดยทีม Coin999-長長久久", "summaryPrefix": "ขณะนี้มี", "summarySuffix": "ลิงก์รางวัล", "summaryNotice": "ข้อมูลรวบรวมจากหน้าเว็บสาธารณะ โปรดตรวจสอบลิงก์ก่อนเปิด", "hideClaimed": "ซ่อนที่รับแล้ว", "clearClaimed": "ล้างประวัติที่รับแล้ว", "emptyMessage": "ไม่มีรางวัลที่แสดงได้ในขณะนี้ อาจถูกทำเครื่องหมายว่ารับแล้วทั้งหมด", "claimedBadge": "รับแล้ว", "campaignDateLabel": "วันที่แคมเปญ", "claim": "รับ", "claimed": "รับแล้ว", "markClaimed": "ทำเครื่องหมายว่ารับแล้ว", "unmarkClaimed": "ยกเลิกเครื่องหมาย", "clearConfirm": "คุณแน่ใจหรือไม่ว่าต้องการล้างประวัติที่รับแล้วทั้งหมด?", "cancel": "ยกเลิก", "confirmClear": "ล้าง", "close": "ปิด", "installButton": "ติดตั้งไปยังหน้าจอหลัก", "iosHintTitle": "วิธีติดตั้งบน iPhone / iPad", "iosHintText": "แตะปุ่มแชร์ใน Safari แล้วเลือก “เพิ่มไปยังหน้าจอโฮม”", "footerText": "หน้านี้รวบรวมเฉพาะลิงก์รางวัลสาธารณะ สถานะการรับจริงขึ้นอยู่กับในเกม"}, "id": {"languageLabel": "Bahasa", "siteTitle": "Tautan Hadiah Harian Coin Master", "siteSubtitle": "Tautan spin gratis, energi, dan koin diperbarui otomatis setiap hari", "lastUpdated": "Terakhir diperbarui", "baseTimeNotice": "Dibuat oleh tim Coin999-長長久久", "summaryPrefix": "Saat ini ada", "summarySuffix": "tautan hadiah.", "summaryNotice": "Data dikumpulkan dari halaman publik. Harap periksa tautan sebelum membukanya.", "hideClaimed": "Sembunyikan yang diklaim", "clearClaimed": "Hapus riwayat klaim", "emptyMessage": "Tidak ada hadiah yang dapat ditampilkan. Mungkin semuanya telah ditandai sebagai diklaim.", "claimedBadge": "Diklaim", "campaignDateLabel": "Tanggal Kampanye", "claim": "Klaim", "claimed": "Diklaim", "markClaimed": "Tandai diklaim", "unmarkClaimed": "Batalkan tanda", "clearConfirm": "Yakin ingin menghapus semua riwayat klaim?", "cancel": "Batal", "confirmClear": "Hapus", "close": "Tutup", "installButton": "Instal ke Layar Utama", "iosHintTitle": "Tips instal iPhone / iPad", "iosHintText": "Ketuk tombol Bagikan di Safari, lalu pilih “Tambahkan ke Layar Utama”.", "footerText": "Halaman ini hanya mengatur tautan hadiah publik. Status klaim sebenarnya bergantung pada game."}, "es": {"languageLabel": "Idioma", "siteTitle": "Enlaces diarios de recompensas de Coin Master", "siteSubtitle": "Actualización automática diaria de giros, energía y monedas gratis", "lastUpdated": "Última actualización", "baseTimeNotice": "Hecho por el equipo Coin999-長長久久", "summaryPrefix": "Hay", "summarySuffix": "enlaces de recompensa.", "summaryNotice": "Los datos se recopilan de páginas públicas. Verifica cada enlace antes de abrirlo.", "hideClaimed": "Ocultar reclamados", "clearClaimed": "Borrar registros reclamados", "emptyMessage": "No hay recompensas visibles. Puede que todas estén marcadas como reclamadas.", "claimedBadge": "Reclamado", "campaignDateLabel": "Fecha de campaña", "claim": "Reclamar", "claimed": "Reclamado", "markClaimed": "Marcar reclamado", "unmarkClaimed": "Desmarcar", "clearConfirm": "¿Seguro que quieres borrar todos los registros reclamados?", "cancel": "Cancelar", "confirmClear": "Borrar", "close": "Cerrar", "installButton": "Instalar en la pantalla de inicio", "iosHintTitle": "Consejo de instalación en iPhone / iPad", "iosHintText": "Toca el botón Compartir en Safari y elige “Añadir a pantalla de inicio”.", "footerText": "Esta página solo organiza enlaces públicos de recompensa. El estado real depende del juego."}, "pt": {"languageLabel": "Idioma", "siteTitle": "Links diários de recompensas Coin Master", "siteSubtitle": "Links de giros, energia e moedas grátis atualizados automaticamente todos os dias", "lastUpdated": "Última atualização", "baseTimeNotice": "Feito pela equipe Coin999-長長久久", "summaryPrefix": "Há", "summarySuffix": "links de recompensa.", "summaryNotice": "Os dados são coletados de páginas públicas. Verifique cada link antes de abrir.", "hideClaimed": "Ocultar resgatados", "clearClaimed": "Limpar registros resgatados", "emptyMessage": "Nenhuma recompensa está visível. Talvez todas estejam marcadas como resgatadas.", "claimedBadge": "Resgatado", "campaignDateLabel": "Data da campanha", "claim": "Resgatar", "claimed": "Resgatado", "markClaimed": "Marcar como resgatado", "unmarkClaimed": "Desmarcar", "clearConfirm": "Tem certeza de que deseja limpar todos os registros resgatados?", "cancel": "Cancelar", "confirmClear": "Limpar", "close": "Fechar", "installButton": "Instalar na tela inicial", "iosHintTitle": "Dica de instalação no iPhone / iPad", "iosHintText": "Toque no botão Compartilhar no Safari e escolha “Adicionar à Tela de Início”.", "footerText": "Esta página apenas organiza links públicos de recompensa. O status real depende do jogo."}};
-    const UPDATE_TIMES = {"zh-Hant": {"time": "2026-11-25 00:13:13", "timezone": "Asia/Taipei", "timezone_label": "台北時間", "locale": "zh-TW"}, "en": {"time": "2026-11-24 16:13:13", "timezone": "UTC", "timezone_label": "UTC", "locale": "en-US"}, "vi": {"time": "2026-11-24 23:13:13", "timezone": "Asia/Ho_Chi_Minh", "timezone_label": "Giờ Việt Nam", "locale": "vi-VN"}, "ja": {"time": "2026-11-25 01:13:13", "timezone": "Asia/Tokyo", "timezone_label": "日本時間", "locale": "ja-JP"}, "ko": {"time": "2026-11-25 01:13:13", "timezone": "Asia/Seoul", "timezone_label": "한국 시간", "locale": "ko-KR"}, "th": {"time": "2026-11-24 23:13:13", "timezone": "Asia/Bangkok", "timezone_label": "เวลาไทย", "locale": "th-TH"}, "id": {"time": "2026-11-24 23:13:13", "timezone": "Asia/Jakarta", "timezone_label": "Waktu Indonesia Barat", "locale": "id-ID"}, "es": {"time": "2026-11-24 17:13:13", "timezone": "Europe/Madrid", "timezone_label": "Hora de España", "locale": "es-ES"}, "pt": {"time": "2026-11-24 16:13:13", "timezone": "Europe/Lisbon", "timezone_label": "Hora de Portugal", "locale": "pt-PT"}};
+    const I18N = {"zh-Hant": {"languageLabel": "語言", "siteTitle": "Coin Master 每日獎勵連結", "siteSubtitle": "每日自動更新免費能量 / 旋轉 / 金幣連結", "lastUpdated": "最後更新", "baseTimeNotice": "由大佬群CSL製作", "unitSpin": "能量", "unitCoin": "金幣", "summaryPrefix": "目前共收錄", "summarySuffix": "筆獎勵連結。", "summaryNotice": "資料來源為公開網頁整理，點擊前請自行確認連結狀態。", "hideClaimed": "隱藏已領取", "clearClaimed": "清除已領取紀錄", "emptyMessage": "目前沒有可顯示的獎勵。可能全部都已標記為已領取。", "claimedBadge": "已領取", "claim": "領取", "claimed": "已領取", "markClaimed": "標記已領", "unmarkClaimed": "取消標記", "clearConfirm": "確定要清除所有已領取紀錄嗎？", "cancel": "取消", "confirmClear": "清除", "close": "關閉", "installButton": "安裝到手機桌面", "iosHintTitle": "iPhone / iPad 安裝提示", "iosHintText": "請點選 Safari 分享按鈕，然後選擇「加入主畫面」。", "footerText": "本頁僅整理公開獎勵連結，實際領取狀態以遊戲內顯示為準。"}, "en": {"languageLabel": "Language", "siteTitle": "Coin Master Daily Reward Links", "siteSubtitle": "Automatically updated daily free spins, energy, and coin links", "lastUpdated": "Last updated", "baseTimeNotice": "Made by 大佬群CSL", "unitSpin": "Spins", "unitCoin": "Coins", "summaryPrefix": "Currently collected", "summarySuffix": "reward links.", "summaryNotice": "Data is collected from public webpages. Please verify each link before opening.", "hideClaimed": "Hide claimed", "clearClaimed": "Clear claimed records", "emptyMessage": "No rewards are currently visible. They may all be marked as claimed.", "claimedBadge": "Claimed", "claim": "Claim", "claimed": "Claimed", "markClaimed": "Mark claimed", "unmarkClaimed": "Unmark", "clearConfirm": "Are you sure you want to clear all claimed records?", "cancel": "Cancel", "confirmClear": "Clear", "close": "Close", "installButton": "Install to Home Screen", "iosHintTitle": "iPhone / iPad install tip", "iosHintText": "Tap the Safari Share button, then choose “Add to Home Screen”.", "footerText": "This page only organizes public reward links. Actual claim status depends on the game."}, "vi": {"languageLabel": "Ngôn ngữ", "siteTitle": "Liên kết phần thưởng Coin Master hằng ngày", "siteSubtitle": "Tự động cập nhật liên kết vòng quay, năng lượng và xu miễn phí mỗi ngày", "lastUpdated": "Cập nhật lần cuối", "baseTimeNotice": "Được thực hiện bởi 大佬群CSL", "unitSpin": "Lượt quay", "unitCoin": "Xu", "summaryPrefix": "Hiện có", "summarySuffix": "liên kết phần thưởng.", "summaryNotice": "Dữ liệu được tổng hợp từ các trang công khai. Vui lòng kiểm tra liên kết trước khi mở.", "hideClaimed": "Ẩn đã nhận", "clearClaimed": "Xóa lịch sử đã nhận", "emptyMessage": "Hiện không có phần thưởng nào để hiển thị. Có thể tất cả đã được đánh dấu là đã nhận.", "claimedBadge": "Đã nhận", "claim": "Nhận", "claimed": "Đã nhận", "markClaimed": "Đánh dấu đã nhận", "unmarkClaimed": "Bỏ đánh dấu", "clearConfirm": "Bạn có chắc muốn xóa toàn bộ lịch sử đã nhận không?", "cancel": "Hủy", "confirmClear": "Xóa", "close": "Đóng", "installButton": "Cài vào màn hình chính", "iosHintTitle": "Gợi ý cài đặt trên iPhone / iPad", "iosHintText": "Nhấn nút Chia sẻ trong Safari, rồi chọn “Thêm vào Màn hình chính”.", "footerText": "Trang này chỉ tổng hợp liên kết quà công khai. Trạng thái nhận thực tế phụ thuộc vào trò chơi."}, "ja": {"languageLabel": "言語", "siteTitle": "Coin Master デイリー報酬リンク", "siteSubtitle": "無料スピン、エネルギー、コインリンクを毎日自動更新", "lastUpdated": "最終更新", "baseTimeNotice": "大佬群CSL 制作", "unitSpin": "スピン", "unitCoin": "コイン", "summaryPrefix": "現在", "summarySuffix": "件の報酬リンクがあります。", "summaryNotice": "データは公開ページから収集されています。リンクを開く前に状態をご確認ください。", "hideClaimed": "受取済みを非表示", "clearClaimed": "受取済み履歴を削除", "emptyMessage": "表示できる報酬がありません。すべて受取済みに設定されている可能性があります。", "claimedBadge": "受取済み", "claim": "受け取る", "claimed": "受取済み", "markClaimed": "受取済みにする", "unmarkClaimed": "解除", "clearConfirm": "すべての受取済み履歴を削除しますか？", "cancel": "キャンセル", "confirmClear": "削除する", "close": "閉じる", "installButton": "ホーム画面にインストール", "iosHintTitle": "iPhone / iPad インストール方法", "iosHintText": "Safari の共有ボタンを押して、「ホーム画面に追加」を選択してください。", "footerText": "このページは公開報酬リンクを整理したものです。実際の受取状況はゲーム内表示に従ってください。"}, "ko": {"languageLabel": "언어", "siteTitle": "Coin Master 일일 보상 링크", "siteSubtitle": "무료 스핀, 에너지, 코인 링크를 매일 자동 업데이트합니다", "lastUpdated": "마지막 업데이트", "baseTimeNotice": "大佬群CSL 제작", "unitSpin": "스핀", "unitCoin": "코인", "summaryPrefix": "현재", "summarySuffix": "개의 보상 링크가 있습니다.", "summaryNotice": "데이터는 공개 웹페이지에서 수집되었습니다. 링크를 열기 전에 상태를 확인하세요.", "hideClaimed": "수령 완료 숨기기", "clearClaimed": "수령 기록 삭제", "emptyMessage": "현재 표시할 보상이 없습니다. 모두 수령 완료로 표시되었을 수 있습니다.", "claimedBadge": "수령 완료", "claim": "받기", "claimed": "수령 완료", "markClaimed": "수령 표시", "unmarkClaimed": "표시 해제", "clearConfirm": "모든 수령 기록을 삭제하시겠습니까?", "cancel": "취소", "confirmClear": "삭제", "close": "닫기", "installButton": "홈 화면에 설치", "iosHintTitle": "iPhone / iPad 설치 안내", "iosHintText": "Safari 공유 버튼을 누른 뒤 “홈 화면에 추가”를 선택하세요.", "footerText": "이 페이지는 공개 보상 링크를 정리한 것입니다. 실제 수령 상태는 게임 내 표시를 따릅니다."}, "th": {"languageLabel": "ภาษา", "siteTitle": "ลิงก์รางวัลรายวัน Coin Master", "siteSubtitle": "อัปเดตลิงก์ฟรีสปิน พลังงาน และเหรียญโดยอัตโนมัติทุกวัน", "lastUpdated": "อัปเดตล่าสุด", "baseTimeNotice": "จัดทำโดย 大佬群CSL", "unitSpin": "สปิน", "unitCoin": "เหรียญ", "summaryPrefix": "ขณะนี้มี", "summarySuffix": "ลิงก์รางวัล", "summaryNotice": "ข้อมูลรวบรวมจากหน้าเว็บสาธารณะ โปรดตรวจสอบลิงก์ก่อนเปิด", "hideClaimed": "ซ่อนที่รับแล้ว", "clearClaimed": "ล้างประวัติที่รับแล้ว", "emptyMessage": "ไม่มีรางวัลที่แสดงได้ในขณะนี้ อาจถูกทำเครื่องหมายว่ารับแล้วทั้งหมด", "claimedBadge": "รับแล้ว", "claim": "รับ", "claimed": "รับแล้ว", "markClaimed": "ทำเครื่องหมายว่ารับแล้ว", "unmarkClaimed": "ยกเลิกเครื่องหมาย", "clearConfirm": "คุณแน่ใจหรือไม่ว่าต้องการล้างประวัติที่รับแล้วทั้งหมด?", "cancel": "ยกเลิก", "confirmClear": "ล้าง", "close": "ปิด", "installButton": "ติดตั้งไปยังหน้าจอหลัก", "iosHintTitle": "วิธีติดตั้งบน iPhone / iPad", "iosHintText": "แตะปุ่มแชร์ใน Safari แล้วเลือก “เพิ่มไปยังหน้าจอโฮม”", "footerText": "หน้านี้รวบรวมเฉพาะลิงก์รางวัลสาธารณะ สถานะการรับจริงขึ้นอยู่กับในเกม"}, "id": {"languageLabel": "Bahasa", "siteTitle": "Tautan Hadiah Harian Coin Master", "siteSubtitle": "Tautan spin gratis, energi, dan koin diperbarui otomatis setiap hari", "lastUpdated": "Terakhir diperbarui", "baseTimeNotice": "Dibuat oleh 大佬群CSL", "unitSpin": "Spin", "unitCoin": "Koin", "summaryPrefix": "Saat ini ada", "summarySuffix": "tautan hadiah.", "summaryNotice": "Data dikumpulkan dari halaman publik. Harap periksa tautan sebelum membukanya.", "hideClaimed": "Sembunyikan yang diklaim", "clearClaimed": "Hapus riwayat klaim", "emptyMessage": "Tidak ada hadiah yang dapat ditampilkan. Mungkin semuanya telah ditandai sebagai diklaim.", "claimedBadge": "Diklaim", "claim": "Klaim", "claimed": "Diklaim", "markClaimed": "Tandai diklaim", "unmarkClaimed": "Batalkan tanda", "clearConfirm": "Yakin ingin menghapus semua riwayat klaim?", "cancel": "Batal", "confirmClear": "Hapus", "close": "Tutup", "installButton": "Instal ke Layar Utama", "iosHintTitle": "Tips instal iPhone / iPad", "iosHintText": "Ketuk tombol Bagikan di Safari, lalu pilih “Tambahkan ke Layar Utama”.", "footerText": "Halaman ini hanya mengatur tautan hadiah publik. Status klaim sebenarnya bergantung pada game."}, "es": {"languageLabel": "Idioma", "siteTitle": "Enlaces diarios de recompensas de Coin Master", "siteSubtitle": "Actualización automática diaria de giros, energía y monedas gratis", "lastUpdated": "Última actualización", "baseTimeNotice": "Hecho por 大佬群CSL", "unitSpin": "Tiradas", "unitCoin": "Monedas", "summaryPrefix": "Hay", "summarySuffix": "enlaces de recompensa.", "summaryNotice": "Los datos se recopilan de páginas públicas. Verifica cada enlace antes de abrirlo.", "hideClaimed": "Ocultar reclamados", "clearClaimed": "Borrar registros reclamados", "emptyMessage": "No hay recompensas visibles. Puede que todas estén marcadas como reclamadas.", "claimedBadge": "Reclamado", "claim": "Reclamar", "claimed": "Reclamado", "markClaimed": "Marcar reclamado", "unmarkClaimed": "Desmarcar", "clearConfirm": "¿Seguro que quieres borrar todos los registros reclamados?", "cancel": "Cancelar", "confirmClear": "Borrar", "close": "Cerrar", "installButton": "Instalar en la pantalla de inicio", "iosHintTitle": "Consejo de instalación en iPhone / iPad", "iosHintText": "Toca el botón Compartir en Safari y elige “Añadir a pantalla de inicio”.", "footerText": "Esta página solo organiza enlaces públicos de recompensa. El estado real depende del juego."}, "pt": {"languageLabel": "Idioma", "siteTitle": "Links diários de recompensas Coin Master", "siteSubtitle": "Links de giros, energia e moedas grátis atualizados automaticamente todos os dias", "lastUpdated": "Última atualização", "baseTimeNotice": "Feito por 大佬群CSL", "unitSpin": "Giros", "unitCoin": "Moedas", "summaryPrefix": "Há", "summarySuffix": "links de recompensa.", "summaryNotice": "Os dados são coletados de páginas públicas. Verifique cada link antes de abrir.", "hideClaimed": "Ocultar resgatados", "clearClaimed": "Limpar registros resgatados", "emptyMessage": "Nenhuma recompensa está visível. Talvez todas estejam marcadas como resgatadas.", "claimedBadge": "Resgatado", "claim": "Resgatar", "claimed": "Resgatado", "markClaimed": "Marcar como resgatado", "unmarkClaimed": "Desmarcar", "clearConfirm": "Tem certeza de que deseja limpar todos os registros resgatados?", "cancel": "Cancelar", "confirmClear": "Limpar", "close": "Fechar", "installButton": "Instalar na tela inicial", "iosHintTitle": "Dica de instalação no iPhone / iPad", "iosHintText": "Toque no botão Compartilhar no Safari e escolha “Adicionar à Tela de Início”.", "footerText": "Esta página apenas organiza links públicos de recompensa. O status real depende do jogo."}};
+    const UPDATE_TIMES = {"zh-Hant": {"time": "2026-11-25 00:17:41", "timezone": "Asia/Taipei", "timezone_label": "台北時間", "locale": "zh-TW"}, "en": {"time": "2026-11-24 16:17:41", "timezone": "UTC", "timezone_label": "UTC", "locale": "en-US"}, "vi": {"time": "2026-11-24 23:17:41", "timezone": "Asia/Ho_Chi_Minh", "timezone_label": "Giờ Việt Nam", "locale": "vi-VN"}, "ja": {"time": "2026-11-25 01:17:41", "timezone": "Asia/Tokyo", "timezone_label": "日本時間", "locale": "ja-JP"}, "ko": {"time": "2026-11-25 01:17:41", "timezone": "Asia/Seoul", "timezone_label": "한국 시간", "locale": "ko-KR"}, "th": {"time": "2026-11-24 23:17:41", "timezone": "Asia/Bangkok", "timezone_label": "เวลาไทย", "locale": "th-TH"}, "id": {"time": "2026-11-24 23:17:41", "timezone": "Asia/Jakarta", "timezone_label": "Waktu Indonesia Barat", "locale": "id-ID"}, "es": {"time": "2026-11-24 17:17:41", "timezone": "Europe/Madrid", "timezone_label": "Hora de España", "locale": "es-ES"}, "pt": {"time": "2026-11-24 16:17:41", "timezone": "Europe/Lisbon", "timezone_label": "Hora de Portugal", "locale": "pt-PT"}};
 
     const cards = Array.from(document.querySelectorAll(".reward-card"));
     const sections = Array.from(document.querySelectorAll(".date-section"));
