@@ -135,7 +135,7 @@ I18N = {
         "siteTitle": "Liên kết phần thưởng Coin Master hằng ngày",
         "siteSubtitle": "Tự động cập nhật liên kết vòng quay, năng lượng và xu miễn phí mỗi ngày",
         "lastUpdated": "Cập nhật lần cuối",
-        "baseTimeNotice": "Được thực hiện bởi 大佬群CSL",
+        "baseTimeNotice": "Thực hiện bởi 大佬群CSL",
         "unitSpin": "Lượt quay",
         "unitCoin": "Xu",
         "summaryPrefix": "Hiện có",
@@ -606,6 +606,8 @@ PAGE_TEMPLATE = r"""<!doctype html>
       line-height: 1.5;
       background: var(--bg);
       color: var(--text);
+      /* 長單字（越南文、葡文等）在窄螢幕時可斷行，避免撐出水平捲軸 */
+      overflow-wrap: break-word;
     }
 
     h1, h2 {
@@ -637,7 +639,7 @@ PAGE_TEMPLATE = r"""<!doctype html>
 
     .site-header h1 {
       margin: 0 0 8px;
-      font-size: clamp(1.625rem, 5vw, 2.25rem);
+      font-size: clamp(1.5rem, 5vw, 2.25rem);
       line-height: 1.2;
     }
 
@@ -660,11 +662,16 @@ PAGE_TEMPLATE = r"""<!doctype html>
         inset 0 0 0 1px rgb(0 0 0 / 0.45),
         inset 0 1px 0 rgb(255 255 255 / 0.12),
         0 3px 10px rgb(0 0 0 / 0.3);
+      max-width: 100%;
       color: #f3cf6b;
       font-size: 1rem;
       font-weight: 800;
-      letter-spacing: 0.04em;
+      line-height: 1.3;
+      letter-spacing: 0.02em;
       text-shadow: 0 1px 0 rgb(0 0 0 / 0.5);
+      /* 讓「大佬群CSL」這類中日韓名稱不會在字中間被拆開 */
+      word-break: keep-all;
+      text-wrap: balance;
     }
 
     .credit-badge svg {
@@ -885,7 +892,7 @@ PAGE_TEMPLATE = r"""<!doctype html>
 
     .cards {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
       gap: 16px;
     }
 
@@ -924,7 +931,8 @@ PAGE_TEMPLATE = r"""<!doctype html>
 
     .card-head {
       display: flex;
-      align-items: flex-start;
+      flex-wrap: wrap;
+      align-items: center;
       justify-content: space-between;
       gap: 8px;
     }
@@ -958,6 +966,7 @@ PAGE_TEMPLATE = r"""<!doctype html>
     .reward-unit {
       font-size: 1rem;
       color: var(--text);
+      white-space: nowrap;
     }
 
     .claimed-badge {
@@ -971,8 +980,11 @@ PAGE_TEMPLATE = r"""<!doctype html>
       border-radius: 999px;
     }
 
+    /* 空間不夠時（越南文、泰文等較長的按鈕文字）兩顆按鈕自動換成上下兩列，
+       而不是把「領取」主按鈕擠扁。 */
     .actions {
       display: flex;
+      flex-wrap: wrap;
       gap: 8px;
       margin-top: auto;
       padding-top: 4px;
@@ -982,6 +994,9 @@ PAGE_TEMPLATE = r"""<!doctype html>
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      text-align: center;
+      line-height: 1.25;
+      text-wrap: balance;
       min-height: var(--tap);
       padding: 8px 14px;
       border: none;
@@ -1006,7 +1021,7 @@ PAGE_TEMPLATE = r"""<!doctype html>
     }
 
     .btn-primary {
-      flex: 1;
+      flex: 999 1 7.5rem;
       background: var(--cta);
       color: var(--on-cta);
       box-shadow: inset 0 0 0 1px var(--cta-border);
@@ -1025,6 +1040,7 @@ PAGE_TEMPLATE = r"""<!doctype html>
     }
 
     .btn-secondary {
+      flex: 1 1 auto;
       background: var(--neutral);
     }
 
@@ -1121,8 +1137,14 @@ PAGE_TEMPLATE = r"""<!doctype html>
 
     .dialog-actions {
       display: flex;
+      flex-wrap: wrap;
       justify-content: flex-end;
       gap: 8px;
+    }
+
+    .dialog-actions .btn {
+      flex: 1 1 auto;
+      max-width: 14rem;
     }
 
     @media (prefers-reduced-motion: no-preference) {
