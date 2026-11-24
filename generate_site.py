@@ -585,9 +585,25 @@ PAGE_TEMPLATE = r"""<!doctype html>
       box-sizing: border-box;
     }
 
+    /* 手機上不允許左右滑：任何超出畫面寬度的東西都直接裁掉，
+       並關掉水平方向的回彈捲動。clip 不會像 hidden 一樣產生捲動容器。 */
+    html,
+    body {
+      max-width: 100%;
+      overflow-x: hidden;
+      overflow-x: clip;
+    }
+
     html {
       -webkit-text-size-adjust: 100%;
       text-size-adjust: 100%;
+      overscroll-behavior-x: none;
+    }
+
+    img,
+    svg,
+    video {
+      max-width: 100%;
     }
 
     body {
@@ -607,7 +623,9 @@ PAGE_TEMPLATE = r"""<!doctype html>
       background: var(--bg);
       color: var(--text);
       /* 長單字（越南文、葡文等）在窄螢幕時可斷行，避免撐出水平捲軸 */
-      overflow-wrap: break-word;
+      /* anywhere（而非 break-word）也會縮小 min-content，
+         flex 子元素裡的長字串才不會把盒子撐寬 */
+      overflow-wrap: anywhere;
     }
 
     h1, h2 {
@@ -717,6 +735,8 @@ PAGE_TEMPLATE = r"""<!doctype html>
       border-radius: 999px;
       padding: 6px 12px;
       font: inherit;
+      /* iOS Safari 在表單元件字級 < 16px 時點擊會自動放大，放大後畫面就能左右滑 */
+      font-size: 16px;
       font-weight: 700;
       color: #1f2937;
       background-color: #ffffff;
@@ -850,6 +870,7 @@ PAGE_TEMPLATE = r"""<!doctype html>
 
     .ios-hint > div {
       flex: 1;
+      min-width: 0;
     }
 
     .ios-hint strong {
